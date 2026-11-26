@@ -21,7 +21,7 @@
 
 | ID | Answer | Date |
 | --- | --- | --- |
-| Q-AUTH-1 | **Sign-in is invite-only.** Only an invited person can get in. A new user with no invitation is blocked. There is no Pending state and no self-registration. This is a change from the Build Plan tickets T-09, T-10 and T-123, which assumed Pending accounts; it follows the Plan's Architecture section ("Anyone not invited cannot get in"). What a blocked person sees is set in the next row (Q-SYS-2). How the first System Admin gets in is still open in `m1-system-admin.md` (Q-SYS-1). | 2026-11-26, product owner |
+| Q-AUTH-1 | **Sign-in is invite-only.** Only an invited person can get in. A new user with no invitation is blocked. There is no Pending state and no self-registration. This is a change from the Build Plan tickets T-09, T-10 and T-123, which assumed Pending accounts; it follows the Plan's Architecture section ("Anyone not invited cannot get in"). What a blocked person sees is set in the next row (Q-SYS-2). The first System Admin is the `SYSTEM_ADMIN_EMAIL` account, the one exception to invite-only (Q-SYS-1, resolved in `m1-system-admin.md`). | 2026-11-26, product owner |
 | Q-SYS-2 | **A person with no invitation sees a notice** saying they have no access yet and should contact an Admin. | 2026-11-26, product owner |
 | Q-AUTH-2 | **An invited Admin gets all modules. An invited User gets no modules until an Admin assigns them.** The invite form does not choose modules for a User. | 2026-11-26, product owner |
 | Q-AUTH-8 | **Ask AI is Admin only.** Users have no Ask AI at all: no button, and the API rejects them. The Plan decision of 2026-11-26 stands; Brief 2.3 and 5.4 are out of date on this point. | 2026-11-26, product owner |
@@ -107,7 +107,7 @@
 - A User opens a module URL they cannot access: redirect to their first allowed module, not an error page showing that the module exists. (Proposed)
 - A User calls a Tax API directly: rejected, with no data in the response and no hint whether Tax data exists. (T-16 "not reachable by ... API")
 - An invitation is accepted twice, or after revocation: rejected. (Proposed; see Q-AUTH-4)
-- The first sign-in of the System Admin: see `m1-system-admin.md`, Q-SYS-1.
+- The first sign-in of the account in `SYSTEM_ADMIN_EMAIL`: allowed without an invitation and becomes System Admin (`m1-system-admin.md`, Q-SYS-1).
 
 ## Acceptance criteria
 

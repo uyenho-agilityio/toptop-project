@@ -7,12 +7,18 @@
 
 | ID | Question | Why it matters | Tickets |
 | --- | --- | --- | --- |
-| Q-SYS-1 | **Open, for the product owner to choose.** Sign-in is invite-only, so nobody can invite the very first System Admin. How do they get in? Options (the spec does not choose):<br>**(a) Email in server configuration.** One email is set as an environment variable. When that Google account signs in, it becomes System Admin. Simple, matches Brief 2.1 and Plan Roles ("email set in server configuration"). To change the System Admin you change the config and redeploy. Anyone who controls that Google account has full platform control, so it should be a protected account.<br>**(b) One-time setup script.** A developer runs a script once that creates the System Admin record for a given email. No special-case sign-in code, and the email is not left in config. It needs a developer to run it, and an extra step per environment.<br>**(c) First sign-in on an empty database.** Whoever signs in first becomes System Admin. No setup at all, but a stranger who finds a fresh deployment first takes it over. Not recommended.<br>Whichever is chosen, also decide what happens when the System Admin changes (does the old one lose access at once?). | First-run setup and security. | T-122 |
+| Q-SYS-1b | When the System Admin changes (the config email is changed and the app is redeployed), does the previous System Admin lose access at once? Proposed: yes, because the role is read from the config on every request. | Security of role changes. | T-122 |
 | Q-SYS-3 | With no Pending list, what does T-123 "Review registrations" become? Options to decide: drop it, or keep a list of blocked sign-in attempts the System Admin can act on by sending an invitation. | T-123 has no purpose as written. | T-123, T-124 |
 | Q-SYS-4 | The Prototype lets the System Admin assign a person to an existing Business as an Admin. Can a Business have more than one Admin? (Same as Q-AUTH-10.) | Roles and member management. | T-124 |
 | Q-SYS-5 | Status words differ: T-125 says "Lock, unlock, deactivate", Brief 8 says "Activate or suspend", the Prototype only toggles active and suspended. Which statuses exist for accounts and Businesses? | Data model and wording. | T-125 |
 | Q-SYS-6 | Log: Brief 8 says every System Admin action goes to an audit log, T-125 says "with a log", and the log viewer is in M7 (`syslog`). In M1, do we store the entries only? Which fields, and for how long? | What T-123 to T-125 must write. | T-123 to T-125 |
 | Q-SYS-7 | Brief 8 describes a dashboard, user management, Business management and monitoring. M1 covers review, create, status. Does the M1 Console also need the user details panel and the Business member list that the Prototype has? | Console scope in M1. | T-123 to T-125 |
+
+## Resolved questions
+
+| ID | Answer | Date |
+| --- | --- | --- |
+| Q-SYS-1 | **The first System Admin is set by an email in server configuration.** The config key is `SYSTEM_ADMIN_EMAIL` (placeholder name; the real value is set per environment by the product owner and is never committed to the repo). When that Google account signs in, it becomes the System Admin without an invitation. Options (b) one-time script and (c) first sign-in on an empty database were not chosen. | 2026-11-26, product owner |
 
 ## Sources
 
@@ -24,7 +30,7 @@
 
 ### A single System Admin (T-122)
 
-- There is exactly one System Admin (Brief 2.1; Plan, Roles). Plan Roles says their email is set in server configuration; how the first one gets in is open (Q-SYS-1).
+- There is exactly one System Admin (Brief 2.1; Plan, Roles). Their email is set in server configuration under `SYSTEM_ADMIN_EMAIL` (Q-SYS-1, resolved). The `SYSTEM_ADMIN_EMAIL` account is the only one that can sign in without an invitation.
 - There is no screen to create another. The role cannot be granted through any API.
 - The System Admin lands in the System Console, a separate interface from the Business workspace (Brief 8, Brief 9).
 
@@ -48,7 +54,7 @@
 
 ## Edge cases
 
-- The configured email is missing or invalid at startup: no System Admin exists; the app must still start and show no console to anyone, and log a clear configuration error. (Proposed)
+- `SYSTEM_ADMIN_EMAIL` is missing or invalid at startup: no System Admin exists; the app must still start and show no console to anyone, and log a clear configuration error. (Proposed)
 - Inviting the same email twice: the second request fails with a clear message, not a duplicate. (Proposed)
 - Creating a Business with an empty or duplicate name: validation error. (Prototype requires a name; duplicate rule is Proposed)
 - Suspending the account of a Business's only Admin: allowed, and the Business keeps its other members. (Proposed)
@@ -57,7 +63,7 @@
 
 ## Acceptance criteria
 
-- [ ] Only the configured email can be System Admin; no screen or API creates another.
+- [ ] Only the `SYSTEM_ADMIN_EMAIL` account can be System Admin and sign in without an invitation; no screen or API creates another.
 - [ ] The Console covers registrations as decided in Q-SYS-3.
 - [ ] The System Admin can create a Business and invite a person as its Admin; that person lands in the Business with every module.
 - [ ] The System Admin can lock, unlock or deactivate accounts and Businesses; affected users are blocked on their next request.
