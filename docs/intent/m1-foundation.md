@@ -13,7 +13,7 @@ An Admin can sign in and invite a User. The User sees only the modules they were
 
 ## Changes from the Build Plan
 
-These follow decisions of 2026-11-26. The Build Plan HTML has not been edited yet.
+These follow decisions of 2026-11-26. The Build Plan HTML is updated to match in a separate PR (branch `docs/remove-t123-from-m1`).
 
 - **Sign-in is invite-only.** There is no Pending state. This changes T-09 and T-10, and removes T-123 (review registrations), since there is no waiting list.
 - **Invites:** an invited Admin gets all modules; an invited User gets none until an Admin assigns them (T-11, T-13, T-124).

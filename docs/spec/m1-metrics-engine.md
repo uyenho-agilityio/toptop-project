@@ -3,7 +3,7 @@
 **Tickets:** T-25, T-29
 **Milestone:** M1
 
-> **Scope narrowed (decision of 2026-11-26).** In M1 the engine computes **net revenue and order count** only. Cost and profit (fees, shipping, packaging, cost of goods, fixed-expense allocation, profit) stay in M4 (tickets T-26 to T-28), and M4 adds the orders and cost tables. T-29 stays as a rule: when M4 produces profit, its change is shown as an amount of money. The Build Plan still words T-25 as "gross sales, net revenue, cost of goods, costs and profit"; its acceptance criteria are narrowed in `docs/tickets/T-25.md`.
+> **Scope narrowed (decision of 2026-11-26).** In M1 the engine computes **net revenue and order count** only. Cost and profit (fees, shipping, packaging, cost of goods, fixed-expense allocation, profit) stay in M4 (tickets T-26 to T-28), and M4 adds the orders and cost tables. T-29 stays as a rule: when M4 produces profit, its change is shown as an amount of money. The Build Plan HTML is updated to match in a separate PR (`docs/remove-t123-from-m1`).
 
 ## Open questions
 
