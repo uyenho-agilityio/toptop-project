@@ -125,8 +125,6 @@ select.st.done{border-color:var(--ok);color:var(--ok)}
 .stc{font-size:11px;font-weight:600;padding:0 8px;border-radius:999px;background:var(--chip);color:var(--muted);white-space:nowrap}
 .stc.ticketed{background:var(--info-soft);color:var(--info)}.stc.done{background:var(--ok-soft);color:var(--ok)}
 .mh h3{font-size:17px;margin:0;text-wrap:balance}
-.open.obox{display:block;font-size:14px;padding:10px 16px;border-radius:12px;margin-top:0}
-.open.obox p{margin:0 0 4px;font-weight:650}.open.obox ol{margin:0;padding-left:20px}.open.obox li{margin:4px 0}
 .t.flash,.ms.flash{background:var(--accent-soft)}
 .tref{font:500 12.5px "Geist Mono",ui-monospace,monospace}
 </style>
@@ -170,7 +168,6 @@ select.st.done{border-color:var(--ok);color:var(--ok)}
   <section class="sec" id="ai"><h2 id="ai-h"></h2><div id="ai-b"></div></section>
   <section class="sec" id="i18n"><h2 id="i18n-h"></h2><div id="i18n-b"></div></section>
   <section class="sec" id="deferred"><h2 id="deferred-h"></h2><div id="deferred-b"></div></section>
-  <section class="sec" id="open"><h2 id="open-h"></h2><div id="open-b"></div></section>
 
   <p class="foot" id="foot"></p>
 </div>
@@ -715,11 +712,11 @@ function strip(){
   $('strip').innerHTML = MS.map(m => { const ks = ORDER[m[0]], pts = ks.reduce((a,k) => a + PTS[tix[k][6]], 0), dc = doneCount(m); return `<a class="card" href="#${m[0]}" data-go="${m[0]}"><b>${m[0]}</b><span class="n">${esc(msName(m))}</span><span class="m">${ks.length} ${u.tickets} · ${pts} ${u.points}</span><div class="prog"><i style="width:${Math.round(dc[0] / dc[1] * 100)}%"></i></div></a>`; }).join('');
 }
 // ---- Numbered sections (sections 1-3 and 6-16; 4 is the stack block, 5 is the ticket list) ----
-const SECIDS = ['overview','board','decisions','architecture','milestones','rules','roles','data','integrations','security','testing','release','ai','i18n','deferred','open'];
+const SECIDS = ['overview','board','decisions','architecture','milestones','rules','roles','data','integrations','security','testing','release','ai','i18n','deferred'];
 const SEC = {
  vi:{
   toc:'Mục lục',
-  titles:{overview:'Tổng quan',board:'Bảng kế hoạch',decisions:'Quyết định',architecture:'Kiến trúc và tech stack',milestones:'Milestone và ticket',rules:'Quy tắc',roles:'Vai trò và quyền',data:'Mô hình dữ liệu',integrations:'Tích hợp và thông báo',security:'Bảo mật',testing:'Kiểm thử',release:'Phát hành',ai:'Thành phần AI',i18n:'Ngôn ngữ và trợ năng',deferred:'Hoãn lại',open:'Việc cần chốt'},
+  titles:{overview:'Tổng quan',board:'Bảng kế hoạch',decisions:'Quyết định',architecture:'Kiến trúc và tech stack',milestones:'Milestone và ticket',rules:'Quy tắc',roles:'Vai trò và quyền',data:'Mô hình dữ liệu',integrations:'Tích hợp và thông báo',security:'Bảo mật',testing:'Kiểm thử',release:'Phát hành',ai:'Thành phần AI',i18n:'Ngôn ngữ và trợ năng',deferred:'Hoãn lại'},
   undecided:'Chưa chốt',
   ov:[['Là gì','Ứng dụng quản lý shop cho người bán TikTok Shop và Shopee tại Việt Nam: bán hàng, marketing, tồn kho, nhà cung cấp, tài chính, thuế, báo cáo và cảnh báo, cùng trợ lý AI.'],['Dành cho ai','Người bán là cá nhân và hộ kinh doanh. Mỗi shop có Admin và các User chỉ xem; toàn hệ thống có một System Admin.'],['Nền tảng','Web app, responsive trên desktop, tablet và điện thoại.'],['Hosting','Cloudflare Workers và Neon PostgreSQL (Singapore).']],
   ovScope:'Phạm vi', ovScopeV:(t,e,m,a,b)=>`${t} ticket, ${e} epic, ${m} milestone (${a} đến ${b}).`,
@@ -775,12 +772,10 @@ const SEC = {
   def:[['Tự đồng bộ từ sàn','Chờ ít nhất một user thật đồng ý kết nối API của sàn.','M9, chờ user thật'],['vinext','Thử thay OpenNext; chỉ thử ở nhánh riêng.','Thử ở nhánh riêng'],['Nhiều Business cho một tài khoản','Chỉ chuẩn bị bộ chọn Business (ticket {bizswitch}, P2).','P2'],['Loại người bán Công ty','Mô hình dữ liệu đã cho phép thêm sau.','Thêm sau']],
   defApi:'Quyền API thật của TikTok Shop và Shopee',
   defApiWhen:'M9, khi có user thật',
-  openLead:'Hiện không còn việc cần chốt.',
-  openQ:[]
  },
  en:{
   toc:'Contents',
-  titles:{overview:'Overview',board:'Plan board',decisions:'Decisions',architecture:'Architecture and tech stack',milestones:'Milestones and tasks',rules:'Rules',roles:'Roles and permissions',data:'Data model',integrations:'Integrations and notifications',security:'Security',testing:'Testing',release:'Release',ai:'AI components',i18n:'Language and accessibility',deferred:'Deferred',open:'Open questions'},
+  titles:{overview:'Overview',board:'Plan board',decisions:'Decisions',architecture:'Architecture and tech stack',milestones:'Milestones and tasks',rules:'Rules',roles:'Roles and permissions',data:'Data model',integrations:'Integrations and notifications',security:'Security',testing:'Testing',release:'Release',ai:'AI components',i18n:'Language and accessibility',deferred:'Deferred'},
   undecided:'Not decided yet',
   ov:[['What','Shop management for TikTok Shop and Shopee sellers in Vietnam: sales, marketing, inventory, suppliers, finance, tax, reports and alerts, plus an AI assistant.'],['For whom','Sellers: individuals and household businesses. Each shop has an Admin and view-only Users; the whole system has one System Admin.'],['Platform','Web app, responsive on desktop, tablet and phone.'],['Hosting','Cloudflare Workers and Neon PostgreSQL (Singapore).']],
   ovScope:'Scope', ovScopeV:(t,e,m,a,b)=>`${t} tickets, ${e} epics, ${m} milestones (${a} to ${b}).`,
@@ -836,8 +831,6 @@ const SEC = {
   def:[['Automatic sync from the platforms','Waits for at least one real user who agrees to connect a platform API.','M9, waits for a real user'],['vinext','A possible replacement for OpenNext; only tried on a side branch.','Tried on a side branch'],['Several Businesses per account','Only the Business switcher is prepared (ticket {bizswitch}, P2).','P2'],['Company seller type','The data model already allows adding it later.','Added later']],
   defApi:'Real TikTok Shop and Shopee API access',
   defApiWhen:'M9, when a real user exists',
-  openLead:'Nothing open right now.',
-  openQ:[]
  }
 };
 const SK = () => SEC[S.lang];
@@ -866,7 +859,6 @@ function secBodies(){
   b.ai = `${ar ? `<p><b>${esc(ar[0])}:</b> ${esc(ar[1])}</p>` : ''}<p>${esc(k.aiTickets)}</p>${trefs(['aipanel','aictx','aiqa','aisugg','aiquota','aiguard','repai'], true)}<p class="note">${esc(k.aiOpen)}</p>`;
   b.i18n = `<p>${esc(k.i18nLead)}</p>${trefs(['i18n','theme','resp','a11y'], true)}`;
   b.deferred = tbl(k.defHead, k.def.concat([[k.defApi, u.openList[0], k.defApiWhen]]));
-  b.open = `<div class="open obox"><p class="oh">${esc(k.openLead)}</p>${k.openQ.length ? `<ol>${k.openQ.map(q => `<li>${fill(q)}</li>`).join('')}</ol>` : ''}</div>`;
   return b;
 }
 function secs(){
