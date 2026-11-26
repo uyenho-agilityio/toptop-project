@@ -43,7 +43,7 @@ None. Every question is resolved; see the next section.
 
 - By default the theme follows the system setting. A manual toggle overrides it and is remembered (Prototype `ACT.theme`).
 - Every color is a token with a light and a dark value, including the chart series colors the Prototype names `--c1` to `--c5`. Every chart must stay readable in both themes. No chart ships in M1, so M1 delivers the tokens and a readability check that later chart tickets reuse.
-- The login screen and the pending screen also follow the theme and language (Prototype `put()` shows the toggles there).
+- The login screen and the blocked screen also follow the theme and language (Prototype `put()` shows the toggles there).
 
 ### Sample data and test accounts (T-134)
 
