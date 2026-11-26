@@ -1,6 +1,6 @@
 # Milestone 1 Intent: Foundation and Access
 
-**Milestone:** M1, "Foundation and access" (30 tickets, see `docs/tickets/`)
+**Milestone:** M1, "Foundation and access" (29 tickets, see `docs/tickets/`)
 **Source:** Build Plan, section 5 (Milestones and tasks)
 
 ## Goal
@@ -15,10 +15,10 @@ An Admin can sign in and invite a User. The User sees only the modules they were
 
 These follow decisions of 2026-11-26. The Build Plan HTML has not been edited yet.
 
-- **Sign-in is invite-only.** There is no Pending state. This changes T-09 and T-10, and leaves T-123 (review registrations) open.
+- **Sign-in is invite-only.** There is no Pending state. This changes T-09 and T-10, and removes T-123 (review registrations), since there is no waiting list.
 - **Invites:** an invited Admin gets all modules; an invited User gets none until an Admin assigns them (T-11, T-13, T-124).
 - **Ask AI is Admin only** (already a Plan decision).
-- **Cost and profit stay out of M1** (T-26 to T-28 remain in M4, and M4 adds the orders and cost tables). The scope of T-25 and T-29 is an open question (Q-ENG-1).
+- **Cost and profit stay out of M1** (T-26 to T-28 remain in M4, and M4 adds the orders and cost tables). T-25 is narrowed to net revenue and order count; T-29 stays as a rule for M4.
 
 ## Out of scope for M1
 

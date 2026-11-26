@@ -8,7 +8,7 @@ One spec per capability group. Each spec lists its open questions first, then th
 | [m1-auth-permissions.md](m1-auth-permissions.md) | T-09, T-10, T-11, T-12, T-13, T-14, T-15, T-16, T-17, T-18, T-19 |
 | [m1-period-filter.md](m1-period-filter.md) | T-21, T-22, T-24 |
 | [m1-metrics-engine.md](m1-metrics-engine.md) | T-25, T-29 |
-| [m1-system-admin.md](m1-system-admin.md) | T-122, T-123, T-124, T-125 |
+| [m1-system-admin.md](m1-system-admin.md) | T-122, T-124, T-125 |
 | [m1-i18n-theme-seed.md](m1-i18n-theme-seed.md) | T-129, T-130, T-134 |
 
 ## Conventions

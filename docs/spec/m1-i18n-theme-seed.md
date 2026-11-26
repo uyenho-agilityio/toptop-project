@@ -12,13 +12,13 @@
 | Q-I18N-3 | Which i18n library and message format? The Plan's stack table does not name one. | Needed to start T-129. | T-129 |
 | Q-I18N-4 | Does the language appear in the URL (for example `/vi/...`) or only in a stored setting? | Interacts with the shared period URL (T-24). | T-129 |
 | Q-THEME-1 | T-130 says "follows the system, with a manual toggle". The Prototype toggle only switches between light and dark and never returns to "follow system". Should the toggle have a third state? | Behavior of the toggle. | T-130 |
-| Q-SEED-2 | Seed scope in M1: the orders and cost tables now exist in M1 (Q-FND-1), so should the seed also load the commerce dataset the Prototype generates (orders, products, ad spend, expenses)? Suppliers, inventory and tax tables stay later. | The engine tests (Q-ENG-3) want a dataset. | T-134, T-25 |
-| Q-SEED-3 | **Open, for the product owner to choose.** Sign-in is Google only and invite-only, so sample accounts need a way in. Options: **(a)** real Google emails for each sample account; **(b)** a dev-only login picker, like the Prototype's account list, disabled in production. The spec does not choose. Either way the seed must not run in production. | Seed is useless without a sign-in route. | T-134 |
+| Q-SEED-2 | Seed scope in M1: M1 has no orders or cost tables (Q-FND-1, resolved), so is the seed limited to accounts, Businesses, shops and permissions? The engine tests (Q-ENG-3) then need their own order fixtures, possibly generated like the Prototype's sample data. | Where the engine's sample dataset lives. | T-134, T-25 |
 
 ## Resolved questions
 
 | ID | Answer | Date |
 | --- | --- | --- |
+| Q-SEED-3 | **Sample accounts sign in through a dev-only account picker**, like the account list in the Prototype (`loginView()`). It is off in production, where only Google sign-in exists. The seed also never runs in production. | 2026-11-26, product owner |
 | Q-SEED-1 | **Keep the Prototype's sample roles as test data**: a System Admin, Admins and Users with different module grants. No new role is added. | 2026-11-26, product owner |
 
 ## Sources
@@ -62,7 +62,7 @@
 - Text length differs between languages: no clipped or overflowing labels in the shell. (Proposed)
 - A browser blocks local storage: the app still works, with the system theme and the default language. (The Prototype wraps storage access in try/catch.)
 - A user changes language or theme on the login screen, then signs in: the choice is kept. (Proposed)
-- Seed run against a non-empty database or against production: refuses to run. (Proposed; Q-SEED-3)
+- Seed or account picker reached in production: both refuse to run. (Q-SEED-3)
 
 ## Acceptance criteria
 
@@ -71,7 +71,7 @@
 - [ ] The theme follows the system by default, has a manual toggle, and the choice is remembered.
 - [ ] Every color token has a light and a dark value and passes a readability check in both themes.
 - [ ] The seed creates the sample accounts, Businesses and shops listed above, with the module grants shown, and can be re-run safely.
-- [ ] Tests and demos can sign in with each sample account (as decided in Q-SEED-3).
+- [ ] A dev-only account picker lets tests and demos sign in as each sample account, and it is disabled in production (Q-SEED-3).
 
 ## Out of scope for M1
 

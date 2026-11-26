@@ -1,22 +1,24 @@
 # Spec: M1 System Admin (System Console basics)
 
-**Tickets:** T-122, T-123, T-124, T-125
+**Tickets:** T-122, T-124, T-125
+
+> **T-123 (Review registrations) is removed from M1** (decision of 2026-11-26). Sign-in is invite-only, so there are no Pending accounts to review. Creating a Business and inviting its Admin is covered by T-124.
 **Milestone:** M1
 
 ## Open questions
 
 | ID | Question | Why it matters | Tickets |
 | --- | --- | --- | --- |
-| Q-SYS-3 | With no Pending list, what does T-123 "Review registrations" become? Options to decide: drop it, or keep a list of blocked sign-in attempts the System Admin can act on by sending an invitation. | T-123 has no purpose as written. | T-123, T-124 |
 | Q-SYS-4 | The Prototype lets the System Admin assign a person to an existing Business as an Admin. Can a Business have more than one Admin? (Same as Q-AUTH-10.) | Roles and member management. | T-124 |
 | Q-SYS-5 | Status words differ: T-125 says "Lock, unlock, deactivate", Brief 8 says "Activate or suspend", the Prototype only toggles active and suspended. Which statuses exist for accounts and Businesses? | Data model and wording. | T-125 |
-| Q-SYS-6 | Log: Brief 8 says every System Admin action goes to an audit log, T-125 says "with a log", and the log viewer is in M7 (`syslog`). In M1, do we store the entries only? Which fields, and for how long? | What T-123 to T-125 must write. | T-123 to T-125 |
-| Q-SYS-7 | Brief 8 describes a dashboard, user management, Business management and monitoring. M1 covers review, create, status. Does the M1 Console also need the user details panel and the Business member list that the Prototype has? | Console scope in M1. | T-123 to T-125 |
+| Q-SYS-6 | Log: Brief 8 says every System Admin action goes to an audit log, T-125 says "with a log", and the log viewer is in M7 (`syslog`). In M1, do we store the entries only? Which fields, and for how long? | What T-124 and T-125 must write. | T-124, T-125 |
+| Q-SYS-7 | Brief 8 describes a dashboard, user management, Business management and monitoring. M1 covers create Business with invited Admin, and status. Does the M1 Console also need the user details panel and the Business member list that the Prototype has? | Console scope in M1. | T-124, T-125 |
 
 ## Resolved questions
 
 | ID | Answer | Date |
 | --- | --- | --- |
+| Q-SYS-3 | **T-123 is removed from M1.** With invite-only sign-in there is no waiting list to review; T-124 covers creating a Business and inviting its Admin. | 2026-11-26, product owner |
 | Q-SYS-1b | **When `SYSTEM_ADMIN_EMAIL` changes, the previous System Admin loses access immediately.** The role is read from the config, so the old account is treated as an ordinary account with no invitation (blocked). | 2026-11-26, product owner |
 | Q-SYS-1 | **The first System Admin is set by an email in server configuration.** The config key is `SYSTEM_ADMIN_EMAIL` (placeholder name; the real value is set per environment by the product owner and is never committed to the repo). When that Google account signs in, it becomes the System Admin without an invitation. Options (b) one-time script and (c) first sign-in on an empty database were not chosen. | 2026-11-26, product owner |
 
@@ -33,11 +35,6 @@
 - There is exactly one System Admin (Brief 2.1; Plan, Roles). Their email is set in server configuration under `SYSTEM_ADMIN_EMAIL` (Q-SYS-1, resolved). The `SYSTEM_ADMIN_EMAIL` account is the only one that can sign in without an invitation.
 - There is no screen to create another. The role cannot be granted through any API.
 - The System Admin lands in the System Console, a separate interface from the Business workspace (Brief 8, Brief 9).
-
-### Review registrations (T-123, blocked by Q-SYS-3)
-
-- The Build Plan describes a list of Pending accounts with approve and reject. Sign-in is now invite-only (Q-AUTH-1), so there are no Pending accounts. What this ticket delivers is open (Q-SYS-3). Do not build it until that is answered.
-- Whatever it becomes, each action writes a log entry.
 
 ### Create a Business and assign an Admin (T-124)
 
@@ -64,10 +61,9 @@
 ## Acceptance criteria
 
 - [ ] Only the `SYSTEM_ADMIN_EMAIL` account can be System Admin and sign in without an invitation; no screen or API creates another.
-- [ ] The Console covers registrations as decided in Q-SYS-3.
 - [ ] The System Admin can create a Business and invite a person as its Admin; that person lands in the Business with every module.
 - [ ] The System Admin can lock, unlock or deactivate accounts and Businesses; affected users are blocked on their next request.
-- [ ] Every invitation, assignment and status change (and any approval or rejection that Q-SYS-3 keeps) is logged with who, what and when.
+- [ ] Every invitation, assignment and status change is logged with who, what and when.
 - [ ] The System Admin cannot reach any Business's Finance or Tax data (also covered by T-17).
 
 ## Out of scope for M1
