@@ -21,7 +21,7 @@ Nền tảng quản lý shop online cho người bán TikTok Shop và Shopee ở
 - Next.js trên Cloudflare Workers qua OpenNext (`@opennextjs/cloudflare`)
 - Tailwind CSS + shadcn/ui
 - Neon PostgreSQL (Singapore) + Drizzle ORM, kết nối qua Hyperdrive
-- Better Auth (Google sign-in, Organization plugin: mỗi shop là một organization)
+- Better Auth (Google sign-in, Organization plugin: mỗi Business là một organization, chứa nhiều shop)
 - Adapter chung cho TikTok Shop, Shopee và CSV; webhook qua Cloudflare Queues
 - Ask AI dùng Claude API (chỉ Admin, tool chỉ đọc, không đọc dữ liệu Thuế)
 - Test: Vitest + Testing Library, Playwright cho 4 luồng chính

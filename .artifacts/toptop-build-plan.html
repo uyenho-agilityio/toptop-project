@@ -190,7 +190,7 @@ const EPICS = [
  ['E11','Tài chính','Chuỗi lãi lỗ đến lợi nhuận trước thuế, chi phí do Admin nhập, dòng tiền.'],
  ['E12','Thuế','Hồ sơ người nộp thuế, doanh thu theo dõi thuế, thuế sàn khấu trừ, lịch sử nộp, nhắc việc. App không tính thuế.'],
  ['E13','Báo cáo và cảnh báo','Báo cáo ngày, tuần, tháng và 13 loại cảnh báo đột xuất do Admin cấu hình.'],
- ['E14','Trợ lý AI','Hỏi đáp trên dữ liệu trong phạm vi quyền của người dùng.'],
+ ['E14','Trợ lý AI','Hỏi đáp trên dữ liệu, chỉ Admin dùng.'],
  ['E15','Cài đặt và Tích hợp','Thông tin Business, ngưỡng, thành viên và kênh thông báo.'],
  ['E16','System Console','Màn riêng cho System Admin: duyệt đăng ký, tạo Business, theo dõi vận hành.'],
  ['E17','Chất lượng và phát hành','Đa ngôn ngữ, sáng tối, responsive, bảo mật, dữ liệu mẫu.']
@@ -320,11 +320,11 @@ const T = [
 ['alertsys','E13','Cảnh báo lỗi kết nối và nhắc việc thuế','Lỗi kết nối hoặc đồng bộ|Nhắc việc thuế đến hạn (chỉ gửi cho Admin)','Hệ thống','P0','S','alertengine,syncstatus,taxrem',''],
 ['alertdelivery','E13','Gửi cảnh báo trong app và qua kênh ngoài','Thông báo trong app có trạng thái đã đọc|Gửi qua kênh thông báo ngoài khi đã kết nối','All','P0','M','alertengine,tgsend',''],
 // E14
-['aipanel','E14','Khung chat Trợ lý AI','Mở từ nút nổi, lưu hội thoại trong phiên|Hiện trạng thái đang trả lời','All','P0','M','shell',''],
-['aictx','E14','Giới hạn dữ liệu AI theo quyền','AI chỉ đọc dữ liệu của module người hỏi được cấp|Không đọc Thuế khi người hỏi là User','All','P0','M','enforce',''],
-['aiqa','E14','Trả lời câu hỏi dựa trên dữ liệu','Trả lời theo số liệu thật, nêu kỳ và nguồn|Chưa có dữ liệu thì nói “chưa có”, không bịa|Gợi ý hành động khi phù hợp','All','P0','L','aipanel,aictx,engine',''],
-['aisugg','E14','Câu hỏi gợi ý','Gợi ý theo module và vai trò','All','P1','S','aipanel',''],
-['aiquota','E14','Hạn mức dùng AI','Đếm số câu hỏi, báo khi gần hết, chặn khi hết','All','P1','S','aipanel',''],
+['aipanel','E14','Khung chat Trợ lý AI','Mở từ nút nổi, lưu hội thoại trong phiên|Hiện trạng thái đang trả lời','Admin','P0','M','shell',''],
+['aictx','E14','Giới hạn dữ liệu AI theo quyền','AI chỉ đọc dữ liệu của Business và shop đang chọn, qua công cụ chỉ đọc|Không đọc dữ liệu Thuế|User không thấy nút Ask AI và API từ chối User','Admin','P0','M','enforce',''],
+['aiqa','E14','Trả lời câu hỏi dựa trên dữ liệu','Trả lời theo số liệu thật, nêu kỳ và nguồn|Chưa có dữ liệu thì nói “chưa có”, không bịa|Gợi ý hành động khi phù hợp','Admin','P0','L','aipanel,aictx,engine',''],
+['aisugg','E14','Câu hỏi gợi ý','Gợi ý theo module','Admin','P1','S','aipanel',''],
+['aiquota','E14','Hạn mức dùng AI','Đếm số câu hỏi, báo khi gần hết, chặn khi hết','Admin','P1','S','aipanel',''],
 ['aiguard','E14','Giới hạn vai trò của AI','AI chỉ đề xuất, không tự sửa dữ liệu, không tính thuế, không tư vấn pháp lý','Hệ thống','P0','S','aiqa',''],
 // E15
 ['setbiz','E15','Thông tin Business','Tên, loại người bán, múi giờ|Admin sửa','Admin','P0','S','model',''],
@@ -349,7 +349,7 @@ const T = [
 ['sec','E17','Bảo mật token và dữ liệu nhạy cảm','Mã hóa token sàn, không ghi log dữ liệu nhạy cảm|Rà soát quyền truy cập','Hệ thống','P0','M','tiktok,shopee',''],
 ['seed','E17','Dữ liệu mẫu và tài khoản thử','Bộ dữ liệu mẫu khớp prototype: 4 vai trò mẫu và System Admin|Dùng cho demo và test','Hệ thống','P1','S','model',''],
 ['a11y','E17','Truy cập được bằng bàn phím và đọc màn hình','Tiêu điểm thấy được, nhãn cho nút và biểu đồ, tương phản đạt','All','P2','M','shell',''],
-['e2e','E17','Kiểm thử đầu cuối theo vai trò','Kịch bản Admin, User kho, User bán hàng có Tài chính, User chỉ bán hàng và báo cáo, System Admin|Kiểm tra mỗi vai trò thấy đúng, không thấy sai','Hệ thống','P0','M','enforce',''],
+['e2e','E17','Kiểm thử đầu cuối và ma trận quyền','Playwright chạy 4 luồng: nhận lời mời và đăng nhập, User không thấy Thuế và Ask AI, nhập CSV, Admin Business A không thấy Business B|Test ma trận quyền ở tầng API (Vitest) cho 5 kịch bản: Admin, User kho, User bán hàng có Tài chính, User chỉ bán hàng và báo cáo, System Admin|Mỗi vai trò thấy đúng, không thấy sai','Hệ thống','P0','M','enforce',''],
 ];
 
 const EPICS_EN = {
@@ -366,7 +366,7 @@ E10:['Suppliers','Suppliers, purchase records, payables.'],
 E11:['Finance','Profit and loss down to profit before tax, Admin-entered expenses, cash flow.'],
 E12:['Tax','Taxpayer profile, tax-tracking revenue, platform-withheld tax, payment history, reminders. The app does not calculate tax.'],
 E13:['Reports and alerts','Daily, weekly and monthly reports plus 13 triggered alerts the Admin configures.'],
-E14:['AI Assistant','Answers questions on the data, within the permissions of the person asking.'],
+E14:['AI Assistant','Answers questions on the data; Admin only.'],
 E15:['Settings and Integrations','Business info, thresholds, members and the notification channel.'],
 E16:['System Console','Separate area for the System Admin: review registrations, create Businesses, monitor operations.'],
 E17:['Quality and release','Languages, light and dark themes, responsive layout, security, sample data.']
@@ -499,9 +499,9 @@ alertfin:['Finance and supplier alerts','Supplier invoice due or overdue|Cash ma
 alertsys:['Connection error and tax reminder alerts','Connection or sync error|Tax reminder due (sent to the Admin only)'],
 alertdelivery:['Deliver alerts in the app and through an external channel','In-app notifications with a read state|Send through the external notification channel when connected'],
 aipanel:['AI Assistant chat panel','Opens from a floating button, keeps the conversation for the session|Shows a typing state'],
-aictx:['Limit AI data by permission','AI reads only the modules the asker is granted|Never reads Tax when the asker is a User'],
+aictx:['Limit AI data by permission','AI reads only the selected Business and shop, through read-only tools|Never reads Tax data|Users do not see the Ask AI button and the API rejects them'],
 aiqa:['Answer questions from the data','Answers from real numbers, naming the period and source|Says “not available yet” when data is missing, never invents|Suggests actions where fitting'],
-aisugg:['Suggested questions','Suggestions by module and role'],
+aisugg:['Suggested questions','Suggestions by module'],
 aiquota:['AI usage quota','Count questions, warn when close, block when used up'],
 aiguard:['Limits on the AI’s role','AI only recommends, never edits data, never calculates tax, gives no legal advice'],
 setbiz:['Business information','Name, seller type, time zone|Admin edits'],
@@ -524,7 +524,7 @@ perf:['Performance with large data','Pagination and indexes for orders|Main page
 sec:['Secure tokens and sensitive data','Encrypt platform tokens, no sensitive data in logs|Access review'],
 seed:['Sample data and test accounts','Sample dataset matching the prototype: 4 sample roles and a System Admin|For demos and tests'],
 a11y:['Keyboard and screen-reader access','Visible focus, labels on buttons and charts, sufficient contrast'],
-e2e:['End-to-end tests by role','Scenarios for Admin, warehouse User, sales and marketing User with Finance, sales and reports User, System Admin|Each role sees exactly what it should and nothing more']
+e2e:['End-to-end tests and permission matrix','Playwright runs 4 flows: accepting an invite and signing in, User cannot see Tax or Ask AI, CSV import, Business A Admin cannot see Business B|API-level permission-matrix tests (Vitest) for 5 scenarios: Admin, warehouse User, sales and marketing User with Finance, sales and reports User, System Admin|Each role sees exactly what it should and nothing more']
 };
 
 // [epic, VI name, EN name, ticket keys]
@@ -654,7 +654,7 @@ MS.forEach(m => {
   const add = k => { if (seen[k] || MOF[k] !== m[0]) return; seen[k] = 1; (tix[k][7] ? tix[k][7].split(',') : []).forEach(add); out.push(k); };
   keys.forEach(add); ORDER[m[0]] = out;
 });
-const UPDATED = '2026-11-25';
+const UPDATED = '2026-11-26';
 let DONE = {};
 try { DONE = JSON.parse(store.get('tt-plan-done') || '{}') || {}; } catch (e) { DONE = {}; }
 
@@ -686,11 +686,11 @@ function render(){
 
 const STK = {
  vi:{h:'Kiến trúc và tech stack',note:'Sơ đồ cho thấy người dùng vào một app duy nhất chạy trên Cloudflare; màu cam nhạt là phần nằm trong Cloudflare, nét đứt là dịch vụ bên ngoài.',
-  tbl:[['Nơi chạy','Next.js (giao diện và API) trên Cloudflare Workers, qua OpenNext. Thử vinext ở nhánh riêng.'],['Giao diện','Tailwind CSS và shadcn/ui.'],['Biểu đồ','shadcn/ui Chart (chạy trên Recharts), vẽ ở trình duyệt.'],['Database','Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive. Tạo kết nối mới cho mỗi request.'],['Đăng nhập và quyền','Better Auth với đăng nhập Google. Plugin Organization: mỗi shop là một organization, Admin và User theo từng shop. System Admin chỉ có một người.'],['Mời chủ shop','System Admin tạo shop rồi gửi link mời cho chủ shop; họ đăng nhập Google và thành Admin. Người không được mời không vào được.'],['Kết nối sàn','Adapter chung cho TikTok Shop, Shopee và nhập CSV. Luồng ủy quyền chạy từ M2 với dữ liệu giả. Webhook qua Cloudflare Queues, chỉ bật ở M9.'],['Nhập file','CSV đọc bằng Papa Parse, Excel (.xlsx) bằng SheetJS, đều chạy ở trình duyệt. Xem thử (số dòng, dòng lỗi) rồi mới ghi vào PostgreSQL. Không giữ file gốc.'],['Xuất file','CSV tạo ngay ở trình duyệt. PDF xuất bằng in từ trình duyệt (CSS in), cần file đẹp hơn thì dùng @react-pdf/renderer ở trình duyệt. Báo cáo theo lịch không đính kèm PDF.'],['Ask AI','Claude API. Chỉ Admin thấy. AI lấy dữ liệu qua công cụ chỉ đọc, lọc theo shop đang chọn, không sửa được dữ liệu và không đọc dữ liệu Thuế.'],['Kiểm thử','Vitest và Testing Library, viết test trước (TDD) cho logic và component có hành vi. Playwright cho 4 luồng: nhận lời mời và đăng nhập, User không thấy Thuế và Ask AI, nhập CSV, Admin shop A không thấy dữ liệu shop B.']],
-  d:{u:[['Admin shop','Sửa dữ liệu, Ask AI'],['User','Chỉ xem, không Thuế'],['System Admin','Một người duy nhất']],cf:'Cloudflare Workers: Next.js (OpenNext)',r1:[['Giao diện và API','Tailwind, shadcn/ui'],['Better Auth','Quyền theo shop'],['Ask AI','Công cụ chỉ đọc'],['Queues','Webhook, chỉ ở M9']],r2:[['Adapter kênh bán','TikTok, Shopee, CSV'],['Drizzle ORM','Truy vấn Postgres'],['Hyperdrive','Cầu nối tới Neon']],x:[['Google','Đăng nhập'],['Neon Postgres','Singapore'],['Claude API','Cho Ask AI'],['TikTok, Shopee','Ủy quyền, webhook']]}},
+  tbl:[['Nơi chạy','Next.js (giao diện và API) trên Cloudflare Workers, qua OpenNext. Thử vinext ở nhánh riêng.'],['Giao diện','Tailwind CSS và shadcn/ui.'],['Biểu đồ','shadcn/ui Chart (chạy trên Recharts), vẽ ở trình duyệt.'],['Database','Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive. Tạo kết nối mới cho mỗi request.'],['Đăng nhập và quyền','Better Auth với đăng nhập Google. Plugin Organization: mỗi Business là một organization và có nhiều shop; Admin và User theo từng Business. System Admin chỉ có một người.'],['Mời chủ Business','System Admin tạo Business rồi gửi link mời cho chủ Business; họ đăng nhập Google và thành Admin. Người không được mời không vào được.'],['Kết nối sàn','Adapter chung cho TikTok Shop, Shopee và nhập CSV. Luồng ủy quyền chạy từ M2 với dữ liệu giả. Webhook qua Cloudflare Queues, chỉ bật ở M9.'],['Nhập file','CSV đọc bằng Papa Parse, Excel (.xlsx) bằng SheetJS, đều chạy ở trình duyệt. Xem thử (số dòng, dòng lỗi) rồi mới ghi vào PostgreSQL. Không giữ file gốc.'],['Xuất file','CSV tạo ngay ở trình duyệt. PDF xuất bằng in từ trình duyệt (CSS in), cần file đẹp hơn thì dùng @react-pdf/renderer ở trình duyệt. Báo cáo theo lịch không đính kèm PDF.'],['Ask AI','Claude API. Chỉ Admin thấy. AI lấy dữ liệu qua công cụ chỉ đọc, lọc theo Business và shop đang chọn, không sửa được dữ liệu và không đọc dữ liệu Thuế.'],['Kiểm thử','Vitest và Testing Library, viết test trước (TDD) cho logic và component có hành vi. Playwright cho 4 luồng: nhận lời mời và đăng nhập, User không thấy Thuế và Ask AI, nhập CSV, Admin Business A không thấy dữ liệu Business B. Phân quyền theo từng vai trò kiểm bằng test ma trận quyền ở tầng API (Vitest).']],
+  d:{u:[['Admin','Sửa dữ liệu, Ask AI'],['User','Chỉ xem, không Thuế'],['System Admin','Một người duy nhất']],cf:'Cloudflare Workers: Next.js (OpenNext)',r1:[['Giao diện và API','Tailwind, shadcn/ui'],['Better Auth','Quyền theo Business'],['Ask AI','Công cụ chỉ đọc'],['Queues','Webhook, chỉ ở M9']],r2:[['Adapter kênh bán','TikTok, Shopee, CSV'],['Drizzle ORM','Truy vấn Postgres'],['Hyperdrive','Cầu nối tới Neon']],x:[['Google','Đăng nhập'],['Neon Postgres','Singapore'],['Claude API','Cho Ask AI'],['TikTok, Shopee','Ủy quyền, webhook']]}},
  en:{h:'Architecture and tech stack',note:'Users reach one app running on Cloudflare; the tinted area runs inside Cloudflare and dashed boxes are outside services.',
-  tbl:[['Hosting','Next.js (UI and API) on Cloudflare Workers, through OpenNext. Try vinext on a side branch.'],['UI','Tailwind CSS and shadcn/ui.'],['Charts','shadcn/ui Chart (built on Recharts), drawn in the browser.'],['Database','Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive. Create a new connection per request.'],['Sign-in and roles','Better Auth with Google sign-in. Organization plugin: each shop is an organization, with Admin and User roles per shop. There is exactly one System Admin.'],['Inviting shop owners','The System Admin creates a shop and sends the owner an invite link; they sign in with Google and become Admin. Anyone not invited cannot get in.'],['Platform connection','One adapter shape for TikTok Shop, Shopee and CSV import. The authorization flow runs from M2 against mock data. Webhooks go through Cloudflare Queues, switched on only in M9.'],['File import','CSV is read with Papa Parse and Excel (.xlsx) with SheetJS, both in the browser. Preview (row count, bad rows), then write to PostgreSQL. The original file is not kept.'],['File export','CSV is built in the browser. PDF through browser print (print CSS); if a nicer file is needed, @react-pdf/renderer in the browser. Scheduled reports carry no PDF attachment.'],['Ask AI','Claude API. Only Admins see it. The AI reads data through read-only tools filtered to the selected shop; it cannot change data and cannot read Tax data.'],['Testing','Vitest and Testing Library, test-first (TDD) for logic and components with behavior. Playwright for 4 flows: accepting an invite and signing in, User cannot see Tax or Ask AI, CSV import, shop A Admin cannot see shop B data.']],
-  d:{u:[['Shop Admin','Edits data, Ask AI'],['User','View only, no Tax'],['System Admin','One person only']],cf:'Cloudflare Workers: Next.js (OpenNext)',r1:[['UI and API','Tailwind, shadcn/ui'],['Better Auth','Per-shop roles'],['Ask AI','Read-only tools'],['Queues','Webhooks, M9 only']],r2:[['Channel adapter','TikTok, Shopee, CSV'],['Drizzle ORM','Postgres queries'],['Hyperdrive','Bridge to Neon']],x:[['Google','Sign-in'],['Neon Postgres','Singapore'],['Claude API','For Ask AI'],['TikTok, Shopee','Auth, webhooks']]}}
+  tbl:[['Hosting','Next.js (UI and API) on Cloudflare Workers, through OpenNext. Try vinext on a side branch.'],['UI','Tailwind CSS and shadcn/ui.'],['Charts','shadcn/ui Chart (built on Recharts), drawn in the browser.'],['Database','Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive. Create a new connection per request.'],['Sign-in and roles','Better Auth with Google sign-in. Organization plugin: each Business is an organization that holds many shops, with Admin and User roles per Business. There is exactly one System Admin.'],['Inviting Business owners','The System Admin creates a Business and sends the owner an invite link; they sign in with Google and become Admin. Anyone not invited cannot get in.'],['Platform connection','One adapter shape for TikTok Shop, Shopee and CSV import. The authorization flow runs from M2 against mock data. Webhooks go through Cloudflare Queues, switched on only in M9.'],['File import','CSV is read with Papa Parse and Excel (.xlsx) with SheetJS, both in the browser. Preview (row count, bad rows), then write to PostgreSQL. The original file is not kept.'],['File export','CSV is built in the browser. PDF through browser print (print CSS); if a nicer file is needed, @react-pdf/renderer in the browser. Scheduled reports carry no PDF attachment.'],['Ask AI','Claude API. Only Admins see it. The AI reads data through read-only tools filtered to the selected Business and shop; it cannot change data and cannot read Tax data.'],['Testing','Vitest and Testing Library, test-first (TDD) for logic and components with behavior. Playwright for 4 flows: accepting an invite and signing in, User cannot see Tax or Ask AI, CSV import, Business A Admin cannot see Business B data. Per-role permissions are checked by permission-matrix tests at the API level (Vitest).']],
+  d:{u:[['Admin','Edits data, Ask AI'],['User','View only, no Tax'],['System Admin','One person only']],cf:'Cloudflare Workers: Next.js (OpenNext)',r1:[['UI and API','Tailwind, shadcn/ui'],['Better Auth','Per-Business roles'],['Ask AI','Read-only tools'],['Queues','Webhooks, M9 only']],r2:[['Channel adapter','TikTok, Shopee, CSV'],['Drizzle ORM','Postgres queries'],['Hyperdrive','Bridge to Neon']],x:[['Google','Sign-in'],['Neon Postgres','Singapore'],['Claude API','For Ask AI'],['TikTok, Shopee','Auth, webhooks']]}}
 };
 function stackSvg(d){
   const bx=(x,y,w,h,cls,t)=>`<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><text x="${x+w/2}" y="${y+h/2-4}" text-anchor="middle" dominant-baseline="central">${esc(t[0])}</text><text class="s" x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" dominant-baseline="central">${esc(t[1])}</text>`;
@@ -739,7 +739,10 @@ const SEC = {
    ['Đồng bộ tự động','Chỉ làm ở M9, khi có user thật kết nối API.','Build Plan'],
    ['Nhập và xuất file','Papa Parse, SheetJS, CSV ở trình duyệt, PDF bằng in trình duyệt.','Bạn, 2026-11-25'],
    ['Ask AI','Claude API, chỉ Admin thấy, công cụ chỉ đọc, không đọc Thuế.','Bạn, 2026-11-25'],
-   ['Kiểm thử','Vitest và Testing Library viết test trước; 4 luồng Playwright.','Bạn, 2026-11-25']
+   ['Kiểm thử','Vitest và Testing Library viết test trước; 4 luồng Playwright.','Bạn, 2026-11-25'],
+   ['Ask AI','Chỉ Admin dùng; User không thấy nút và API từ chối User.','Bạn, 2026-11-26'],
+   ['Organization','Mỗi Business là một organization trong Better Auth, chứa nhiều shop; quyền Admin và User theo Business.','Bạn, 2026-11-26'],
+   ['Kiểm thử','Playwright 4 luồng; 5 kịch bản theo vai trò kiểm bằng test ma trận quyền ở tầng API (Vitest), nhanh và rẻ hơn mà phủ đủ vai trò.','Claude đề xuất, bạn đồng ý 2026-11-26']
   ],
   msNote:'Cỡ S=1, M=3, L=5 điểm công. Mã ticket T-xx và mã feature F-xx giống trang TopTop Features.',
   rulesH:'Quy tắc sản phẩm đã chốt',
@@ -749,15 +752,14 @@ const SEC = {
   git:'Git workflow, quy ước branch và PR',
   roleHead:['Vai trò','Thấy','Sửa được','Ghi chú'],
   roles:[
-   ['Admin','Mọi module của shop mình, gồm Tài chính và Thuế; Cài đặt, thành viên, nhật ký thao tác.','Nhập, sửa, xóa dữ liệu; nhập file; mời User, cấp quyền theo module, gỡ User; cấu hình ngưỡng cảnh báo.','Ask AI: xem mục 16.'],
-   ['User','Chỉ module được cấp (mặc định không có module nào). Không bao giờ thấy Tab Thuế.','Không sửa được gì; nút sửa bị khóa và API từ chối ghi.','Xuất CSV được với module được cấp. Mỗi module một mức: Xem hoặc Không có quyền. Ask AI: Chưa chốt.'],
+   ['Admin','Mọi module của Business mình (mọi shop), gồm Tài chính và Thuế; Cài đặt, thành viên, nhật ký thao tác.','Nhập, sửa, xóa dữ liệu; nhập file; mời User, cấp quyền theo module, gỡ User; cấu hình ngưỡng cảnh báo.','Dùng được Ask AI.'],
+   ['User','Chỉ module được cấp (mặc định không có module nào). Không bao giờ thấy Tab Thuế.','Không sửa được gì; nút sửa bị khóa và API từ chối ghi.','Xuất CSV được với module được cấp. Mỗi module một mức: Xem hoặc Không có quyền. Không dùng được Ask AI.'],
    ['System Admin','System Console: duyệt đăng ký, Business, trạng thái, giám sát vận hành. Không đọc Tài chính, Thuế của Business.','Duyệt hoặc từ chối đăng ký; tạo Business và gán Admin; khóa, mở, vô hiệu hóa tài khoản và Business.','Chỉ một người, email đặt trong cấu hình máy chủ. Tài khoản mới ở trạng thái Chờ duyệt.']
   ],
   dataH:['Mô hình','Truy vấn và lưu trữ'],
   data:['Business có nhiều shop; tài khoản về sau thuộc nhiều Business.','Quyền lưu theo user, module, mức quyền.','Hồ sơ người nộp thuế và kết nối sàn là bản ghi riêng.','Loại người bán là danh sách (Cá nhân, Hộ kinh doanh), thêm Công ty sau được.','Mọi truy vấn bắt buộc lọc theo Business; test Admin Business A không đọc được Business B.','Mỗi bản ghi lưu nguồn: API sàn, file nhập hoặc nhập tay.','Database: Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive.'],
   dataMig:'Migration: Chưa chốt (cách quản lý và công cụ chạy migration chưa được quyết).',
   dataRef:'Ticket liên quan: ',
-  dataOpen:'Cách tổ chức shop và Business trong dữ liệu còn một điểm cần chốt, xem mục 16.',
   intHead:['Tích hợp','Mục đích','Milestone'],
   ints:[['TikTok Shop','Kết nối tài khoản bằng OAuth, nhập đơn hàng, chi quảng cáo, quyết toán.','OAuth ở M2; đồng bộ ở M9'],['Shopee','Kết nối tài khoản bằng OAuth, nhập đơn hàng, chi quảng cáo, quyết toán.','OAuth ở M2; đồng bộ ở M9'],['Nhập CSV, Excel','Đưa dữ liệu vào app khi chưa có đồng bộ tự động (Papa Parse, SheetJS).','M2'],['Telegram','Gửi báo cáo theo lịch và cảnh báo; Admin chọn người nhận ({tgconn}, {tgsend}).','M6'],['Đăng nhập Google','Đăng nhập qua Better Auth.','M1'],['Claude API','Cho Ask AI và nhận xét báo cáo.','M7'],['Cloudflare Queues','Nhận webhook từ sàn.','M9']],
   secLead:'Các biện pháp bảo mật nằm trong ticket:',
@@ -765,20 +767,16 @@ const SEC = {
   testLead:'Bộ kiểm thử gồm hai lớp:',
   testStack:'Kiểm thử',
   testE2e:'Ticket kiểm thử đầu cuối:',
-  testOpen:'Số luồng và kịch bản đầu cuối còn một điểm cần chốt, xem mục 16.',
+  testOpen:'Vì sao chia như vậy: test ma trận quyền ở tầng API chạy nhanh và rẻ hơn test trình duyệt, lại phủ đủ mọi tổ hợp vai trò và module; Playwright chỉ giữ 4 luồng quan trọng nhất (chốt 2026-11-26).',
   relM8:'M8 hoàn thành khi: ',relM9:'M9 chờ user thật: ',relPilot:'Chạy thử với người dùng thật và cách triển khai dần',
-  aiLead:'Ask AI: ',aiTickets:'Ticket Trợ lý AI (E14) và nhận xét báo cáo:',aiOpen:'Việc User có dùng Ask AI hay không còn cần chốt, xem mục 16.',
+  aiLead:'Ask AI: ',aiTickets:'Ticket Trợ lý AI (E14) và nhận xét báo cáo:',aiOpen:'Chỉ Admin dùng Ask AI; User không thấy nút và API từ chối (chốt 2026-11-26).',
   i18nLead:'Ticket liên quan:',
   defHead:['Tính năng','Vì sao','Khi nào'],
   def:[['Tự đồng bộ từ sàn','Chờ ít nhất một user thật đồng ý kết nối API của sàn.','M9, chờ user thật'],['vinext','Thử thay OpenNext; chỉ thử ở nhánh riêng.','Thử ở nhánh riêng'],['Nhiều Business cho một tài khoản','Chỉ chuẩn bị bộ chọn Business (ticket {bizswitch}, P2).','P2'],['Loại người bán Công ty','Mô hình dữ liệu đã cho phép thêm sau.','Thêm sau']],
   defApi:'Quyền API thật của TikTok Shop và Shopee',
   defApiWhen:'M9, khi có user thật',
-  openLead:'Cần chốt trước khi làm:',
-  openQ:[
-   'Ask AI: tech stack ghi chỉ Admin thấy, nhưng các ticket E14 ({aipanel} khung chat, {aictx} giới hạn dữ liệu) ghi vai trò All và có quy tắc cho User. Cần chốt User có dùng Ask AI không.',
-   'Tổ chức dữ liệu: tech stack ghi mỗi shop là một organization, còn ticket mô hình dữ liệu ({model}) ghi một Business có nhiều shop. Cần chốt organization ứng với shop hay Business.',
-   'Kiểm thử đầu cuối: tech stack ghi 4 luồng Playwright, ticket e2e ({e2e}) liệt kê 5 kịch bản theo vai trò. Cần chốt.'
-  ]
+  openLead:'Hiện không còn việc cần chốt.',
+  openQ:[]
  },
  en:{
   toc:'Contents',
@@ -802,7 +800,10 @@ const SEC = {
    ['Automatic sync','Built only in M9, once a real user connects their API.','Build Plan'],
    ['File import and export','Papa Parse, SheetJS, CSV in the browser, PDF through browser print.','You, 2026-11-25'],
    ['Ask AI','Claude API, only Admins see it, read-only tools, cannot read Tax.','You, 2026-11-25'],
-   ['Testing','Vitest and Testing Library, tests written first; 4 Playwright flows.','You, 2026-11-25']
+   ['Testing','Vitest and Testing Library, tests written first; 4 Playwright flows.','You, 2026-11-25'],
+   ['Ask AI','Admin only; Users do not see the button and the API rejects them.','You, 2026-11-26'],
+   ['Organization','Each Business is one Better Auth organization holding many shops; Admin and User roles are per Business.','You, 2026-11-26'],
+   ['Testing','Playwright for 4 flows; the 5 role scenarios are checked by API-level permission-matrix tests (Vitest), faster and cheaper while covering every role.','Proposed by Claude, approved by you 2026-11-26']
   ],
   msNote:'Size S=1, M=3, L=5 effort points. Ticket IDs T-xx and feature IDs F-xx match the TopTop Features page.',
   rulesH:'Fixed product rules',
@@ -812,15 +813,14 @@ const SEC = {
   git:'Git workflow, branch and PR conventions',
   roleHead:['Role','Sees','Can edit','Notes'],
   roles:[
-   ['Admin','Every module of their own shop, including Finance and Tax; Settings, members, the activity log.','Enter, edit and delete data; import files; invite Users, grant permissions per module, remove Users; configure alert thresholds.','Ask AI: see section 16.'],
-   ['User','Only granted modules (none by default). Never sees the Tax tab.','Nothing; edit buttons are locked and the API rejects writes.','Can export CSV for granted modules. One level per module: View or No access. Ask AI: Not decided yet.'],
+   ['Admin','Every module of their own Business (all its shops), including Finance and Tax; Settings, members, the activity log.','Enter, edit and delete data; import files; invite Users, grant permissions per module, remove Users; configure alert thresholds.','Can use Ask AI.'],
+   ['User','Only granted modules (none by default). Never sees the Tax tab.','Nothing; edit buttons are locked and the API rejects writes.','Can export CSV for granted modules. One level per module: View or No access. Cannot use Ask AI.'],
    ['System Admin','The System Console: sign-up approval, Businesses, status, operations monitoring. Cannot read a Business’s Finance or Tax data.','Approve or reject sign-ups; create a Business and assign its Admin; lock, unlock or disable accounts and Businesses.','One person only, with the email set in server configuration. New accounts start as Pending approval.']
   ],
   dataH:['Model','Queries and storage'],
   data:['A Business has many shops; an account may later belong to several Businesses.','Permissions are stored per user, module and level.','The taxpayer profile and platform connections are separate records.','Seller type is a list (Individual, Household business); adding Company later must be possible.','Every query must filter by Business; test: an Admin of Business A cannot read Business B.','Every record stores its source: platform API, imported file or manual entry.','Database: Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive.'],
   dataMig:'Migrations: Not decided yet (how they are managed and which tool runs them).',
   dataRef:'Related tickets: ',
-  dataOpen:'How shops and Businesses map onto the data still needs a decision, see section 16.',
   intHead:['Integration','Purpose','Milestone'],
   ints:[['TikTok Shop','Connect the account with OAuth; bring in orders, ad spend and settlements.','OAuth in M2; sync in M9'],['Shopee','Connect the account with OAuth; bring in orders, ad spend and settlements.','OAuth in M2; sync in M9'],['CSV, Excel import','Bring data in while there is no automatic sync (Papa Parse, SheetJS).','M2'],['Telegram','Send scheduled reports and alerts; the Admin picks recipients ({tgconn}, {tgsend}).','M6'],['Google sign-in','Sign-in through Better Auth.','M1'],['Claude API','For Ask AI and report commentary.','M7'],['Cloudflare Queues','Receive webhooks from the platforms.','M9']],
   secLead:'Security measures live in these tickets:',
@@ -828,20 +828,16 @@ const SEC = {
   testLead:'Testing has two layers:',
   testStack:'Testing',
   testE2e:'End-to-end ticket:',
-  testOpen:'The number of end-to-end flows and scenarios still needs a decision, see section 16.',
+  testOpen:'Why this split: API-level permission-matrix tests are faster and cheaper than browser tests and cover every role and module combination; Playwright keeps only the 4 most important flows (decided 2026-11-26).',
   relM8:'M8 is done when: ',relM9:'M9 waits for a real user: ',relPilot:'Pilot with real users and gradual rollout',
-  aiLead:'Ask AI: ',aiTickets:'AI Assistant tickets (E14) and report commentary:',aiOpen:'Whether Users get Ask AI still needs a decision, see section 16.',
+  aiLead:'Ask AI: ',aiTickets:'AI Assistant tickets (E14) and report commentary:',aiOpen:'Only Admins use Ask AI; Users do not see the button and the API rejects them (decided 2026-11-26).',
   i18nLead:'Related tickets:',
   defHead:['Feature','Why','When'],
   def:[['Automatic sync from the platforms','Waits for at least one real user who agrees to connect a platform API.','M9, waits for a real user'],['vinext','A possible replacement for OpenNext; only tried on a side branch.','Tried on a side branch'],['Several Businesses per account','Only the Business switcher is prepared (ticket {bizswitch}, P2).','P2'],['Company seller type','The data model already allows adding it later.','Added later']],
   defApi:'Real TikTok Shop and Shopee API access',
   defApiWhen:'M9, when a real user exists',
-  openLead:'To decide before building:',
-  openQ:[
-   'Ask AI: the tech stack says only Admins see it, but the E14 tickets ({aipanel} chat panel, {aictx} data limits) list the role as All and include a rule for Users. Decide whether Users get Ask AI.',
-   'Data organization: the tech stack says each shop is an organization, while the data model ticket ({model}) says one Business has many shops. Decide whether an organization maps to a shop or to a Business.',
-   'End-to-end testing: the tech stack says 4 Playwright flows, while the e2e ticket ({e2e}) lists 5 role-based scenarios. Decide which.'
-  ]
+  openLead:'Nothing open right now.',
+  openQ:[]
  }
 };
 const SK = () => SEC[S.lang];
@@ -860,7 +856,7 @@ function secBodies(){
   b.milestones = esc(k.msNote);
   b.rules = `<h3 class="stkh">${esc(k.rulesH)}</h3>${ul(k.rules)}<h3 class="stkh">${esc(k.rulesH2)}</h3>${ul(k.rules2)}<p>${esc(k.git)}: <b>${esc(k.undecided)}</b></p>`;
   b.roles = tbl(k.roleHead, k.roles);
-  b.data = ul(k.data) + `<p>${esc(k.dataMig)}</p><p class="note">${esc(k.dataRef)}${['model','tenant','source'].map(tref).join(' · ')}</p><p class="note">${esc(k.dataOpen)}</p>`;
+  b.data = ul(k.data) + `<p>${esc(k.dataMig)}</p><p class="note">${esc(k.dataRef)}${['model','tenant','source'].map(tref).join(' · ')}</p>`;
   b.integrations = tbl(k.intHead, k.ints);
   b.security = `<p>${esc(k.secLead)}</p>${trefs(k.secKeys, true)}`;
   const tr = stkRow('Kiểm thử');
@@ -870,7 +866,7 @@ function secBodies(){
   b.ai = `${ar ? `<p><b>${esc(ar[0])}:</b> ${esc(ar[1])}</p>` : ''}<p>${esc(k.aiTickets)}</p>${trefs(['aipanel','aictx','aiqa','aisugg','aiquota','aiguard','repai'], true)}<p class="note">${esc(k.aiOpen)}</p>`;
   b.i18n = `<p>${esc(k.i18nLead)}</p>${trefs(['i18n','theme','resp','a11y'], true)}`;
   b.deferred = tbl(k.defHead, k.def.concat([[k.defApi, u.openList[0], k.defApiWhen]]));
-  b.open = `<div class="open obox"><p class="oh">${esc(k.openLead)}</p><ol>${k.openQ.map(q => `<li>${fill(q)}</li>`).join('')}</ol></div>`;
+  b.open = `<div class="open obox"><p class="oh">${esc(k.openLead)}</p>${k.openQ.length ? `<ol>${k.openQ.map(q => `<li>${fill(q)}</li>`).join('')}</ol>` : ''}</div>`;
   return b;
 }
 function secs(){
