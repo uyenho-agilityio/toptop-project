@@ -7,7 +7,6 @@
 
 | ID | Question | Why it matters | Tickets |
 | --- | --- | --- | --- |
-| Q-AUTH-3 | Invitation delivery: the Decisions say "invites by manual link", while T-11 says "Send the invitation". Does the app email the link, or does the Admin copy it? | Email sending is not in the stack list. | T-11 |
 | Q-AUTH-4 | Invitation lifecycle: T-11 names the status "Invited" and revoke. Are there more statuses (accepted, expired, revoked)? Does a link expire, and is it single use? | Needed for the acceptance test of T-12. | T-11, T-12 |
 | Q-AUTH-5 | Must the Google account that accepts an invitation have the same email as the invited address? | A mismatch could let the wrong person join. | T-12 |
 | Q-AUTH-6 | The Prototype gives each account one Business. Can an invited person who already belongs to another Business accept? Brief 2.5 only says "later". | Edge case in T-12 and in `m1-system-admin.md`. | T-12 |
@@ -23,6 +22,7 @@
 | --- | --- | --- |
 | Q-AUTH-1 | **Sign-in is invite-only.** Only an invited person can get in. A new user with no invitation is blocked. There is no Pending state and no self-registration. This is a change from the Build Plan tickets T-09 and T-10, which assumed Pending accounts (T-123 is removed); it follows the Plan's Architecture section ("Anyone not invited cannot get in"). What a blocked person sees is set in the next row (Q-SYS-2). The first System Admin is the `SYSTEM_ADMIN_EMAIL` account, the one exception to invite-only (Q-SYS-1, resolved in `m1-system-admin.md`). If that email changes, the previous System Admin loses access immediately (Q-SYS-1b, resolved). | 2026-11-26, product owner |
 | Q-SYS-2 | **A person with no invitation sees a notice** saying they have no access yet and should contact an Admin. | 2026-11-26, product owner |
+| Q-AUTH-3 | **Invitations are manual links.** The app creates an invitation link and the Admin copies and sends it; the app does not send email. Decided earlier in the Build Plan: Decisions row "Sign-in: Better Auth, Google, Organization plugin, invites by manual link" (Uyn, 2026-11-25), and Architecture "Inviting Business owners": the System Admin "sends the owner an invite link". T-11 "Send the invitation" means "create the link". | 2026-11-25 and 2026-11-26 |
 | Q-AUTH-2 | **An invited Admin gets all modules. An invited User gets no modules until an Admin assigns them.** The invite form does not choose modules for a User. | 2026-11-26, product owner |
 | Q-AUTH-8 | **Ask AI is Admin only.** Users have no Ask AI at all: no button, and the API rejects them. The Plan decision of 2026-11-26 stands; Brief 2.3 and 5.4 are out of date on this point. | 2026-11-26, product owner |
 
@@ -49,7 +49,7 @@
 
 ### Admin invites a User (T-11)
 
-- The Admin enters an email. The invited person becomes a User with **no modules** (Q-AUTH-2, resolved). The invitation has the status Invited and can be revoked. See Q-AUTH-3 and Q-AUTH-4 for delivery and lifecycle.
+- The Admin enters an email and the app creates an invitation link for the Admin to copy and send (no email is sent by the app; Q-AUTH-3, resolved). The invited person becomes a User with **no modules** (Q-AUTH-2, resolved). The invitation has the status Invited and can be revoked. See Q-AUTH-4 for lifecycle.
 - A User is the only role an Admin can invite. Admin and System Admin accounts come only from the System Admin (Brief 2.1, 2.4). An Admin invited by the System Admin gets all modules (see `m1-system-admin.md`).
 
 ### User accepts the invitation (T-12)

@@ -11,6 +11,8 @@ One spec per capability group. Each spec lists its open questions first, then th
 | [m1-system-admin.md](m1-system-admin.md) | T-122, T-124, T-125 |
 | [m1-i18n-theme-seed.md](m1-i18n-theme-seed.md) | T-129, T-130, T-134 |
 
+[m1-open-questions.md](m1-open-questions.md) lists every open question by what it needs (decision, or a detail for the ticket).
+
 ## Conventions
 
 - **Brief** means `.artifacts/product-brief.html`. Citations use its section numbers, for example "Brief 2.3".

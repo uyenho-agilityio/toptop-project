@@ -12,12 +12,12 @@
 | Q-I18N-3 | Which i18n library and message format? The Plan's stack table does not name one. | Needed to start T-129. | T-129 |
 | Q-I18N-4 | Does the language appear in the URL (for example `/vi/...`) or only in a stored setting? | Interacts with the shared period URL (T-24). | T-129 |
 | Q-THEME-1 | T-130 says "follows the system, with a manual toggle". The Prototype toggle only switches between light and dark and never returns to "follow system". Should the toggle have a third state? | Behavior of the toggle. | T-130 |
-| Q-SEED-2 | Seed scope in M1: M1 has no orders or cost tables (Q-FND-1, resolved), so is the seed limited to accounts, Businesses, shops and permissions? The engine tests (Q-ENG-3) then need their own order fixtures, possibly generated like the Prototype's sample data. | Where the engine's sample dataset lives. | T-134, T-25 |
 
 ## Resolved questions
 
 | ID | Answer | Date |
 | --- | --- | --- |
+| Q-SEED-2 | **The M1 seed holds accounts, Businesses, shops and permissions only.** M1 has no orders or cost tables (decision of 2026-11-26: no cost or profit processing in M1, M4 adds the tables). Order fixtures for the engine tests are a test concern, see Q-ENG-3. | 2026-11-26, product owner |
 | Q-SEED-3 | **Sample accounts sign in through a dev-only account picker**, like the account list in the Prototype (`loginView()`). It is off in production, where only Google sign-in exists. The seed also never runs in production. | 2026-11-26, product owner |
 | Q-SEED-1 | **Keep the Prototype's sample roles as test data**: a System Admin, Admins and Users with different module grants. No new role is added. | 2026-11-26, product owner |
 
@@ -54,7 +54,7 @@
   - Business B1 "Mộc Mạc" (active, has data) with three shops: Mộc Mạc Official and Mộc Mạc Gốm on TikTok Shop, Mộc Mạc Shopee on Shopee.
   - Business B2 "Sắc Việt Decor" (active, no data), to test the empty workspace.
   - Accounts: System Admin; Admin Nguyễn Thu Lan (B1, all modules); Users Trần Minh (Overview, Sales, Inventory, Supplier), Lê Hà (Overview, Sales, Marketing, Finance), Đặng Sơn (Sales, Reports); Admin Võ Khang (B2). The Prototype's Pending registration (Phạm Quỳnh) has no equivalent now that sign-in is invite-only; use an uninvited Google account as the blocked-person test case.
-- The seed must be repeatable (running it twice does not duplicate data) and must be able to grow when later milestones add tables. See Q-SEED-2.
+- The seed must be repeatable (running it twice does not duplicate data) and must be able to grow when later milestones add tables.
 
 ## Edge cases
 
@@ -76,4 +76,4 @@
 ## Out of scope for M1
 
 - Responsive layout verification and accessibility audit (M8; build responsively from M1, per the Plan).
-- Seeding the module data (orders, products, costs) before the tables exist (see Q-SEED-2).
+- Seeding the module data (orders, products, costs) before the tables exist (Q-SEED-2, resolved).
