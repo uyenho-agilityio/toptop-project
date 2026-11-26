@@ -1,0 +1,482 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta content="cover" name="claude:viewport-fit-sides"/>
+<title>TopTop Product Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+/* Layout: one reading column. EN is the default; the globe button switches to VI. Tables and calculations keep their own scroll box. */
+:root{--bg:#fffaf5;--surface:#ffffff;--fg:#2b1a0d;--muted:#7d5b44;--line:#f2dccb;--accent:#e8731a;--accent-soft:#fde8d6;--chip:#fdf0e4;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1a120c;--surface:#241913;--fg:#f5ebe0;--muted:#c2a58c;--line:#3d2c1f;--accent:#ff9a3c;--accent-soft:#3a2716;--chip:#2e2016;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a120c;--surface:#241913;--fg:#f5ebe0;--muted:#c2a58c;--line:#3d2c1f;--accent:#ff9a3c;--accent-soft:#3a2716;--chip:#2e2016;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 "Geist",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font-size:24px;margin:0 0 4px}
+h3{font-size:15px;margin:22px 0 8px}
+h2{font-size:18px;margin:32px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+p,li{max-width:70ch}
+.sub{color:var(--muted);font-size:13px;margin:0}
+.lang{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);font:inherit;font-weight:600;cursor:pointer}
+.scroll{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+pre{background:var(--chip);border-radius:8px;padding:10px 12px;overflow-x:auto;font-size:13px;margin:10px 0}
+a{color:var(--accent)}
+ul.check{list-style:none;padding-left:0}
+ul.check li::before{content:"\2610  ";color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+.tools{display:flex;gap:8px}
+.links{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:14px}
+h1{letter-spacing:-.015em}
+.links{background:var(--surface)}
+.lang{box-shadow:0 1px 2px rgba(20,20,19,.04)}
+
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;align-items:start;margin-top:16px}
+.page{min-width:0;display:flex;flex-direction:column;gap:14px}
+.page .links{margin-top:0}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+.toc{display:flex;flex-direction:column;gap:2px}
+.toc a{display:block;padding:8px 12px;border-radius:10px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;line-height:1.35}
+.toc a:hover{background:var(--chip);color:var(--fg)}
+.toc a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 2px rgba(20,20,19,.04);min-width:0;scroll-margin-top:16px}
+.panel h2{margin:0 0 10px;padding-top:0;border-top:0}
+.links{border-radius:14px;box-shadow:0 1px 2px rgba(20,20,19,.04)}
+.menu-btn{display:none}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40}
+@media (max-width:900px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .menu-btn{display:inline-flex}
+  .top{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"menu tools" "title title";align-items:center;gap:10px}
+  .top .menu-btn{grid-area:menu}
+  .top .tools{grid-area:tools;justify-self:end}
+  .top .title-block{grid-area:title}
+  .side{position:fixed;top:0;left:0;bottom:0;width:min(280px,85vw);z-index:50;transform:translateX(-105%);transition:transform .2s;padding:calc(16px + env(safe-area-inset-top,0px)) 12px 16px calc(12px + env(safe-area-inset-left,0px));background:var(--bg);box-shadow:8px 0 24px rgba(0,0,0,.18);overflow-y:auto}
+  html.menu-open .side{transform:none}
+  html.menu-open .backdrop{display:block}
+}
+@media (prefers-reduced-motion:reduce){.side{transition:none}}
+table.feat td.fid{white-space:nowrap;font-family:"Geist Mono",ui-monospace,monospace;font-size:13px;color:var(--muted)}
+table.feat td.prio{white-space:nowrap;font-weight:600}
+table.feat td.p-m{color:var(--accent)}
+tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spacing:0;font-size:13px;position:static}
+.tpv{font-style:normal;font-weight:600;color:var(--warn,#b45309)}</style>
+<div class="wrap">
+<div class="top">
+<button aria-controls="side" aria-expanded="false" aria-label="Menu" class="lang menu-btn" id="menu-btn" type="button"><svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+<div class="title-block">
+<h1><span class="en">TopTop Project - Product Brief</span><span class="vi">TopTop Project - Bản mô tả sản phẩm</span></h1>
+<p class="sub"><span class="en">Version 1.0.0. Online shop management platform for TikTok Shop and Shopee sellers in Vietnam.</span><span class="vi">Phiên bản 1.0.0. Nền tảng quản trị cửa hàng online cho người bán TikTok Shop và Shopee tại Việt Nam.</span></p>
+</div>
+<div class="tools"><button aria-label="Language" class="lang" id="lang-btn" type="button">
+<svg aria-hidden="true" fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"></path></svg>
+<span id="lang-label">VI</span>
+</button>
+<button aria-label="Theme" class="lang" id="theme-btn" type="button">
+<svg aria-hidden="true" fill="none" height="18" id="theme-icon" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"></svg>
+</button></div>
+</div>
+<div class="layout">
+<aside aria-label="Contents" class="side" id="side"><nav class="toc" id="toc"></nav></aside>
+<div class="page">
+<div class="links"><span class="en">Prototype: <a href="https://claude.ai/artifact/LBCphaxGh1Mbxk8hh6byVd" rel="noopener" target="_blank">TopTop Project Prototype</a></span><span class="vi">Prototype: <a href="https://claude.ai/artifact/LBCphaxGh1Mbxk8hh6byVd" rel="noopener" target="_blank">TopTop Project Prototype</a></span></div>
+<section class="panel" id="s1">
+<h2><span class="en">1. Product overview</span><span class="vi">1. Tổng quan sản phẩm</span></h2>
+<h3 class="en">1.1 What is the product</h3>
+<h3 class="vi">1.1 Sản phẩm là gì</h3>
+<p class="en">An online shop management platform that helps online sellers manage, monitor and understand their business from one workspace. It brings together information from several sales channels, so a shop owner can follow sales, marketing, inventory, suppliers, finances and basic tax information without switching between platforms and spreadsheets. An AI Assistant helps users understand the data, find problems and make better decisions. The app is for managing and for recommendations; it does not run the business for the seller.</p>
+<p class="vi">Nền tảng quản trị cửa hàng online giúp người bán online quản lý, theo dõi và hiểu tình hình kinh doanh trong một không gian làm việc. Nền tảng gom thông tin từ nhiều kênh bán hàng, để chủ shop theo dõi bán hàng, marketing, tồn kho, nhà cung cấp, tài chính và thông tin thuế cơ bản mà không phải chuyển qua lại giữa các sàn và bảng tính. Trợ lý AI giúp người dùng hiểu dữ liệu, tìm vấn đề và ra quyết định tốt hơn. App phục vụ việc quản trị và đưa ra đề xuất; app không vận hành kinh doanh thay người bán.</p>
+<h3 class="en">1.2 Product vision</h3>
+<h3 class="vi">1.2 Tầm nhìn sản phẩm</h3>
+<p class="en">Help online shop owners move from managing scattered data to understanding and managing their business through one centralized platform. Core values:</p>
+<p class="vi">Giúp chủ shop online chuyển từ việc quản lý dữ liệu rời rạc sang hiểu và quản lý kinh doanh trên một nền tảng tập trung. Giá trị cốt lõi:</p>
+<ul class="en"><li><strong>Business visibility:</strong> understand overall business performance.</li><li><strong>Business intelligence:</strong> identify trends, problems and bottlenecks.</li><li><strong>Business management:</strong> monitor the important operations.</li><li><strong>AI assistance:</strong> ask questions and receive insights and suggestions based on the data.</li></ul>
+<ul class="vi"><li><strong>Nhìn rõ kinh doanh:</strong> hiểu hiệu quả kinh doanh chung.</li><li><strong>Hiểu kinh doanh:</strong> nhận ra xu hướng, vấn đề và điểm nghẽn.</li><li><strong>Quản lý kinh doanh:</strong> theo dõi các hoạt động quan trọng.</li><li><strong>Hỗ trợ bằng AI:</strong> đặt câu hỏi và nhận nhận định, gợi ý dựa trên dữ liệu.</li></ul>
+<h3 class="en">1.3 Target users</h3>
+<h3 class="vi">1.3 Người dùng mục tiêu</h3>
+<p class="en">The app serves small sellers on TikTok Shop and Shopee: <strong>individual sellers and household businesses</strong>. Companies are not a target in this version. The main users are the shop owner (Admin) and the managers the owner trusts; users who are given access to only a few modules are the minority. The platform is built so it can later grow to companies, with more roles and more modules, without redesigning the data (section 2.5).</p>
+<p class="vi">App phục vụ người bán nhỏ trên TikTok Shop và Shopee: <strong>cá nhân kinh doanh và hộ kinh doanh</strong>. Công ty chưa phải đối tượng ở phiên bản này. Người dùng chính là chủ shop (Admin) và những người quản lý mà chủ shop tin cậy; người dùng chỉ được cấp vài module là số ít. Nền tảng được xây để sau này mở rộng cho công ty, với nhiều vai trò và module hơn, mà không phải thiết kế lại dữ liệu (mục 2.5).</p>
+<ul class="en"><li>Individual sellers operating TikTok Shop or Shopee.</li><li>Household businesses managing one or several shops.</li><li>Shop managers and employees responsible for daily operations (as Users with limited access).</li></ul>
+<ul class="vi"><li>Cá nhân kinh doanh trên TikTok Shop hoặc Shopee.</li><li>Hộ kinh doanh quản lý một hoặc nhiều shop.</li><li>Quản lý shop và nhân viên phụ trách vận hành hằng ngày (là User với quyền giới hạn).</li></ul>
+<p class="en">Common problems:</p>
+<p class="vi">Những vấn đề thường gặp:</p>
+<ul class="en"><li>Business information is scattered across platforms.</li><li>It is hard to see the real profit.</li><li>It is hard to judge whether ads are effective.</li><li>There is little visibility of inventory and supplier costs.</li><li>Operational problems and bottlenecks are hard to spot.</li><li>Too much depends on manual spreadsheets.</li><li>Business reports are hard to consolidate.</li></ul>
+<ul class="vi"><li>Thông tin kinh doanh nằm rải rác ở nhiều sàn.</li><li>Khó thấy lợi nhuận thực.</li><li>Khó đánh giá quảng cáo có hiệu quả không.</li><li>Thiếu cái nhìn rõ về tồn kho và chi phí nhà cung cấp.</li><li>Khó phát hiện vấn đề vận hành và điểm nghẽn.</li><li>Phụ thuộc quá nhiều vào bảng tính làm tay.</li><li>Khó tổng hợp báo cáo kinh doanh.</li></ul>
+<p class="en note">The app must be simple enough for users without accounting or data-analysis expertise: every number is shown with a plain-language meaning, and the app avoids thresholds the owner did not set.</p>
+<p class="vi note">App phải đủ đơn giản cho người dùng không có kiến thức kế toán hay phân tích dữ liệu: mỗi con số đi kèm ý nghĩa bằng ngôn ngữ dễ hiểu, và app tránh các ngưỡng mà chủ shop chưa tự đặt.</p>
+</section>
+<section class="panel" id="s2">
+<h2><span class="en">2. User roles and permissions</span><span class="vi">2. Vai trò và phân quyền</span></h2>
+<p class="en">The platform has three roles.</p>
+<p class="vi">Nền tảng có ba vai trò.</p>
+<h3 class="en">2.1 System Admin</h3>
+<h3 class="vi">2.1 System Admin</h3>
+<p class="en">Manages the whole SaaS platform through a separate System Console (section 8): reviews registrations, creates Business workspaces, assigns Business Admins, manages the status of accounts and Businesses, and monitors operations and technical issues. There is exactly one System Admin in this version, fixed by server configuration. The System Admin has no automatic access to a Business's financial or tax information.</p>
+<p class="vi">Quản lý toàn bộ nền tảng SaaS qua System Console riêng (mục 8): duyệt đăng ký, tạo không gian làm việc Business, gán Admin cho Business, quản lý trạng thái tài khoản và Business, và theo dõi vận hành cùng lỗi kỹ thuật. Ở phiên bản này chỉ có đúng một System Admin, do cấu hình máy chủ quy định. System Admin không tự động được xem thông tin tài chính hay thuế của Business.</p>
+<h3 class="en">2.2 Admin</h3>
+<h3 class="vi">2.2 Admin</h3>
+<p class="en">The Business owner. Admin has full access to their Business and is the only role that edits or enters data. Responsibilities:</p>
+<p class="vi">Chủ Business. Admin có toàn quyền trong Business của mình và là vai trò duy nhất được sửa hoặc nhập dữ liệu. Trách nhiệm:</p>
+<ul class="en"><li>Manage Business information, shops and platform connections.</li><li>Access every module, including Finance and Tax.</li><li>Enter and edit business records: expenses, other income and expenses, products and costs, purchases and payments, tax records; import data.</li><li>Invite Users, grant or revoke access per module, and remove Users.</li><li>Manage integrations and reports.</li></ul>
+<ul class="vi"><li>Quản lý thông tin Business, các shop và kết nối nền tảng.</li><li>Truy cập mọi module, kể cả Tài chính và Thuế.</li><li>Nhập và sửa dữ liệu kinh doanh: chi phí, thu chi khác, sản phẩm và giá vốn, phiếu nhập và thanh toán, hồ sơ thuế; nhập file dữ liệu.</li><li>Mời User, cấp hoặc thu hồi quyền theo module và gỡ User.</li><li>Quản lý tích hợp và báo cáo.</li></ul>
+<h3 class="en">2.3 User</h3>
+<h3 class="vi">2.3 User</h3>
+<p class="en">An employee or manager the Admin invites. A User can only view; the Admin decides which modules a User may open, and a User sees exactly what the module shows. Rules:</p>
+<p class="vi">Nhân viên hoặc quản lý do Admin mời. User chỉ được xem; Admin quyết định User được mở module nào, và User thấy đúng những gì module đó hiển thị. Quy tắc:</p>
+<ul class="en"><li>No module access by default; the Admin grants access one module at a time.</li><li>View only: a User checks, compares and tells the Admin about problems. A User cannot edit or import data.</li><li>Cannot manage members or change permissions.</li><li>The Tax tab is never visible to a User: it is hidden by default and cannot be granted, whatever the other permissions.</li><li>Can open Finance only when the Admin grants it.</li><li>Can use the AI Assistant, reports and exports only with the data of the modules granted.</li></ul>
+<ul class="vi"><li>Mặc định không có module nào; Admin cấp từng module một.</li><li>Chỉ xem: User xem, đối chiếu, kiểm tra và báo lại cho Admin. User không sửa hay nhập dữ liệu.</li><li>Không quản lý thành viên và không đổi quyền.</li><li>Tab Thuế không bao giờ hiện với User: mặc định luôn ẩn và không thể cấp, dù có quyền nào khác.</li><li>Chỉ mở được Tài chính khi Admin cấp.</li><li>Chỉ dùng trợ lý AI, báo cáo và xuất dữ liệu với dữ liệu của các module được cấp.</li></ul>
+<p class="en note">Permission model (MVP): one level per module, View or No Access. The Admin has full access. Importing data and changing business records are Admin-only.</p>
+<p class="vi note">Mô hình phân quyền (MVP): mỗi module một mức, Xem hoặc Không có quyền. Admin có toàn quyền. Nhập dữ liệu và sửa dữ liệu kinh doanh chỉ dành cho Admin.</p>
+<h3 class="en">2.4 Registration and onboarding</h3>
+<h3 class="vi">2.4 Đăng ký và tiếp nhận</h3>
+<ol class="en"><li>A person registers through the app (Google sign-in).</li><li>The new account has the status Pending.</li><li>The System Admin reviews the registration.</li><li>The System Admin creates or selects a Business.</li><li>The System Admin assigns the person as the Business Admin.</li><li>The Admin invites additional Users.</li><li>The Admin grants module access to each User.</li></ol>
+<ol class="vi"><li>Người dùng đăng ký trong app (đăng nhập Google).</li><li>Tài khoản mới ở trạng thái Chờ duyệt.</li><li>System Admin xem xét đăng ký.</li><li>System Admin tạo hoặc chọn một Business.</li><li>System Admin gán người đó làm Admin của Business.</li><li>Admin mời thêm User.</li><li>Admin cấp quyền module cho từng User.</li></ol>
+<h3 class="en">2.5 Designed to grow</h3>
+<h3 class="vi">2.5 Thiết kế để mở rộng</h3>
+<p class="en">Features can grow later, so the data is designed to grow with them from the start:</p>
+<p class="vi">Tính năng có thể mở rộng sau này, nên dữ liệu được thiết kế để mở rộng theo ngay từ đầu:</p>
+<ul class="en"><li>A Business holds one or more shops; a user account can later belong to several Businesses with a different role in each.</li><li>Permissions are stored per user, module and level. Only View and No Access are offered now; Edit and other levels, and more roles, can be added without changing the structure.</li><li>The taxpayer profile and each platform connection are records of their own, apart from Business and shop.</li><li>Every record keeps its source (platform API, import file or manual entry).</li><li>Product attributes are configuration, not fixed columns for one industry, so any category can be handled (section 4, Inventory).</li><li>The seller type is a list (Individual, Household business) to which Company can be added later.</li></ul>
+<ul class="vi"><li>Một Business có một hoặc nhiều shop; sau này một tài khoản có thể thuộc nhiều Business với vai trò khác nhau ở mỗi nơi.</li><li>Quyền được lưu theo người dùng, module và mức quyền. Hiện chỉ có Xem và Không có quyền; có thể thêm Sửa, các mức khác và thêm vai trò mà không đổi cấu trúc.</li><li>Hồ sơ người nộp thuế và từng kết nối nền tảng là các bản ghi riêng, tách khỏi Business và shop.</li><li>Mọi bản ghi giữ nguồn của nó (API của sàn, file nhập hoặc nhập tay).</li><li>Thuộc tính sản phẩm là cấu hình, không phải cột cố định cho một ngành, nên xử lý được mọi ngành hàng (mục 4, Tồn kho).</li><li>Loại người bán là một danh sách (Cá nhân, Hộ kinh doanh) có thể thêm Công ty sau này.</li></ul>
+</section>
+<section class="panel" id="s3">
+<h2><span class="en">3. Application structure</span><span class="vi">3. Cấu trúc ứng dụng</span></h2>
+<p class="en">The Business workspace has eight main modules.</p>
+<p class="vi">Không gian làm việc của Business có tám module chính.</p>
+<div class="scroll"><table class="en"><thead><tr><th>Module</th><th>Name</th><th>Purpose</th></tr></thead><tbody><tr><td>01</td><td>Overview</td><td>Understand overall business performance</td></tr><tr><td>02</td><td>Sales</td><td>Monitor sales, orders and revenue; see what sells, what sells slowly and what has problems</td></tr><tr><td>03</td><td>Marketing</td><td>Monitor advertising and campaign performance</td></tr><tr><td>04</td><td>Inventory</td><td>Manage stock and product availability</td></tr><tr><td>05</td><td>Supplier</td><td>Manage suppliers and purchasing</td></tr><tr><td>06</td><td>Finance</td><td>Monitor expenses, profit and cash flow</td></tr><tr><td>07</td><td>Tax</td><td>Keep tax-related information of the business</td></tr><tr><td>08</td><td>Reports</td><td>Generate and review business reports</td></tr></tbody></table></div>
+<div class="scroll"><table class="vi"><thead><tr><th>Module</th><th>Tên</th><th>Mục đích</th></tr></thead><tbody><tr><td>01</td><td>Tổng quan</td><td>Hiểu tổng quan hiệu quả kinh doanh</td></tr><tr><td>02</td><td>Bán hàng</td><td>Theo dõi bán hàng, đơn hàng và doanh thu; thấy sản phẩm nào bán chạy, bán chậm và có vấn đề</td></tr><tr><td>03</td><td>Marketing</td><td>Theo dõi quảng cáo và hiệu quả campaign</td></tr><tr><td>04</td><td>Tồn kho</td><td>Quản lý tồn kho và tình trạng sẵn hàng</td></tr><tr><td>05</td><td>Nhà cung cấp</td><td>Quản lý nhà cung cấp và việc nhập hàng</td></tr><tr><td>06</td><td>Tài chính</td><td>Theo dõi chi phí, lợi nhuận và dòng tiền</td></tr><tr><td>07</td><td>Thuế</td><td>Lưu thông tin liên quan đến thuế của hoạt động kinh doanh</td></tr><tr><td>08</td><td>Báo cáo</td><td>Tạo và xem các báo cáo kinh doanh</td></tr></tbody></table></div>
+<p class="en">Shared features: the AI Assistant, Settings and Integrations.</p>
+<p class="vi">Tính năng dùng chung: Trợ lý AI, Cài đặt và Tích hợp.</p>
+</section>
+<section class="panel" id="s4">
+<h2><span class="en">4. Module requirements</span><span class="vi">4. Yêu cầu chức năng theo module</span></h2>
+<h3 class="en">Module 01: Overview</h3>
+<h3 class="vi">Module 01: Tổng quan</h3>
+<p class="en"><strong>Purpose:</strong> give one centralized view of business performance and highlight what needs attention. Overview is the landing page. It shows only the data of the modules the user may open.</p>
+<p class="vi"><strong>Mục đích:</strong> cho một cái nhìn tập trung về hiệu quả kinh doanh và làm nổi bật việc cần chú ý. Tổng quan là trang chủ. Trang chỉ hiện dữ liệu của các module người dùng được mở.</p>
+<p class="en"><strong>Six business cards.</strong> The dashboard shows the most relevant indicators without crowding the page: one card per area, each with a one-line meaning so an owner knows what it says. A card links to its module and is hidden when the user cannot open that module.</p>
+<p class="vi"><strong>Sáu thẻ chỉ số.</strong> Dashboard chỉ hiện các chỉ số liên quan nhất để trang không bị rối: mỗi lĩnh vực một thẻ, mỗi thẻ có một câu giải thích ngắn để chủ shop biết nó nói lên điều gì. Thẻ dẫn tới module của nó và bị ẩn khi người dùng không mở được module đó.</p>
+<div class="scroll"><table class="en"><thead><tr><th>Card</th><th>What it tells the owner</th><th>Opens</th></tr></thead><tbody><tr><td>Net revenue</td><td>What the shop really sold, after cancellations, returns and discounts.</td><td>Sales</td></tr><tr><td>Orders</td><td>How many orders came in, with the cancel and return rate underneath: how many orders were lost.</td><td>Sales</td></tr><tr><td>Profit before tax</td><td>What is left after all costs, with the profit margin underneath: is the shop earning or losing money.</td><td>Finance</td></tr><tr><td>Cash available</td><td>The money in the platform wallets, with the payouts the platforms still owe and the supplier invoices due soon: can the shop pay what is coming.</td><td>Finance</td></tr><tr><td>Ad spend</td><td>How much was spent on ads, with ROAS underneath. ROAS is revenue per ad dollar, not profit.</td><td>Marketing</td></tr><tr><td>Products to reorder</td><td>How many products are out of stock or have reached their reorder point.</td><td>Inventory</td></tr></tbody></table></div>
+<div class="scroll"><table class="vi"><thead><tr><th>Thẻ</th><th>Cho chủ shop biết điều gì</th><th>Mở</th></tr></thead><tbody><tr><td>Doanh thu thuần</td><td>Shop thực sự bán được bao nhiêu, sau khi trừ đơn hủy, hoàn và giảm giá.</td><td>Bán hàng</td></tr><tr><td>Đơn hàng</td><td>Có bao nhiêu đơn, kèm tỷ lệ hủy và hoàn bên dưới: bao nhiêu đơn bị mất.</td><td>Bán hàng</td></tr><tr><td>Lợi nhuận trước thuế</td><td>Còn lại bao nhiêu sau mọi chi phí, kèm biên lợi nhuận bên dưới: shop đang lãi hay lỗ.</td><td>Tài chính</td></tr><tr><td>Tiền khả dụng</td><td>Tiền đang có trong ví các sàn, kèm tiền sàn còn phải trả về và hóa đơn nhà cung cấp sắp đến hạn: shop có đủ tiền cho các khoản sắp tới không.</td><td>Tài chính</td></tr><tr><td>Chi quảng cáo</td><td>Đã chi bao nhiêu cho quảng cáo, kèm ROAS bên dưới. ROAS là doanh thu trên mỗi đồng quảng cáo, không phải lợi nhuận.</td><td>Marketing</td></tr><tr><td>Hàng cần nhập</td><td>Có bao nhiêu sản phẩm đã hết hoặc đã chạm điểm đặt hàng lại.</td><td>Tồn kho</td></tr></tbody></table></div>
+<p class="en note">Every card shows its change against the previous period. The compared period is named once, under the greeting. The change of profit is always shown as an amount of money, never as a percentage, because a percentage of a loss misleads. Other figures (gross sales, completed orders, cost of goods, pending settlement, inventory value) live on their module pages.</p>
+<p class="vi note">Mỗi thẻ hiện mức thay đổi so với kỳ trước. Kỳ so sánh chỉ được nêu một lần, dưới lời chào. Thay đổi của lợi nhuận luôn là số tiền, không bao giờ là phần trăm, vì phần trăm của một khoản lỗ gây hiểu nhầm. Các số khác (doanh thu gộp, đơn hoàn tất, giá vốn, tiền sàn chờ quyết toán, giá trị tồn kho) nằm ở trang của từng module.</p>
+<p class="en"><strong>Charts.</strong></p>
+<p class="vi"><strong>Biểu đồ.</strong></p>
+<ul class="en"><li>Revenue trend, profit trend and orders trend (current period against the previous one).</li><li>Sales by platform and by shop (shown only when there is more than one).</li><li>Top-selling products.</li><li>Expense breakdown (where the money went).</li></ul>
+<ul class="vi"><li>Xu hướng doanh thu, lợi nhuận và đơn hàng (kỳ này so với kỳ trước).</li><li>Doanh thu theo sàn và theo shop (chỉ hiện khi có nhiều hơn một).</li><li>Sản phẩm bán chạy.</li><li>Cơ cấu chi phí (tiền đi đâu).</li></ul>
+<p class="en"><strong>Business health and what needs attention.</strong> The list is rule-based, not AI. Each alert has an issue description, the relevant metric, a severity and a link to the related module. Examples:</p>
+<p class="vi"><strong>Sức khỏe kinh doanh và việc cần chú ý.</strong> Danh sách được tạo theo quy tắc, không dùng AI. Mỗi cảnh báo có mô tả vấn đề, chỉ số liên quan, mức độ nghiêm trọng và liên kết tới module liên quan. Ví dụ:</p>
+<ul class="en"><li>Revenue decreased.</li><li>Advertising spend increased, or campaign performance declined.</li><li>Product stock is low or out of stock.</li><li>Return rate is unusually high.</li><li>Expenses increased, or profit margin decreased.</li><li>Platform settlements are pending.</li></ul>
+<ul class="vi"><li>Doanh thu giảm.</li><li>Chi quảng cáo tăng, hoặc hiệu quả campaign giảm.</li><li>Sản phẩm sắp hết hoặc đã hết hàng.</li><li>Tỷ lệ hoàn cao bất thường.</li><li>Chi phí tăng, hoặc biên lợi nhuận giảm.</li><li>Quyết toán của sàn đang chờ.</li></ul>
+<p class="en"><strong>Filters:</strong> one shared period filter for every module: three quick buttons, Daily, Weekly and Monthly (each compared with the previous period), and next to them a Custom date option. When the user picks a custom date range, the three quick buttons stop applying until one of them is chosen again. Platform and shop filters sit beside it. The Admin sees all the data of the Business; a User sees only the data of the permitted modules. Extra detail (products table, quick checks, latest report) sits under a "Show details" fold that is closed by default.</p>
+<p class="vi"><strong>Bộ lọc:</strong> một bộ lọc kỳ dùng chung cho mọi module: ba nút nhanh Ngày, Tuần và Tháng (mỗi kỳ so với kỳ trước), và bên cạnh là lựa chọn Ngày tùy chọn. Khi người dùng chọn khoảng ngày tùy chọn, ba nút nhanh không còn hiệu lực cho đến khi chọn lại một trong ba nút. Bộ lọc sàn và shop nằm cạnh. Admin thấy toàn bộ dữ liệu của Business; User chỉ thấy dữ liệu của các module được cấp. Phần chi tiết thêm (bảng sản phẩm, kiểm tra nhanh, báo cáo mới nhất) nằm trong mục “Xem thêm”, mặc định đóng.</p>
+<h3 class="en">Module 02: Sales</h3>
+<h3 class="vi">Module 02: Bán hàng</h3>
+<p class="en"><strong>Purpose:</strong> let the owner or manager see how selling is going: how much is selling, which products sell well, which sell slowly and which have problems. The module follows this purpose; it does not replace fulfillment in the platform seller centers.</p>
+<p class="vi"><strong>Mục đích:</strong> để chủ shop hoặc người quản lý thấy việc bán hàng đang diễn ra thế nào: bán được bao nhiêu, sản phẩm nào bán chạy, sản phẩm nào bán chậm và sản phẩm nào có vấn đề. Module bám theo mục đích này; module không thay thế việc xử lý đơn trong kênh người bán của sàn.</p>
+<p class="en"><strong>Sales overview:</strong></p>
+<p class="vi"><strong>Tổng quan bán hàng:</strong></p>
+<ul class="en"><li>Gross sales and net revenue.</li><li>Total, completed, cancelled and returned orders.</li><li>Average order value; completion, cancellation and return rates.</li></ul>
+<ul class="vi"><li>Doanh thu gộp và doanh thu thuần.</li><li>Tổng đơn, đơn hoàn tất, đơn hủy và đơn hoàn.</li><li>Giá trị đơn trung bình; tỷ lệ hoàn tất, hủy và hoàn.</li></ul>
+<p class="en"><strong>Sales analytics:</strong></p>
+<p class="vi"><strong>Phân tích bán hàng:</strong></p>
+<ul class="en"><li>Revenue trend and order trend.</li><li>Sales by platform, by shop and by product.</li><li>Top-selling products and best-performing shops.</li><li>Slow-selling products: products with little or falling sales.</li><li>Products with problems: a high cancel or return rate, a sharp drop in sales, or a product that sells while it is out of stock or nearly so.</li></ul>
+<ul class="vi"><li>Xu hướng doanh thu và xu hướng đơn hàng.</li><li>Doanh thu theo sàn, theo shop và theo sản phẩm.</li><li>Sản phẩm bán chạy và shop hiệu quả nhất.</li><li>Sản phẩm bán chậm: sản phẩm bán ít hoặc đang giảm.</li><li>Sản phẩm có vấn đề: tỷ lệ hủy hoặc hoàn cao, doanh số giảm mạnh, hoặc sản phẩm đang bán trong lúc đã hết hoặc gần hết hàng.</li></ul>
+<p class="en"><strong>Order list:</strong> order ID, platform and shop, order date, product and SKU, quantity, selling price, discount, order value, order status, and return or cancellation status. It supports search, filtering, sorting and an order detail view.</p>
+<p class="vi"><strong>Danh sách đơn hàng:</strong> mã đơn, sàn và shop, ngày đặt, sản phẩm và SKU, số lượng, giá bán, giảm giá, giá trị đơn, trạng thái đơn, và trạng thái hoàn hoặc hủy. Hỗ trợ tìm kiếm, lọc, sắp xếp và xem chi tiết đơn.</p>
+<h3 class="en">Module 03: Marketing</h3>
+<h3 class="vi">Module 03: Marketing</h3>
+<p class="en"><strong>Purpose:</strong> understand how well advertising and creator affiliate work, and whether marketing pays off. The module focuses on two things: <strong>Ads</strong> and <strong>Affiliate (creators)</strong>.</p>
+<p class="vi"><strong>Mục đích:</strong> hiểu quảng cáo và affiliate của creator hoạt động tốt đến đâu, và marketing có đáng tiền hay không. Module tập trung vào hai việc: <strong>Quảng cáo (Ads)</strong> và <strong>Affiliate (creator)</strong>.</p>
+<p class="en"><strong>Marketing overview:</strong> total advertising spend, ad-attributed revenue, ROAS, cost per order, affiliate revenue, commission paid to creators, total marketing cost (ads plus commission) as a share of revenue, and active campaigns.</p>
+<p class="vi"><strong>Tổng quan marketing:</strong> tổng chi quảng cáo, doanh thu quy gán cho quảng cáo, ROAS, chi phí mỗi đơn, doanh thu từ affiliate, hoa hồng đã trả cho creator, tổng chi phí marketing (quảng cáo cộng hoa hồng) trên doanh thu, và số campaign đang chạy.</p>
+<h3 class="en">Ads</h3>
+<h3 class="vi">Quảng cáo (Ads)</h3>
+<p class="en">TikTok Ads and Shopee Ads campaigns. Each campaign has a name, platform, shop, budget, actual spend, attributed revenue, orders, promoted products, start and end date and status. Analytics: campaign comparison, advertising spend trend, attributed revenue trend, ROAS comparison and cost per order.</p>
+<p class="vi">Các campaign TikTok Ads và Shopee Ads. Mỗi campaign có tên, sàn, shop, ngân sách, chi thực tế, doanh thu quy gán, số đơn, sản phẩm được đẩy, ngày bắt đầu và kết thúc, và trạng thái. Phân tích: so sánh campaign, xu hướng chi quảng cáo, xu hướng doanh thu quy gán, so sánh ROAS và chi phí mỗi đơn.</p>
+<h3 class="en">Affiliate (creators)</h3>
+<h3 class="vi">Affiliate (creator)</h3>
+<p class="en">Each creator (KOC / KOL) has a <strong>revenue share rate</strong>: the percentage of the revenue they bring that the shop pays them. <strong>The Admin enters the rate for each creator</strong> (for example 3%, 5%, 8%, 10% or a custom value), because every creator agrees a different rate; the rate belongs to the creator, not to the product. The creator list shows the creator, platform, shop, rate, attributed revenue, orders, commission and the profit left after the commission. When the platform data gives the actual commission, the app uses it and the rate is only the fallback. A User can view the rates but cannot change them.</p>
+<p class="vi">Mỗi creator (KOC / KOL) có một <strong>tỷ lệ hưởng doanh thu</strong>: phần trăm doanh thu họ mang về mà shop trả cho họ. <strong>Admin tự nhập tỷ lệ cho từng creator</strong> (ví dụ 3%, 5%, 8%, 10% hoặc một con số tùy chọn), vì mỗi creator thỏa thuận một tỷ lệ khác nhau; tỷ lệ thuộc về creator, không thuộc về sản phẩm. Danh sách creator hiện creator, sàn, shop, tỷ lệ, doanh thu quy gán, số đơn, hoa hồng và lợi nhuận còn lại sau hoa hồng. Khi dữ liệu của sàn có hoa hồng thực tế, app dùng số thực tế và tỷ lệ chỉ là số dự phòng. User xem được tỷ lệ nhưng không đổi được.</p>
+<h3 class="en">Marketing insights</h3>
+<h3 class="vi">Nhận định marketing</h3>
+<p class="en">The app highlights ad campaigns with low ROAS, rising advertising costs, campaigns that spend budget without enough revenue, creators whose commission leaves little profit, and products with a low contribution margin. Where cost data exists it shows the estimated contribution profit after advertising, commission and other variable costs (POAS, profit after ads). <strong>ROAS is never presented as profit.</strong></p>
+<p class="vi">App làm nổi bật các campaign quảng cáo có ROAS thấp, chi phí quảng cáo tăng, campaign tiêu ngân sách mà chưa đủ doanh thu, creator mà hoa hồng khiến lợi nhuận còn rất ít, và sản phẩm có biên đóng góp thấp. Khi có dữ liệu giá vốn, app hiện lợi nhuận đóng góp ước tính sau quảng cáo, hoa hồng và các chi phí biến đổi khác (POAS, lợi nhuận sau quảng cáo). <strong>ROAS không bao giờ được trình bày như lợi nhuận.</strong></p>
+<h3 class="en">Module 04: Inventory</h3>
+<h3 class="vi">Module 04: Tồn kho</h3>
+<p class="en"><strong>Purpose:</strong> monitor product stock, inventory value and product availability, for any kind of product.</p>
+<p class="vi"><strong>Mục đích:</strong> theo dõi tồn kho, giá trị tồn kho và tình trạng sẵn hàng, cho mọi loại sản phẩm.</p>
+<p class="en"><strong>Inventory overview:</strong> total products, total SKUs, total quantity, inventory value, low-stock products, out-of-stock products and slow-moving products.</p>
+<p class="vi"><strong>Tổng quan tồn kho:</strong> tổng số sản phẩm, tổng số SKU, tổng số lượng, giá trị tồn kho, sản phẩm sắp hết, sản phẩm đã hết và sản phẩm bán chậm.</p>
+<p class="en"><strong>Products and SKUs:</strong> product name, SKU, category, selling price, cost price, supplier, stock quantity and a minimum stock threshold.</p>
+<p class="vi"><strong>Sản phẩm và SKU:</strong> tên sản phẩm, SKU, danh mục, giá bán, giá vốn, nhà cung cấp, số lượng tồn và ngưỡng tồn tối thiểu.</p>
+<p class="en"><strong>Works for every industry.</strong> A shop can sell clothes, food, cosmetics or electronics, so product attributes are settings per product, not fixed for one industry: unit of measure, variants, supplier lead time, and lot and expiry tracking switched on or off. A product without expiry tracking never shows lot or expiry fields; a product with it gets stock by lot, expiry alerts and first-expired-first-out picking.</p>
+<p class="vi"><strong>Dùng được cho mọi ngành hàng.</strong> Shop có thể bán quần áo, thực phẩm, mỹ phẩm hay đồ điện tử, nên thuộc tính sản phẩm là cài đặt theo từng sản phẩm, không cố định cho một ngành: đơn vị tính, biến thể, thời gian giao của nhà cung cấp, và bật hoặc tắt theo dõi lô và hạn dùng. Sản phẩm không theo dõi hạn dùng sẽ không bao giờ hiện trường lô hay hạn dùng; sản phẩm có theo dõi thì có tồn kho theo lô, cảnh báo hạn dùng và xuất kho hết hạn trước ra trước.</p>
+<p class="en"><strong>Reorder point.</strong> The app tells the owner when to order: reorder point = units sold per day × supplier lead time + safety stock. The Admin can set a fixed minimum threshold on a product, which then replaces the calculated point. Alerts read like "Order today: the supplier delivers in 5 days".</p>
+<p class="vi"><strong>Điểm đặt hàng lại.</strong> App cho biết khi nào cần đặt hàng: điểm đặt hàng lại = số bán mỗi ngày × thời gian giao của nhà cung cấp + tồn kho an toàn. Admin có thể đặt một ngưỡng tối thiểu cố định cho sản phẩm; khi đó ngưỡng này thay cho điểm tự tính. Cảnh báo có dạng “Đặt hàng hôm nay: nhà cung cấp giao sau 5 ngày”.</p>
+<p class="en"><strong>Inventory tracking</strong> (recorded by the Admin): stock in, stock out, stock adjustment, returned stock and damaged stock.</p>
+<p class="vi"><strong>Theo dõi tồn kho</strong> (do Admin ghi nhận): nhập kho, xuất kho, điều chỉnh tồn kho, hàng hoàn về và hàng hư hỏng.</p>
+<p class="en"><strong>Inventory analytics:</strong> inventory value, low-stock report, out-of-stock report, slow-moving products, inventory aging and stock movement history.</p>
+<p class="vi"><strong>Phân tích tồn kho:</strong> giá trị tồn kho, báo cáo hàng sắp hết, báo cáo hàng đã hết, sản phẩm bán chậm, tuổi tồn kho và lịch sử xuất nhập.</p>
+<h3 class="en">Module 05: Supplier</h3>
+<h3 class="vi">Module 05: Nhà cung cấp</h3>
+<p class="en"><strong>Purpose:</strong> manage suppliers, purchasing records and outstanding payments. The MVP stays with basic supplier and purchase tracking.</p>
+<p class="vi"><strong>Mục đích:</strong> quản lý nhà cung cấp, phiếu nhập hàng và các khoản còn phải trả. MVP chỉ làm theo dõi nhà cung cấp và nhập hàng cơ bản.</p>
+<p class="en"><strong>Suppliers:</strong> supplier name, contact person, phone, email, address and notes.</p>
+<p class="vi"><strong>Nhà cung cấp:</strong> tên nhà cung cấp, người liên hệ, số điện thoại, email, địa chỉ và ghi chú.</p>
+<p class="en"><strong>Purchase records:</strong> purchase ID, supplier, purchase date, products and SKUs, quantity, unit purchase price, total amount, due date and payment status (Unpaid, Partially paid, Paid). The Admin enters purchases and confirms payments; nothing is saved without confirmation.</p>
+<p class="vi"><strong>Phiếu nhập:</strong> mã phiếu, nhà cung cấp, ngày nhập, sản phẩm và SKU, số lượng, đơn giá nhập, tổng tiền, ngày đến hạn và trạng thái thanh toán (Chưa trả, Trả một phần, Đã trả). Admin nhập phiếu và xác nhận thanh toán; không lưu gì khi chưa xác nhận.</p>
+<p class="en"><strong>Supplier analytics:</strong> total purchase value, purchase value by supplier, outstanding payables, purchase price history and recent purchases.</p>
+<p class="vi"><strong>Phân tích nhà cung cấp:</strong> tổng giá trị nhập, giá trị nhập theo nhà cung cấp, công nợ còn phải trả, lịch sử giá nhập và các lần nhập gần nhất.</p>
+<h3 class="en">Module 06: Finance</h3>
+<h3 class="vi">Module 06: Tài chính</h3>
+<p class="en"><strong>Purpose:</strong> help the owner understand revenue, costs, profitability and cash flow. Finance is a management view, not formal accounting software.</p>
+<p class="vi"><strong>Mục đích:</strong> giúp chủ shop hiểu doanh thu, chi phí, khả năng sinh lời và dòng tiền. Tài chính là góc nhìn quản trị, không phải phần mềm kế toán chính thức.</p>
+<p class="en"><strong>Profit and loss.</strong> A clear breakdown from revenue to profit before tax:</p>
+<p class="vi"><strong>Lãi lỗ.</strong> Bảng phân tích rõ từ doanh thu đến lợi nhuận trước thuế:</p>
+<ul class="en"><li><strong>Revenue:</strong> gross sales, seller-funded discounts, refunds and returns, net revenue.</li><li>Cost of goods, then gross profit.</li><li><strong>Variable costs:</strong> platform fees, transaction fees, shipping, affiliate commissions, advertising, packaging; then contribution profit.</li><li><strong>Fixed expenses:</strong> warehouse rent, fixed salaries, accounting services, software, internet and other operating expenses; then operating profit.</li><li><strong>Other income and expenses</strong> (for example loan interest): shown only when the Admin has entered them.</li><li>Management profit before tax.</li></ul>
+<ul class="vi"><li><strong>Doanh thu:</strong> doanh thu gộp, giảm giá do người bán chịu, hoàn tiền và hàng trả, doanh thu thuần.</li><li>Giá vốn, rồi lợi nhuận gộp.</li><li><strong>Chi phí biến đổi:</strong> phí sàn, phí giao dịch, vận chuyển, hoa hồng affiliate, quảng cáo, đóng gói; rồi lợi nhuận đóng góp.</li><li><strong>Chi phí cố định:</strong> thuê kho, lương cố định, dịch vụ kế toán, phần mềm, internet và các chi phí vận hành khác; rồi lợi nhuận hoạt động.</li><li><strong>Thu chi khác</strong> (ví dụ lãi vay): chỉ hiện khi Admin đã nhập.</li><li>Lợi nhuận trước thuế quản trị.</li></ul>
+<p class="en"><strong>Expenses.</strong> Only the Admin records and categorises expenses and other income or expenses, because they decide the profit before tax. A User with Finance access reads, checks and reports differences to the Admin.</p>
+<p class="vi"><strong>Chi phí.</strong> Chỉ Admin được ghi và phân loại chi phí cùng thu chi khác, vì chúng quyết định lợi nhuận trước thuế. User có quyền Tài chính chỉ đọc, kiểm tra và báo chênh lệch cho Admin.</p>
+<p class="en"><strong>Cash flow:</strong> platform settlement, pending settlement, cash received, cash out and net cash flow. Revenue is kept clearly apart from the cash actually received. The module also shows how many months the cash covers the fixed costs.</p>
+<p class="vi"><strong>Dòng tiền:</strong> quyết toán của sàn, quyết toán đang chờ, tiền đã nhận, tiền đã chi và dòng tiền ròng. Doanh thu được tách rõ khỏi tiền thực nhận. Module còn cho biết số tiền mặt đủ trả chi phí cố định bao nhiêu tháng.</p>
+<p class="en note">Finance is available to the Admin and to Users the Admin has granted it to.</p>
+<p class="vi note">Tài chính dành cho Admin và những User được Admin cấp quyền.</p>
+<h3 class="en">Module 07: Tax</h3>
+<h3 class="vi">Module 07: Thuế</h3>
+<p class="en"><strong>Purpose:</strong> let the owner organise tax-related information and keep track of the relevant tax records. Tax is Admin only, independent of Finance access, and the Tax tab is hidden from every User. The MVP is information management and tracking only: no formal tax filing, no complex tax calculation and no legal tax advice.</p>
+<p class="vi"><strong>Mục đích:</strong> để chủ shop sắp xếp thông tin liên quan đến thuế và theo dõi các hồ sơ thuế. Thuế chỉ dành cho Admin, độc lập với quyền Tài chính, và tab Thuế luôn bị ẩn với mọi User. MVP chỉ là quản lý và theo dõi thông tin: không khai thuế chính thức, không tính thuế phức tạp và không tư vấn pháp lý về thuế.</p>
+<p class="en"><strong>Taxpayer profile:</strong> taxpayer type (individual or household business), tax identification number where applicable, whether the taxpayer also earns a salary or only runs the business, relevant business information, tax status and notes. The profile is independent of Business and shop records, because one person may run several shops.</p>
+<p class="vi"><strong>Hồ sơ người nộp thuế:</strong> loại người nộp thuế (cá nhân kinh doanh hoặc hộ kinh doanh), mã số thuế khi có, người đó có thêm thu nhập làm công ăn lương hay chỉ kinh doanh, thông tin kinh doanh liên quan, tình trạng thuế và ghi chú. Hồ sơ độc lập với bản ghi Business và shop, vì một người có thể chạy nhiều shop.</p>
+<p class="en"><strong>Business tax information:</strong> business revenue for tax tracking (by period, platform and shop), the tax the platforms have withheld, tax payment records, tax-related notes and important tax reminders.</p>
+<p class="vi"><strong>Thông tin thuế của hoạt động kinh doanh:</strong> doanh thu kinh doanh để theo dõi thuế (theo kỳ, sàn và shop), thuế các sàn đã khấu trừ, lịch sử nộp thuế, ghi chú liên quan đến thuế và các nhắc việc thuế quan trọng.</p>
+<p class="en"><strong>Tax payment records:</strong> payment date, amount, tax category, payment period, reference and notes.</p>
+<p class="vi"><strong>Lịch sử nộp thuế:</strong> ngày nộp, số tiền, loại thuế, kỳ nộp, số tham chiếu và ghi chú.</p>
+<h3 class="en">Module 08: Reports</h3>
+<h3 class="vi">Module 08: Báo cáo</h3>
+<p class="en"><strong>Purpose:</strong> generate, view and manage business reports. Reports do not depend on any messaging integration.</p>
+<p class="vi"><strong>Mục đích:</strong> tạo, xem và quản lý các báo cáo kinh doanh. Báo cáo không phụ thuộc vào bất kỳ tích hợp nhắn tin nào.</p>
+<div class="scroll"><table class="en"><thead><tr><th>Report</th><th>Content</th></tr></thead><tbody><tr><td>Daily</td><td>Revenue, orders, cancellations and returns, advertising spend, the profit metrics available, and the important business issues.</td></tr><tr><td>Weekly</td><td>Revenue and order trends, comparison with the previous week, marketing performance, inventory issues, expense summary and business bottlenecks.</td></tr><tr><td>Monthly</td><td>Business performance, revenue and profit, expense breakdown, campaign performance, product performance, inventory status, cash flow and the important business issues.</td></tr></tbody></table></div>
+<div class="scroll"><table class="vi"><thead><tr><th>Báo cáo</th><th>Nội dung</th></tr></thead><tbody><tr><td>Ngày</td><td>Doanh thu, đơn hàng, đơn hủy và hoàn, chi quảng cáo, các chỉ số lợi nhuận hiện có và các vấn đề kinh doanh quan trọng.</td></tr><tr><td>Tuần</td><td>Xu hướng doanh thu và đơn hàng, so sánh với tuần trước, hiệu quả marketing, vấn đề tồn kho, tóm tắt chi phí và các điểm nghẽn kinh doanh.</td></tr><tr><td>Tháng</td><td>Kết quả kinh doanh, doanh thu và lợi nhuận, cơ cấu chi phí, hiệu quả campaign, hiệu quả sản phẩm, tình trạng tồn kho, dòng tiền và các vấn đề kinh doanh quan trọng.</td></tr></tbody></table></div>
+<p class="en"><strong>Report management:</strong> select the report type, the date range, the platform and the shop; preview the report; generate it; view the report history; export it where supported.</p>
+<p class="vi"><strong>Quản lý báo cáo:</strong> chọn loại báo cáo, khoảng ngày, sàn và shop; xem trước; tạo báo cáo; xem lịch sử báo cáo; xuất file khi hỗ trợ.</p>
+<p class="en"><strong>Scheduled reports (automation that repeats):</strong> daily, weekly and monthly reports can be scheduled. A report is always available in the app; when the Admin switches it on, it is also sent through the connected integration (Telegram). The daily report is built from rules, without AI; the weekly and monthly reports add a short AI comment.</p>
+<p class="vi"><strong>Báo cáo theo lịch (tự động hóa lặp lại):</strong> báo cáo ngày, tuần và tháng có thể đặt lịch. Báo cáo luôn xem được trong app; khi Admin bật, báo cáo còn được gửi qua tích hợp đã kết nối (Telegram). Báo cáo ngày được tạo theo quy tắc, không dùng AI; báo cáo tuần và tháng có thêm nhận xét ngắn của AI.</p>
+<h3 class="en">Automation: alerts sent when something happens</h3>
+<h3 class="vi">Tự động hóa: cảnh báo gửi khi có sự việc</h3>
+<p class="en">Besides scheduled reports, the Admin can switch on <strong>triggered alerts</strong>: short reports that are not periodic but are sent the moment a condition is met. They also appear in the "needs attention" list on Overview; the difference is that a triggered alert is pushed to people instead of waiting for them to open the app. Proposed alerts:</p>
+<p class="vi">Ngoài báo cáo theo lịch, Admin có thể bật <strong>cảnh báo kích hoạt theo sự việc</strong>: các báo cáo ngắn không định kỳ mà được gửi ngay khi điều kiện xảy ra. Chúng cũng hiện trong danh sách “việc cần chú ý” ở Tổng quan; khác biệt là cảnh báo kích hoạt được đẩy tới người nhận thay vì chờ họ mở app. Các cảnh báo đề xuất:</p>
+<div class="scroll"><table class="en"><thead><tr><th>Alert</th><th>Sent when</th><th>Module</th></tr></thead><tbody><tr><td>Product reached its reorder point</td><td>Stock falls to the reorder point: order now, with the supplier lead time.</td><td>Inventory</td></tr><tr><td>Product out of stock</td><td>A product reaches zero stock, especially one that is selling or in an active campaign.</td><td>Inventory</td></tr><tr><td>Lot close to expiry</td><td>A lot gets close to its expiry date (only products with expiry tracking).</td><td>Inventory</td></tr><tr><td>Sales drop</td><td>Revenue falls well below the shop's normal level.</td><td>Sales</td></tr><tr><td>High cancel or return rate</td><td>The cancel or return rate of the shop or of a product rises above the limit.</td><td>Sales</td></tr><tr><td>Campaign losing money</td><td>An ad campaign has low ROAS or negative profit after ads, or ad spend grows faster than revenue.</td><td>Marketing</td></tr><tr><td>Creator commission eats the profit</td><td>The commission paid to a creator leaves little or no profit on the orders they bring.</td><td>Marketing</td></tr><tr><td>Supplier invoice due or overdue</td><td>A purchase is due within the number of days the Admin sets, or is past its due date.</td><td>Supplier</td></tr><tr><td>Cash may fall short</td><td>The payouts coming do not cover the supplier invoices due soon.</td><td>Finance</td></tr><tr><td>Profit margin below target</td><td>The profit margin falls below the target the Admin set.</td><td>Finance</td></tr><tr><td>Settlement pending too long</td><td>A platform settlement has not arrived by its expected date.</td><td>Finance</td></tr><tr><td>Connection or sync error</td><td>A platform connection fails or a data sync does not complete (sent to the Admin).</td><td>Settings</td></tr><tr><td>Tax reminder</td><td>A tax reminder the Admin set comes due (sent to the Admin only).</td><td>Tax</td></tr></tbody></table></div>
+<div class="scroll"><table class="vi"><thead><tr><th>Cảnh báo</th><th>Gửi khi</th><th>Module</th></tr></thead><tbody><tr><td>Sản phẩm chạm điểm đặt hàng lại</td><td>Tồn kho giảm đến điểm đặt hàng lại: cần đặt hàng, kèm thời gian giao của nhà cung cấp.</td><td>Tồn kho</td></tr><tr><td>Sản phẩm hết hàng</td><td>Sản phẩm về 0 tồn kho, nhất là sản phẩm đang bán hoặc đang chạy campaign.</td><td>Tồn kho</td></tr><tr><td>Lô sắp hết hạn</td><td>Một lô gần đến hạn dùng (chỉ sản phẩm có theo dõi hạn dùng).</td><td>Tồn kho</td></tr><tr><td>Doanh thu giảm mạnh</td><td>Doanh thu giảm mạnh so với mức bình thường của shop.</td><td>Bán hàng</td></tr><tr><td>Tỷ lệ hủy hoặc hoàn cao</td><td>Tỷ lệ hủy hoặc hoàn của shop hoặc của một sản phẩm vượt mức đã đặt.</td><td>Bán hàng</td></tr><tr><td>Campaign đang lỗ</td><td>Campaign quảng cáo có ROAS thấp hoặc lợi nhuận sau quảng cáo âm, hoặc chi quảng cáo tăng nhanh hơn doanh thu.</td><td>Marketing</td></tr><tr><td>Hoa hồng creator ăn hết lợi nhuận</td><td>Hoa hồng trả cho một creator khiến đơn họ mang về còn rất ít hoặc không còn lợi nhuận.</td><td>Marketing</td></tr><tr><td>Hóa đơn nhà cung cấp đến hạn hoặc quá hạn</td><td>Một phiếu nhập đến hạn trong số ngày Admin đặt, hoặc đã quá hạn.</td><td>Nhà cung cấp</td></tr><tr><td>Tiền mặt có thể thiếu</td><td>Tiền sàn sắp trả về không đủ cho các hóa đơn nhà cung cấp sắp đến hạn.</td><td>Tài chính</td></tr><tr><td>Biên lợi nhuận dưới mục tiêu</td><td>Biên lợi nhuận xuống dưới mục tiêu Admin đã đặt.</td><td>Tài chính</td></tr><tr><td>Quyết toán chờ quá lâu</td><td>Một khoản quyết toán của sàn chưa về đến ngày dự kiến.</td><td>Tài chính</td></tr><tr><td>Lỗi kết nối hoặc đồng bộ</td><td>Một kết nối nền tảng bị lỗi hoặc việc đồng bộ dữ liệu không hoàn tất (gửi cho Admin).</td><td>Cài đặt</td></tr><tr><td>Nhắc việc thuế</td><td>Một nhắc việc thuế do Admin đặt đến hạn (chỉ gửi cho Admin).</td><td>Thuế</td></tr></tbody></table></div>
+<p class="en"><strong>The Admin sets up each alert:</strong> switch it on or off, set the limit where it needs one (the app does not impose thresholds the owner has not set), and choose who receives it. Alerts always appear in the app; when Telegram is connected they are also sent there. Each event is sent once, so nobody is flooded.</p>
+<p class="vi"><strong>Admin tự thiết lập từng cảnh báo:</strong> bật hoặc tắt, đặt mức giới hạn khi cảnh báo cần (app không áp ngưỡng mà chủ shop chưa tự đặt), và chọn người nhận. Cảnh báo luôn hiện trong app; khi đã kết nối Telegram thì còn được gửi qua đó. Mỗi sự việc chỉ gửi một lần, để không ai bị tràn tin.</p>
+<p class="en note">Report and alert content and recipients follow each person's permissions: a User only receives alerts of modules they can open. Tax information is never included in a User's report or alert.</p>
+<p class="vi note">Nội dung và người nhận của báo cáo, cảnh báo theo quyền của từng người: User chỉ nhận cảnh báo của các module họ mở được. Thông tin thuế không bao giờ nằm trong báo cáo hay cảnh báo của User.</p>
+</section>
+<section class="panel" id="s5">
+<h2><span class="en">5. AI Assistant</span><span class="vi">5. Trợ lý AI</span></h2>
+<p class="en"><strong>Purpose:</strong> help users understand business data, identify problems and receive recommendations they can act on. The AI Assistant is available throughout the app through one shared button.</p>
+<p class="vi"><strong>Mục đích:</strong> giúp người dùng hiểu dữ liệu kinh doanh, nhận ra vấn đề và nhận các đề xuất có thể hành động. Trợ lý AI có mặt trong toàn app qua một nút dùng chung.</p>
+<h3 class="en">5.1 Business Q&amp;A</h3>
+<h3 class="vi">5.1 Hỏi đáp kinh doanh</h3>
+<p class="en">Users ask in natural language, for example:</p>
+<p class="vi">Người dùng hỏi bằng ngôn ngữ tự nhiên, ví dụ:</p>
+<ul class="en"><li>What is my revenue today?</li><li>Which shop performs best?</li><li>What are my top-selling products?</li><li>Why did advertising spend increase?</li><li>Which campaign has low ROAS?</li><li>Why did profit decrease?</li><li>Which products are running low on stock?</li><li>What should I focus on?</li></ul>
+<ul class="vi"><li>Doanh thu hôm nay của tôi là bao nhiêu?</li><li>Shop nào hoạt động tốt nhất?</li><li>Sản phẩm nào bán chạy nhất?</li><li>Vì sao chi quảng cáo tăng?</li><li>Campaign nào có ROAS thấp?</li><li>Vì sao lợi nhuận giảm?</li><li>Sản phẩm nào sắp hết hàng?</li><li>Tôi nên tập trung vào việc gì?</li></ul>
+<h3 class="en">5.2 Business insights</h3>
+<h3 class="vi">5.2 Nhận định kinh doanh</h3>
+<p class="en">The AI helps identify unusual revenue changes, rising advertising costs, declining campaign performance, high return rates, inventory issues, expense changes and profit margin changes.</p>
+<p class="vi">AI giúp nhận ra doanh thu thay đổi bất thường, chi phí quảng cáo tăng, hiệu quả campaign giảm, tỷ lệ hoàn cao, vấn đề tồn kho, chi phí thay đổi và biên lợi nhuận thay đổi.</p>
+<h3 class="en">5.3 Action suggestions</h3>
+<h3 class="vi">5.3 Gợi ý hành động</h3>
+<p class="en">The AI explains the relevant business information and suggests possible next steps. Every answer includes the relevant numbers, the date range and the data context, and separates confirmed facts from possible explanations. All numbers come from the app's own calculations; the AI only explains them. A daily question quota per Business applies.</p>
+<p class="vi">AI giải thích thông tin kinh doanh liên quan và gợi ý các bước tiếp theo. Mỗi câu trả lời có số liệu liên quan, khoảng ngày và ngữ cảnh dữ liệu, và tách rõ điều đã xác nhận với lời giải thích có thể xảy ra. Mọi con số đến từ phép tính của chính app; AI chỉ giải thích. Mỗi Business có hạn mức câu hỏi mỗi ngày.</p>
+<h3 class="en">5.4 Permission control</h3>
+<h3 class="vi">5.4 Kiểm soát quyền</h3>
+<p class="en">The AI can only use information the current user is allowed to view. A User with Marketing access can ask about campaign performance; a User without Finance access cannot ask about financial details; nobody but the Admin can ask about Tax; the Admin can ask about every module. The AI provides analysis and recommendations only; it does not run business operations by itself.</p>
+<p class="vi">AI chỉ dùng thông tin mà người dùng hiện tại được phép xem. User có quyền Marketing hỏi được về hiệu quả campaign; User không có quyền Tài chính không hỏi được về chi tiết tài chính; chỉ Admin hỏi được về Thuế; Admin hỏi được mọi module. AI chỉ phân tích và đề xuất; AI không tự chạy nghiệp vụ.</p>
+</section>
+<section class="panel" id="s6">
+<h2><span class="en">6. Settings and integrations</span><span class="vi">6. Cài đặt và tích hợp</span></h2>
+<p class="en"><strong>Purpose:</strong> manage Business configuration, shops, members, platform connections and external integrations. Only the Admin changes settings.</p>
+<p class="vi"><strong>Mục đích:</strong> quản lý cấu hình Business, shop, thành viên, kết nối nền tảng và tích hợp bên ngoài. Chỉ Admin được đổi cài đặt.</p>
+<h3 class="en">6.1 Business settings</h3>
+<h3 class="vi">6.1 Cài đặt Business</h3>
+<p class="en">Business name, business information, currency and time zone. Alert thresholds the owner wants to set (for example how many days ahead supplier invoices are shown) also live here.</p>
+<p class="vi">Tên Business, thông tin Business, đơn vị tiền tệ và múi giờ. Các ngưỡng cảnh báo chủ shop muốn tự đặt (ví dụ xem trước hóa đơn nhà cung cấp trong bao nhiêu ngày) cũng nằm ở đây.</p>
+<h3 class="en">6.2 Shop management</h3>
+<h3 class="vi">6.2 Quản lý shop</h3>
+<p class="en">Add a shop, edit shop information, manage shop status and connect sales platforms. A Business can manage several shops.</p>
+<p class="vi">Thêm shop, sửa thông tin shop, quản lý trạng thái shop và kết nối các sàn bán hàng. Một Business có thể quản lý nhiều shop.</p>
+<h3 class="en">6.3 Platform connections</h3>
+<h3 class="vi">6.3 Kết nối nền tảng</h3>
+<p class="en">Initial platforms: TikTok Shop and Shopee. For each connection the app shows the connection status, the connected shop, the last sync time, the sync status and any connection errors. More platforms can be added later.</p>
+<p class="vi">Sàn ban đầu: TikTok Shop và Shopee. Với mỗi kết nối, app hiển thị trạng thái kết nối, shop đã kết nối, thời điểm đồng bộ gần nhất, trạng thái đồng bộ và lỗi kết nối nếu có. Có thể thêm sàn khác sau này.</p>
+<h3 class="en">6.4 Members and permissions</h3>
+<h3 class="vi">6.4 Thành viên và phân quyền</h3>
+<p class="en">The Admin can invite a User, view the members, assign module permissions (View or No Access), revoke permissions and remove members.</p>
+<p class="vi">Admin có thể mời User, xem danh sách thành viên, cấp quyền theo module (Xem hoặc Không có quyền), thu hồi quyền và gỡ thành viên.</p>
+<h3 class="en">6.5 Integrations</h3>
+<h3 class="vi">6.5 Tích hợp</h3>
+<p class="en">An integration area shows, for each connected service: the provider name, the connection status, the connected account or destination, setup instructions, a Test connection button and a Disconnect option. Telegram is the integration of this version: once connected, it delivers scheduled reports and important business alerts. Report generation never depends on it.</p>
+<p class="vi">Khu vực tích hợp hiển thị, với mỗi dịch vụ đã kết nối: tên nhà cung cấp, trạng thái kết nối, tài khoản hoặc nơi nhận đã kết nối, hướng dẫn thiết lập, nút Kiểm tra kết nối và tùy chọn Ngắt kết nối. Telegram là tích hợp của phiên bản này: khi đã kết nối, Telegram gửi các báo cáo theo lịch và cảnh báo kinh doanh quan trọng. Việc tạo báo cáo không bao giờ phụ thuộc vào Telegram.</p>
+</section>
+<section class="panel" id="s7">
+<h2><span class="en">7. Data sources</span><span class="vi">7. Nguồn dữ liệu</span></h2>
+<p class="en">The platform supports four ways of getting data:</p>
+<p class="vi">Nền tảng có bốn cách đưa dữ liệu vào:</p>
+<ul class="en"><li><strong>Platform APIs</strong> (TikTok Shop and Shopee), connected per shop and subject to the API permissions and metrics each platform grants.</li><li><strong>CSV / Excel import</strong> for business records the APIs do not provide and for shops that are not connected yet. Only the Admin imports. Importing the same file again never duplicates records.</li><li><strong>Manual input</strong> by the Admin: product costs, creator commission rates, expenses, supplier information, inventory adjustments and other missing information.</li><li><strong>CSV export</strong> from the app's tables, limited to the modules the user can open, and downloaded from the platforms where they offer it.</li></ul>
+<ul class="vi"><li><strong>API của sàn</strong> (TikTok Shop và Shopee), kết nối theo từng shop và tùy theo quyền API cùng chỉ số mà mỗi sàn cấp.</li><li><strong>Nhập file CSV / Excel</strong> cho dữ liệu mà API không cung cấp và cho các shop chưa kết nối. Chỉ Admin được nhập. Nhập lại cùng một file không bao giờ tạo bản ghi trùng.</li><li><strong>Nhập tay</strong> do Admin thực hiện: giá vốn sản phẩm, tỷ lệ hưởng doanh thu của creator, chi phí, thông tin nhà cung cấp, điều chỉnh tồn kho và các thông tin còn thiếu.</li><li><strong>Xuất CSV</strong> từ các bảng của app, giới hạn trong các module người dùng mở được, và tải từ các sàn khi sàn có hỗ trợ.</li></ul>
+<p class="en">All data is normalised into one common structure, so every module reads the same orders, products and costs whatever their source. The app shows the data source, sync status and last sync time where relevant.</p>
+<p class="vi">Mọi dữ liệu được chuẩn hóa về một cấu trúc chung, để mọi module đọc cùng đơn hàng, sản phẩm và chi phí dù nguồn là gì. App hiển thị nguồn dữ liệu, trạng thái đồng bộ và thời điểm đồng bộ gần nhất khi cần.</p>
+<p class="en">The app adapts to the data available:</p>
+<p class="vi">App thích ứng với dữ liệu hiện có:</p>
+<ul class="en"><li>A TikTok-only Business shows TikTok data.</li><li>A TikTok + Shopee Business supports combined and per-platform views.</li><li>Unavailable data is identified as unavailable, never shown as a fabricated zero.</li><li>Incomplete cost data is clearly identified wherever an estimated profit is shown.</li></ul>
+<ul class="vi"><li>Business chỉ có TikTok hiện dữ liệu TikTok.</li><li>Business có cả TikTok và Shopee hỗ trợ cả góc nhìn gộp và theo từng sàn.</li><li>Dữ liệu chưa có được ghi rõ là chưa có, không bao giờ hiện thành số 0 giả.</li><li>Dữ liệu giá vốn chưa đầy đủ được ghi rõ ở mọi nơi có lợi nhuận ước tính.</li></ul>
+</section>
+<section class="panel" id="s8">
+<h2><span class="en">8. System Console (System Admin)</span><span class="vi">8. System Console (System Admin)</span></h2>
+<p class="en">The System Admin uses a separate management interface.</p>
+<p class="vi">System Admin dùng một giao diện quản trị riêng.</p>
+<h3 class="en">System dashboard</h3>
+<h3 class="vi">Bảng điều khiển hệ thống</h3>
+<ul class="en"><li>Total users and pending accounts.</li><li>Active Businesses.</li><li>Recent system activity.</li><li>Platform status.</li></ul>
+<ul class="vi"><li>Tổng số người dùng và tài khoản chờ duyệt.</li><li>Các Business đang hoạt động.</li><li>Hoạt động hệ thống gần đây.</li><li>Trạng thái nền tảng.</li></ul>
+<h3 class="en">User management</h3>
+<h3 class="vi">Quản lý người dùng</h3>
+<ul class="en"><li>View users and account details.</li><li>Approve accounts.</li><li>Activate or suspend accounts.</li><li>Assign a Business Admin.</li></ul>
+<ul class="vi"><li>Xem người dùng và chi tiết tài khoản.</li><li>Duyệt tài khoản.</li><li>Kích hoạt hoặc tạm khóa tài khoản.</li><li>Gán Admin cho Business.</li></ul>
+<h3 class="en">Business management</h3>
+<h3 class="vi">Quản lý Business</h3>
+<ul class="en"><li>Create and view Businesses.</li><li>Assign an Admin.</li><li>Activate or suspend a Business.</li><li>View a Business's membership.</li></ul>
+<ul class="vi"><li>Tạo và xem Business.</li><li>Gán Admin.</li><li>Kích hoạt hoặc tạm khóa Business.</li><li>Xem danh sách thành viên của Business.</li></ul>
+<h3 class="en">System monitoring</h3>
+<h3 class="vi">Giám sát hệ thống</h3>
+<ul class="en"><li>Application status.</li><li>API errors.</li><li>Integration failures.</li><li>Data sync failures.</li></ul>
+<ul class="vi"><li>Trạng thái ứng dụng.</li><li>Lỗi API.</li><li>Lỗi tích hợp.</li><li>Lỗi đồng bộ dữ liệu.</li></ul>
+<p class="en note">The System Admin does not automatically get unrestricted access to a customer's financial or tax information. Every System Admin action is recorded in an audit log.</p>
+<p class="vi note">System Admin không tự động có quyền xem không giới hạn thông tin tài chính hay thuế của khách hàng. Mọi thao tác của System Admin được ghi vào nhật ký.</p>
+</section>
+<section class="panel" id="s9">
+<h2><span class="en">9. UI / UX requirements</span><span class="vi">9. Yêu cầu giao diện và trải nghiệm</span></h2>
+<p class="en">A modern, clean and professional SaaS dashboard design, in English and Vietnamese, with light and dark themes.</p>
+<p class="vi">Thiết kế dashboard SaaS hiện đại, gọn gàng và chuyên nghiệp, có tiếng Anh và tiếng Việt, giao diện sáng và tối.</p>
+<h3 class="en">Main layout</h3>
+<h3 class="vi">Bố cục chính</h3>
+<ul class="en"><li><strong>Sidebar:</strong> Business selector; the eight modules (Overview, Sales, Marketing, Inventory, Supplier, Finance, Tax, Reports); Settings; user profile. A User sees only the modules granted, and never the Tax tab. The System Console is a separate interface.</li><li><strong>Header:</strong> page title, Business and shop context, the shared period filter (Daily / Weekly / Monthly buttons and a Custom date option), relevant filters, quick actions and the AI Assistant.</li><li><strong>Main content:</strong> KPI cards, charts, data tables, filters, status indicators, business alerts and detail views.</li><li>The AI Assistant is reachable from everywhere through one shared button.</li></ul>
+<ul class="vi"><li><strong>Thanh bên:</strong> bộ chọn Business; tám module (Tổng quan, Bán hàng, Marketing, Tồn kho, Nhà cung cấp, Tài chính, Thuế, Báo cáo); Cài đặt; hồ sơ người dùng. User chỉ thấy các module được cấp và không bao giờ thấy tab Thuế. System Console là một giao diện riêng.</li><li><strong>Phần đầu trang:</strong> tiêu đề trang, ngữ cảnh Business và shop, bộ lọc kỳ dùng chung (nút Ngày / Tuần / Tháng và lựa chọn Ngày tùy chọn), bộ lọc liên quan, thao tác nhanh và Trợ lý AI.</li><li><strong>Nội dung chính:</strong> thẻ chỉ số, biểu đồ, bảng dữ liệu, bộ lọc, chỉ báo trạng thái, cảnh báo kinh doanh và màn hình chi tiết.</li><li>Trợ lý AI truy cập được từ mọi nơi qua một nút dùng chung.</li></ul>
+<h3 class="en">Design principles</h3>
+<h3 class="vi">Nguyên tắc thiết kế</h3>
+<ul class="en"><li>Clean and minimal.</li><li>Easy for non-technical users: plain wording, with a short meaning next to every key number.</li><li>Clear information hierarchy: each module opens on the block that answers its main question, and the rest is folded.</li><li>Consistent components.</li><li>No unnecessary charts and no information overload.</li><li>Responsive for desktop, tablet and mobile.</li></ul>
+<ul class="vi"><li>Gọn và tối giản.</li><li>Dễ dùng cho người không rành kỹ thuật: dùng từ đơn giản, mỗi con số chính có một câu giải thích ngắn.</li><li>Phân cấp thông tin rõ ràng: mỗi module mở ra ở khối trả lời câu hỏi chính của nó, phần còn lại được gập lại.</li><li>Thành phần nhất quán.</li><li>Không có biểu đồ thừa và không quá tải thông tin.</li><li>Hiển thị tốt trên máy tính, máy tính bảng và điện thoại.</li></ul>
+</section>
+<section class="panel" id="s10">
+<h2><span class="en">10. MVP scope</span><span class="vi">10. Phạm vi MVP</span></h2>
+<p class="en">The first MVP demonstrates the complete business management experience.</p>
+<p class="vi">MVP đầu tiên thể hiện trọn vẹn trải nghiệm quản trị kinh doanh.</p>
+<h3 class="en">Must have</h3>
+<h3 class="vi">Bắt buộc có</h3>
+<ul class="en"><li>System Admin Console.</li><li>Business workspace.</li><li>Admin and User roles with module-level View permission.</li><li>Overview, Sales, Marketing, Inventory, Supplier, Finance, Tax and Reports.</li><li>AI Assistant interface.</li><li>Settings and Integrations interface.</li></ul>
+<ul class="vi"><li>System Console cho System Admin.</li><li>Không gian làm việc Business.</li><li>Vai trò Admin và User với quyền Xem theo module.</li><li>Tổng quan, Bán hàng, Marketing, Tồn kho, Nhà cung cấp, Tài chính, Thuế và Báo cáo.</li><li>Giao diện Trợ lý AI.</li><li>Giao diện Cài đặt và Tích hợp.</li></ul>
+<h3 class="en">Can be mocked in the initial prototype</h3>
+<h3 class="vi">Có thể làm giả lập trong prototype ban đầu</h3>
+<ul class="en"><li>Authentication and account approval.</li><li>External platform connections and data synchronisation.</li><li>AI responses.</li><li>Report generation.</li><li>The Telegram connection.</li></ul>
+<ul class="vi"><li>Đăng nhập và duyệt tài khoản.</li><li>Kết nối với sàn bên ngoài và đồng bộ dữ liệu.</li><li>Câu trả lời của AI.</li><li>Việc tạo báo cáo.</li><li>Kết nối Telegram.</li></ul>
+<p class="en note">The prototype uses realistic, consistent sample data across all modules.</p>
+<p class="vi note">Prototype dùng dữ liệu mẫu thực tế và nhất quán trên mọi module.</p>
+<h3 class="en">Out of scope</h3>
+<h3 class="vi">Ngoài phạm vi</h3>
+<ul class="en"><li>Companies as a seller type (the data is prepared for them later).</li><li>Trello-like task management and complex employee-assignment workflows.</li><li>Formal accounting.</li><li>Automated tax filing and advanced tax calculations.</li><li>Autonomous AI operations and automatic advertising budget optimisation.</li><li>Predictive business forecasting.</li><li>Complex procurement management.</li><li>Advanced notification preference systems.</li><li>Order fulfillment and shipping labels: these stay in the platform seller centers.</li></ul>
+<ul class="vi"><li>Công ty như một loại người bán (dữ liệu đã được chuẩn bị cho sau này).</li><li>Quản lý công việc kiểu Trello và quy trình giao việc nhân viên phức tạp.</li><li>Kế toán chính thức.</li><li>Tự động khai thuế và tính thuế nâng cao.</li><li>AI tự vận hành nghiệp vụ và tự tối ưu ngân sách quảng cáo.</li><li>Dự báo kinh doanh.</li><li>Quản lý mua hàng phức tạp.</li><li>Hệ thống tùy chỉnh thông báo nâng cao.</li><li>Xử lý đơn và in vận đơn: việc này nằm ở kênh người bán của sàn.</li></ul>
+</section>
+<section class="panel" id="s11">
+<h2><span class="en">11. Acceptance criteria</span><span class="vi">11. Tiêu chí nghiệm thu</span></h2>
+<p class="en">Accepted when it shows that:</p>
+<p class="vi">Được nghiệm thu khi chứng minh được rằng:</p>
+<ol class="en"><li>A System Admin can approve a registration, create a Business and assign its Admin.</li><li>An Admin can open every module of the Business and manage members.</li><li>An Admin can grant a User View access to individual modules.</li><li>A User can open only the modules granted.</li><li>The Tax tab is hidden from every User.</li><li>Finance information is restricted by permission.</li><li>The AI Assistant respects module permissions.</li><li>The dashboard adapts to the connected platforms.</li><li>A User can view business reports.</li><li>Reports stay independent of the Telegram integration.</li><li>Settings offers an integration management interface.</li><li>All modules use consistent and realistic mock data.</li></ol>
+<ol class="vi"><li>System Admin duyệt được một đăng ký, tạo Business và gán Admin cho Business đó.</li><li>Admin mở được mọi module của Business và quản lý được thành viên.</li><li>Admin cấp được cho User quyền Xem ở từng module.</li><li>User chỉ mở được các module đã được cấp.</li><li>Tab Thuế bị ẩn với mọi User.</li><li>Thông tin tài chính bị giới hạn theo quyền.</li><li>Trợ lý AI tuân theo quyền theo module.</li><li>Dashboard thích ứng với các sàn đã kết nối.</li><li>User xem được các báo cáo kinh doanh.</li><li>Báo cáo độc lập với tích hợp Telegram.</li><li>Cài đặt có giao diện quản lý tích hợp.</li><li>Mọi module dùng dữ liệu mẫu nhất quán và thực tế.</li></ol>
+</section>
+<section class="panel" id="s12">
+<h2><span class="en">Final product vision</span><span class="vi">Tầm nhìn cuối cùng của sản phẩm</span></h2>
+<p class="en">A centralized business management platform that helps online shop owners understand their business performance, identify operational and financial problems, and make better decisions through unified data, actionable insights and AI assistance.</p>
+<p class="vi">Một nền tảng quản trị kinh doanh tập trung, giúp chủ shop online hiểu hiệu quả kinh doanh, nhận ra các vấn đề vận hành và tài chính, và ra quyết định tốt hơn nhờ dữ liệu thống nhất, nhận định có thể hành động và sự hỗ trợ của AI.</p>
+</section>
+</div>
+</div>
+<div class="backdrop" id="backdrop"></div>
+</div>
+<script>
+(function () {
+  // contents sidebar built from the section headings (keeps both language spans)
+  var toc = document.getElementById("toc");
+  document.querySelectorAll(".page > section.panel").forEach(function (sec) {
+    var a = document.createElement("a");
+    a.href = "#" + sec.id;
+    a.innerHTML = sec.querySelector("h2").innerHTML;
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      sec.scrollIntoView({ behavior: "smooth", block: "start" });
+      setMenu(false);
+    });
+    toc.appendChild(a);
+  });
+  function markActive() {
+    var secs = document.querySelectorAll(".page > section.panel"), cur = secs[0];
+    secs.forEach(function (s) { if (s.getBoundingClientRect().top < 120) cur = s; });
+    toc.querySelectorAll("a").forEach(function (a) { a.classList.toggle("active", cur && a.getAttribute("href") === "#" + cur.id); });
+  }
+  window.addEventListener("scroll", markActive, { passive: true });
+  markActive();
+  function setMenu(open) {
+    document.documentElement.classList.toggle("menu-open", open);
+    document.getElementById("menu-btn").setAttribute("aria-expanded", String(open));
+  }
+  document.getElementById("menu-btn").addEventListener("click", function () { setMenu(!document.documentElement.classList.contains("menu-open")); });
+  document.getElementById("backdrop").addEventListener("click", function () { setMenu(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+  var KEY = "toptop-brief-lang";
+  var lang = "en";
+  try { var s = localStorage.getItem(KEY); if (s === "en" || s === "vi") lang = s; } catch (e) {}
+  function apply() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll(".en").forEach(function (el) { el.hidden = lang !== "en"; });
+    document.querySelectorAll(".vi").forEach(function (el) { el.hidden = lang !== "vi"; });
+    document.getElementById("lang-label").textContent = lang === "en" ? "VI" : "EN";
+    document.getElementById("lang-btn").title = lang === "en" ? "Switch to Vietnamese" : "Chuyển sang tiếng Anh";
+    document.title = lang === "en" ? "TopTop Project - Product Brief" : "TopTop Project - Bản mô tả sản phẩm";
+    var AL = lang === "en" ? ["Language", "Theme", "Contents", "Menu"] : ["Ngôn ngữ", "Giao diện", "Mục lục", "Điều hướng"];
+    document.getElementById("lang-btn").setAttribute("aria-label", AL[0]);
+    document.getElementById("theme-btn").setAttribute("aria-label", AL[1]);
+    document.getElementById("side").setAttribute("aria-label", AL[2]);
+    document.getElementById("menu-btn").setAttribute("aria-label", AL[3]);
+  }
+  document.getElementById("lang-btn").addEventListener("click", function () {
+    lang = lang === "en" ? "vi" : "en";
+    try { localStorage.setItem(KEY, lang); } catch (e) {}
+    apply();
+  });
+  apply();
+
+  var TKEY = "toptop-brief-theme";
+  var SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  try { var saved = localStorage.getItem(TKEY); if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved); } catch (e) {}
+  function isDark() {
+    var attr = document.documentElement.getAttribute("data-theme");
+    return attr === "dark" || (!attr && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }
+  function themeIcon() {
+    var dark = isDark();
+    document.getElementById("theme-icon").innerHTML = dark ? SUN : MOON;
+    document.getElementById("theme-btn").title = lang === "en" ? (dark ? "Light mode" : "Dark mode") : (dark ? "Chế độ sáng" : "Chế độ tối");
+  }
+  document.getElementById("theme-btn").addEventListener("click", function () {
+    var next = isDark() ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem(TKEY, next); } catch (e) {}
+    themeIcon();
+  });
+  themeIcon();
+})();
+</script>
+
+</body></html>

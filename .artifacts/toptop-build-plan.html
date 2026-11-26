@@ -609,7 +609,7 @@ Object.keys(MSK).forEach(m => MSK[m].split(' ').forEach(k => { MOF[k] = m; }));
 const BRIEF='https://claude.ai/artifact/WegNRyW7ufz4FSgHXGaHNW', PROTO='https://claude.ai/artifact/LBCphaxGh1Mbxk8hh6byVd', FEATURES='https://claude.ai/artifact/CG2CgHFqsgZ2D226SqoJAq';
 const UI = {
  vi:{title:'TopTop Build Plan',sub:'Kế hoạch làm TopTop theo milestone. Mỗi milestone là một đợt giao hàng có điều kiện hoàn thành. Ticket nằm trong milestone, xếp theo thứ tự nên làm (ticket phụ thuộc luôn đứng sau ticket nó cần). Mã ticket T-01 và mã feature F-01 giống trang TopTop Features.',
-  links:[['Product Brief',BRIEF],['Prototype',PROTO],['TopTop Features',FEATURES]],
+  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'bản lưu trong repo',snapNote:'Bản lưu trong repo chụp ngày 2026-11-26 từ Prototype (phiên bản 1795564554-39ac) và Product Brief (phiên bản 1795506559-5f2d), phòng khi bản online bị xóa.',
   ms:'Milestone',total:'Tổng ticket',pts:'Điểm công (S=1, M=3, L=5)',p0:'P0',
   doneWhen:'Hoàn thành khi: ',tickets:'ticket',points:'điểm',doneN:(a,b)=>a+'/'+b+' xong',
   search:'Tìm theo tên, mã ticket hoặc mã feature, ví dụ T-25, F-10 hoặc tồn kho',allRoles:'Mọi vai trò',allPrio:'Mọi ưu tiên',allMs:'Mọi milestone',copy:'Copy CSV',copied:n=>'Đã copy '+n+' ticket',copyFail:'Không copy được',
@@ -618,7 +618,7 @@ const UI = {
   openList:['Quyền API thật của TikTok Shop và Shopee (ảnh hưởng T-31 đến T-35: kết nối ở M2, đồng bộ dữ liệu ở M9). Đồng bộ tự động chỉ làm khi có user thật kết nối API; chưa có thì chờ.'],
   csv:['Milestone','ID','Feature','Epic','Tiêu đề','Tiêu chí nghiệm thu','Vai trò','Cỡ','Phụ thuộc','Trạng thái'],langBtn:'EN',themeAria:'Đổi giao diện sáng tối',langAria:'Đổi ngôn ngữ'},
  en:{title:'TopTop Build Plan',sub:'The TopTop build plan, organized by milestone. Each milestone is a delivery step with a done-when check. Tickets sit inside milestones, in a sensible build order (a ticket always comes after the tickets it needs). Ticket codes T-01 and feature codes F-01 match the TopTop Features page.',
-  links:[['Product Brief',BRIEF],['Prototype',PROTO],['TopTop Features',FEATURES]],
+  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'local snapshot',snapNote:'Local snapshots taken on 2026-11-26 from the Prototype (version 1795564554-39ac) and the Product Brief (version 1795506559-5f2d), in case the online copies are deleted.',
   ms:'Milestones',total:'Total tickets',pts:'Effort points (S=1, M=3, L=5)',p0:'P0',
   doneWhen:'Done when: ',tickets:'tickets',points:'points',doneN:(a,b)=>a+'/'+b+' done',
   search:'Search by name, ticket or feature ID, for example T-25, F-10 or inventory',allRoles:'All roles',allPrio:'All priorities',allMs:'All milestones',copy:'Copy CSV',copied:n=>'Copied '+n+' tickets',copyFail:'Could not copy',
@@ -885,7 +885,7 @@ function chrome(){
   const u = U(), c = p => T.filter(t => t[5] === p).length, pts = T.reduce((a,t) => a + PTS[t[6]], 0);
   document.documentElement.lang = S.lang;
   $('h1').textContent = u.title; $('sub').textContent = u.sub;
-  $('links').innerHTML = u.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('') + `<span class="upd">${esc(u.updated)}: ${UPDATED}</span>`; $('foot').textContent = u.foot;
+  $('links').innerHTML = u.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>` + (l[2] ? `<span class="upd">(<a href="${l[2]}" target="_blank" rel="noopener">${esc(u.snap)}</a>)</span>` : '')).join('') + `<span class="upd" title="${esc(u.snapNote)}">${esc(u.updated)}: ${UPDATED}</span>`; $('foot').textContent = u.foot + ' ' + u.snapNote;
   $('stats').innerHTML = [[u.ms, MS.length], [u.total, T.length], [u.pts, pts], [u.stDoneT, T.filter(t => stOf(t[0]) === 'done').length + '/' + T.length], [u.stTicketT, T.filter(t => stOf(t[0]) === 'ticketed').length]].map(s => `<div class="stat"><b>${s[1]}</b><span>${s[0]}</span></div>`).join('');
   strip(); stack(); secs();
   $('q').placeholder = u.search;
