@@ -5,13 +5,7 @@
 
 ## Open questions
 
-| ID | Question | Why it matters | Tickets |
-| --- | --- | --- | --- |
-| Q-I18N-1 | Which language is the default for a new visitor? The Prototype starts in English (`ST.lang = 'en'`); the target users are in Vietnam. | First impression and tests. | T-129 |
-| Q-I18N-2 | Where is the language and theme choice stored: only in the browser (Prototype: `localStorage` keys `tt-lang`, `tt-theme`) or on the user account so it follows them across devices? T-19 says the user "can change language and theme". | Data model for the profile. | T-129, T-130, T-19 |
-| Q-I18N-3 | Which i18n library and message format? The Plan's stack table does not name one. | Needed to start T-129. | T-129 |
-| Q-I18N-4 | Does the language appear in the URL (for example `/vi/...`) or only in a stored setting? | Interacts with the shared period URL (T-24). | T-129 |
-| Q-THEME-1 | T-130 says "follows the system, with a manual toggle". The Prototype toggle only switches between light and dark and never returns to "follow system". Should the toggle have a third state? | Behavior of the toggle. | T-130 |
+None. Every question is resolved; see the next section.
 
 ## Resolved questions
 
@@ -20,6 +14,11 @@
 | Q-SEED-2 | **The M1 seed holds accounts, Businesses, shops and permissions only.** M1 has no orders or cost tables (decision of 2026-11-26: no cost or profit processing in M1, M4 adds the tables). Order fixtures for the engine tests are a test concern, see Q-ENG-3. | 2026-11-26, product owner |
 | Q-SEED-3 | **Sample accounts sign in through a dev-only account picker**, like the account list in the Prototype (`loginView()`). It is off in production, where only Google sign-in exists. The seed also never runs in production. | 2026-11-26, product owner |
 | Q-SEED-1 | **Keep the Prototype's sample roles as test data**: a System Admin, Admins and Users with different module grants. No new role is added. | 2026-11-26, product owner |
+| Q-I18N-1 | **The default app language is English.** Vietnamese stays available through the language toggle, as in the Prototype. Code, commits and docs are English only. | 2026-11-26, product owner |
+| Q-I18N-2 | Language and theme are stored in the browser in M1 (Prototype `localStorage` keys `tt-lang`, `tt-theme`). | 2026-11-26, product owner accepted the proposed default |
+| Q-I18N-3 | One standard Next.js i18n library, chosen when T-129 starts, with English and Vietnamese message catalogs. | 2026-11-26, product owner accepted the proposed default |
+| Q-I18N-4 | Language is a stored setting, not part of the URL. | 2026-11-26, product owner accepted the proposed default |
+| Q-THEME-1 | The theme follows the system until the user toggles; after that the toggle keeps the choice (as in the Prototype). | 2026-11-26, product owner accepted the proposed default |
 
 ## Sources
 
@@ -31,7 +30,7 @@
 
 ### Multi-language (T-129)
 
-- Two languages: Vietnamese (VI) and English (EN).
+- Two languages: English (EN) and Vietnamese (VI). **English is the default**; Vietnamese is available through the language toggle, as in the Prototype (Q-I18N-1). Code, commits and docs are English only.
 - All visible text comes from message catalogs. There is no hard-coded text in code (Plan T-129).
 - Dates, numbers and money follow the language (same helper as T-05):
   - Vietnamese: decimal comma, `d/m/yyyy`, amount suffixes "triệu" and "tỷ" for compact money.
@@ -66,7 +65,7 @@
 
 ## Acceptance criteria
 
-- [ ] The whole app can be used in Vietnamese and in English, with no hard-coded text, and the language can be switched at any time.
+- [ ] The app opens in English by default, and the whole app can be used in Vietnamese and in English, with no hard-coded text, and the language can be switched at any time.
 - [ ] Dates, numbers and money follow the language.
 - [ ] The theme follows the system by default, has a manual toggle, and the choice is remembered.
 - [ ] Every color token has a light and a dark value and passes a readability check in both themes.

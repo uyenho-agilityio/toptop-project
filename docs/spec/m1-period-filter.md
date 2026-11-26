@@ -5,19 +5,18 @@
 
 ## Open questions
 
-| ID | Question | Why it matters | Tickets |
-| --- | --- | --- | --- |
-| Q-PER-2 | Brief 4 says one shared filter for every module. The Prototype shows it on Overview, Sales, Marketing, Finance and (period only) Supplier, and not on Inventory, Tax or Reports. Which modules show it? | Header layout and the scope of "shared". | T-21 |
-| Q-PER-3 | Which period is selected on first load? The Prototype starts on Weekly. | Default state and URL default. | T-21, T-24 |
-| Q-PER-4 | URL format for T-24 ("filters live in the URL and can be shared"), and whether the platform and shop filters (built in M2) are part of it now. Is a saved default across sessions also wanted? | A shared link must restore the same view. | T-24 |
-| Q-PER-5 | Limits on a custom range: the Prototype blocks only future dates. Is there a maximum length or an earliest date (for example before the Business was created)? | Performance of the engine and calendar behavior. | T-22 |
-| Q-PER-6 | Brief says the compared period is "named once, under the greeting" (Overview). The Prototype prints it in the header of every page that has the filter. Which is wanted? | T-21 AC wording. | T-21 |
+None. Every question is resolved; see the next section.
 
 ## Resolved questions
 
 | ID | Answer | Date |
 | --- | --- | --- |
 | Q-PER-1 | **Follow the Prototype.** Daily = today, Weekly = the last 7 days including today, Monthly = from the 1st of this month to today. The compared period is always the same number of days directly before the current one (so Monthly on Nov 23 compares Nov 1 to 23 with Oct 9 to 31, not with the whole of October). | 2026-11-26, product owner |
+| Q-PER-2 | As in the Prototype: the filter shows on Overview, Sales, Marketing and Finance (with platform and shop later), and on Supplier with the period only. It is not shown on Inventory, Tax or Reports. | 2026-11-26, product owner accepted the proposed default |
+| Q-PER-3 | The default period is Weekly. | 2026-11-26, product owner accepted the proposed default |
+| Q-PER-4 | Query parameters for the period and custom dates; platform and shop join in M2. No saved default across sessions. | 2026-11-26, product owner accepted the proposed default |
+| Q-PER-5 | Only future dates are blocked, as in the Prototype. | 2026-11-26, product owner accepted the proposed default |
+| Q-PER-6 | The compared period is shown in the header of pages that have the filter, as in the Prototype. | 2026-11-26, product owner accepted the proposed default |
 
 ## Sources
 

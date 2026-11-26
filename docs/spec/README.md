@@ -1,6 +1,6 @@
 # Milestone 1 specs
 
-One spec per capability group. Each spec lists its open questions first, then the sources it relies on, the behavior, edge cases and acceptance criteria.
+One spec per capability group. Each spec lists its questions first (all resolved now), then the sources it relies on, the behavior, edge cases and acceptance criteria.
 
 | Spec | Tickets |
 | --- | --- |
@@ -18,5 +18,5 @@ One spec per capability group. Each spec lists its open questions first, then th
 - **Brief** means `.artifacts/product-brief.html`. Citations use its section numbers, for example "Brief 2.3".
 - **Prototype** means `.artifacts/prototype.html`. It has no section numbers, so citations name the screen or function, for example "Prototype `curRange()`".
 - **Plan** means `.artifacts/toptop-build-plan.html`. Citations use its section titles and ticket ids.
-- "Proposed" marks a rule that no source states. It is a suggestion for the product owner to confirm, not a decision.
-- Open questions use ids such as `Q-FND-1`. A ticket links to the questions that affect it.
+- "Proposed" marks an edge-case rule that no source states. It is the default the ticket uses and can be changed in review; it is not an open question.
+- Question ids such as `Q-FND-1` stay in the specs. All of them are resolved now; each spec lists the answer under "Resolved questions".

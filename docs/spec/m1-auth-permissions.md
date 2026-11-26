@@ -5,16 +5,7 @@
 
 ## Open questions
 
-| ID | Question | Why it matters | Tickets |
-| --- | --- | --- | --- |
-| Q-AUTH-4 | Invitation lifecycle: T-11 names the status "Invited" and revoke. Are there more statuses (accepted, expired, revoked)? Does a link expire, and is it single use? | Needed for the acceptance test of T-12. | T-11, T-12 |
-| Q-AUTH-5 | Must the Google account that accepts an invitation have the same email as the invited address? | A mismatch could let the wrong person join. | T-12 |
-| Q-AUTH-6 | The Prototype gives each account one Business. Can an invited person who already belongs to another Business accept? Brief 2.5 only says "later". | Edge case in T-12 and in `m1-system-admin.md`. | T-12 |
-| Q-AUTH-7 | Removing a User (T-18): the Prototype sets them back to Pending with no Business and no modules. With invite-only sign-in there is no Pending state, so the account simply loses membership and is blocked at next sign-in unless invited again. Confirm. | Defines what the removed person sees at next sign-in. | T-18 |
-| Q-AUTH-9 | T-14 lists "cards, charts, reports, exports and AI" (AI is now Admin-only, see Resolved). None of these exist in M1. Is M1 expected to deliver only the enforcement layer (route guard, API check, data filter) that those features must use later? | Defines what can be tested in M1. | T-14 |
-| Q-AUTH-10 | Can a Business have more than one Admin? Brief 2.2 calls the Admin "the Business owner" and the Prototype lets the System Admin approve a person into an existing Business as another Admin. | Affects T-18 (who can be removed) and the Business-switching edge cases. | T-13, T-18, T-124 |
-| Q-AUTH-11 | "Keep the session" (T-09): how long does a session last? | Security and UX. | T-09 |
-| Q-AUTH-12 | Is the User allowed to see the Settings area in read-only form, for example the member list? The Prototype hides Settings from Users completely, and Brief 6 says only the Admin changes settings. | Menu and route guard. | T-06, T-15 |
+None. Every question is resolved; see the next section.
 
 ## Resolved questions
 
@@ -25,6 +16,14 @@
 | Q-AUTH-3 | **Invitations are manual links.** The app creates an invitation link and the Admin copies and sends it; the app does not send email. Decided earlier in the Build Plan: Decisions row "Sign-in: Better Auth, Google, Organization plugin, invites by manual link" (Uyn, 2026-11-25), and Architecture "Inviting Business owners": the System Admin "sends the owner an invite link". T-11 "Send the invitation" means "create the link". | 2026-11-25 and 2026-11-26 |
 | Q-AUTH-2 | **An invited Admin gets all modules. An invited User gets no modules until an Admin assigns them.** The invite form does not choose modules for a User. | 2026-11-26, product owner |
 | Q-AUTH-8 | **Ask AI is Admin only.** Users have no Ask AI at all: no button, and the API rejects them. The Plan decision of 2026-11-26 stands; Brief 2.3 and 5.4 are out of date on this point. | 2026-11-26, product owner |
+| Q-AUTH-4 | **Invitations are single-use and expire after 7 days.** Statuses: Invited, Accepted, Revoked, Expired. | 2026-11-26, product owner |
+| Q-AUTH-5 | The Google account that accepts an invitation must have the same email as the invited address. | 2026-11-26, product owner accepted the proposed default |
+| Q-AUTH-6 | One Business per account in M1. A person who already belongs to a Business cannot accept an invitation to another (Brief 2.5, Prototype Business selector). | 2026-11-26, product owner accepted the proposed default |
+| Q-AUTH-7 | A removed User is treated like any person without an invitation: blocked, and sees the no-access notice. | 2026-11-26, product owner accepted the proposed default |
+| Q-AUTH-9 | T-14 delivers the enforcement layer only (route guard, API check, data filter). Cards, exports and reports call it when they are built. | 2026-11-26, product owner accepted the proposed default |
+| Q-AUTH-10 | **One Admin per Business.** The System Admin cannot assign a second Admin to an existing Business in M1. Replacing an Admin is not part of M1. | 2026-11-26, product owner |
+| Q-AUTH-11 | Session length is the Better Auth default. | 2026-11-26, product owner accepted the proposed default |
+| Q-AUTH-12 | Settings is hidden from Users completely, as in the Prototype. | 2026-11-26, product owner accepted the proposed default |
 
 ## Sources
 
@@ -49,12 +48,12 @@
 
 ### Admin invites a User (T-11)
 
-- The Admin enters an email and the app creates an invitation link for the Admin to copy and send (no email is sent by the app; Q-AUTH-3, resolved). The invited person becomes a User with **no modules** (Q-AUTH-2, resolved). The invitation has the status Invited and can be revoked. See Q-AUTH-4 for lifecycle.
-- A User is the only role an Admin can invite. Admin and System Admin accounts come only from the System Admin (Brief 2.1, 2.4). An Admin invited by the System Admin gets all modules (see `m1-system-admin.md`).
+- The Admin enters an email and the app creates an invitation link for the Admin to copy and send (no email is sent by the app; Q-AUTH-3, resolved). The invited person becomes a User with **no modules** (Q-AUTH-2, resolved). The invitation has the status Invited and can be revoked. It is single-use and expires after 7 days; statuses are Invited, Accepted, Revoked and Expired (Q-AUTH-4, resolved).
+- A User is the only role an Admin can invite. Admin and System Admin accounts come only from the System Admin (Brief 2.1, 2.4). Each Business has one Admin (Q-AUTH-10). An Admin invited by the System Admin gets all modules (see `m1-system-admin.md`).
 
 ### User accepts the invitation (T-12)
 
-- The invited person opens the link, signs in with Google and lands in the right Business with the access granted. A User with no modules sees the empty state described above.
+- The invited person opens the link, signs in with the Google account that has the invited email (Q-AUTH-5), and lands in the right Business with the access granted. A User with no modules sees the empty state described above.
 
 ### Grant access per module (T-13)
 
@@ -92,7 +91,7 @@
 ### Manage members (T-18)
 
 - A member list with role and access. The Admin can edit access, revoke an invitation and remove a User (Brief 6.4).
-- Removal takes effect at once. See Q-AUTH-7.
+- Removal takes effect at once. A removed User is blocked like any uninvited person (Q-AUTH-7).
 
 ### Personal profile and sign out (T-19)
 
@@ -102,11 +101,11 @@
 ## Edge cases
 
 - A User's grant changes while they are signed in: the next request uses the new grant. (Plan T-13 "take effect immediately")
-- A User is removed, suspended or their Business is suspended while signed in: the next request is rejected and the pending/suspended screen appears. (Proposed, consistent with Prototype `pendingView()`)
+- A User is removed, suspended or their Business is suspended while signed in: the next request is rejected and the blocked screen appears. (Prototype `pendingView()`)
 - A person with no invitation signs in with Google: blocked, no record that grants access is created. (Q-AUTH-1)
 - A User opens a module URL they cannot access: redirect to their first allowed module, not an error page showing that the module exists. (Proposed)
 - A User calls a Tax API directly: rejected, with no data in the response and no hint whether Tax data exists. (T-16 "not reachable by ... API")
-- An invitation is accepted twice, or after revocation: rejected. (Proposed; see Q-AUTH-4)
+- An invitation is accepted twice, used after 7 days, or used after revocation: rejected. (Q-AUTH-4)
 - The first sign-in of the account in `SYSTEM_ADMIN_EMAIL`: allowed without an invitation and becomes System Admin (`m1-system-admin.md`, Q-SYS-1).
 
 ## Acceptance criteria

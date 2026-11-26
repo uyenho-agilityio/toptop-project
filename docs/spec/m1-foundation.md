@@ -5,20 +5,19 @@
 
 ## Open questions
 
-| ID | Question | Why it matters | Tickets |
-| --- | --- | --- | --- |
-| Q-FND-2 | How is "every query filters by Business" enforced: a shared query helper in code, Postgres row-level security, or both? | The Plan states the rule and a test, not the mechanism. The choice changes how T-02 is built and tested. | T-02 |
-| Q-FND-3 | Migrations: which tool runs them and how are they managed? | The Plan marks this "Not decided yet" (Data model section). The first schema ships in this milestone. | T-01 |
-| Q-FND-4 | Money display: T-05 says "VND with separators". The Prototype shows compact amounts on cards ("1,2 triệu", "1.2M ₫", "tỷ"/"B") and full amounts elsewhere. Which format applies where? | One shared helper has to cover both. | T-05, T-07 |
-| Q-FND-5 | Time zone: T-05 says "Vietnam time", while Brief 6.1 makes time zone a Business setting. Is Vietnam time fixed for the whole app in M1? | Period boundaries (T-21) depend on it. | T-05, T-21 |
-| Q-FND-6 | The Plan puts the AI Assistant in the sidebar (T-06). Brief 9 and the Prototype put it behind one shared button in the header. In M1, where does the AI entry appear, and does it exist at all before M7? | Layout of the shell. | T-06 |
-| Q-FND-7 | The eight module screens do not exist until M3 to M7. What does a menu item open in M1: a placeholder page, or is the item hidden until its module ships? | T-06 AC "Sidebar with 8 modules". | T-06 |
+None. Every question is resolved; see the next section.
 
 ## Resolved questions
 
 | ID | Answer | Date |
 | --- | --- | --- |
 | Q-FND-1 | **No.** M1 does not add orders or cost tables and does not process cost or profit. M4 adds them. T-01 stays as written in the Build Plan. | 2026-11-26, product owner |
+| Q-FND-2 | A shared query helper that requires a Business id, plus the T-02 test. Row-level security can be added later. | 2026-11-26, product owner accepted the proposed default |
+| Q-FND-3 | Migrations use Drizzle Kit (the stack already uses Drizzle ORM). | 2026-11-26, product owner accepted the proposed default |
+| Q-FND-4 | Compact amounts on cards and full amounts in tables, as in the Prototype. | 2026-11-26, product owner accepted the proposed default |
+| Q-FND-5 | Fixed Vietnam time for the whole app in M1. | 2026-11-26, product owner accepted the proposed default |
+| Q-FND-6 | The AI entry is a header button shown to Admins only (Brief 9, Prototype); its behavior arrives in M7. | 2026-11-26, product owner accepted the proposed default |
+| Q-FND-7 | Menu items open a "coming soon" placeholder page until their module ships. | 2026-11-26, product owner accepted the proposed default |
 
 ## Sources
 

@@ -7,12 +7,7 @@
 
 ## Open questions
 
-| ID | Question | Why it matters | Tickets |
-| --- | --- | --- | --- |
-| Q-SYS-4 | The Prototype lets the System Admin assign a person to an existing Business as an Admin. Can a Business have more than one Admin? (Same as Q-AUTH-10.) | Roles and member management. | T-124 |
-| Q-SYS-5 | Status words differ: T-125 says "Lock, unlock, deactivate", Brief 8 says "Activate or suspend", the Prototype only toggles active and suspended. Which statuses exist for accounts and Businesses? | Data model and wording. | T-125 |
-| Q-SYS-6 | Log: Brief 8 says every System Admin action goes to an audit log, T-125 says "with a log", and the log viewer is in M7 (`syslog`). In M1, do we store the entries only? Which fields, and for how long? | What T-124 and T-125 must write. | T-124, T-125 |
-| Q-SYS-7 | Brief 8 describes a dashboard, user management, Business management and monitoring. M1 covers create Business with invited Admin, and status. Does the M1 Console also need the user details panel and the Business member list that the Prototype has? | Console scope in M1. | T-124, T-125 |
+None. Every question is resolved; see the next section.
 
 ## Resolved questions
 
@@ -21,6 +16,10 @@
 | Q-SYS-3 | **T-123 is removed from M1.** With invite-only sign-in there is no waiting list to review; T-124 covers creating a Business and inviting its Admin. | 2026-11-26, product owner |
 | Q-SYS-1b | **When `SYSTEM_ADMIN_EMAIL` changes, the previous System Admin loses access immediately.** The role is read from the config, so the old account is treated as an ordinary account with no invitation (blocked). | 2026-11-26, product owner |
 | Q-SYS-1 | **The first System Admin is set by an email in server configuration.** The config key is `SYSTEM_ADMIN_EMAIL` (placeholder name; the real value is set per environment by the product owner and is never committed to the repo). When that Google account signs in, it becomes the System Admin without an invitation. Options (b) one-time script and (c) first sign-in on an empty database were not chosen. | 2026-11-26, product owner |
+| Q-SYS-4 | **One Admin per Business** (same answer as Q-AUTH-10). Creating a Business creates its single Admin invitation. | 2026-11-26, product owner |
+| Q-SYS-5 | Statuses are active and suspended (Brief 8, Prototype). "Lock, unlock, deactivate" in T-125 mean suspend and activate. | 2026-11-26, product owner accepted the proposed default |
+| Q-SYS-6 | Store who, what and when for each System Admin action. The log viewer is M7. | 2026-11-26, product owner accepted the proposed default |
+| Q-SYS-7 | The M1 Console has lists of Businesses and users with status and the actions in T-124 and T-125. Dashboard and monitoring are M7. | 2026-11-26, product owner accepted the proposed default |
 
 ## Sources
 
@@ -39,7 +38,7 @@
 ### Create a Business and assign an Admin (T-124)
 
 - The System Admin creates a new Business and invites a person as its Admin (Plan Architecture: the System Admin sends the owner an invite link). The invited Admin gets **all modules** (Q-AUTH-2, resolved).
-- The Prototype offers a new Business (name required) or an existing one, and in the Business dialog lists only users who do not belong to a Business yet. With invite-only sign-in the person is chosen by email, not from a list of registered users.
+- Each Business has exactly one Admin (Q-SYS-4). The Prototype's option to assign a person to an existing Business is not part of M1. The Business name is required, and the person is chosen by email, not from a list of registered users.
 - A Business is one Better Auth organization (Plan, Decisions). It starts active and with no data.
 - The System Admin can view a Business's member list (name, role, modules). That is account information, not business data (Prototype `ACT['b-mem']`, Brief 8).
 
@@ -54,7 +53,7 @@
 - `SYSTEM_ADMIN_EMAIL` is missing or invalid at startup: no System Admin exists; the app must still start and show no console to anyone, and log a clear configuration error. (Proposed)
 - Inviting the same email twice: the second request fails with a clear message, not a duplicate. (Proposed)
 - Creating a Business with an empty or duplicate name: validation error. (Prototype requires a name; duplicate rule is Proposed)
-- Suspending the account of a Business's only Admin: allowed, and the Business keeps its other members. (Proposed)
+- Suspending the account of a Business's Admin: allowed; its Users keep their access, because suspending an account does not suspend its Business. (Prototype `pendingView()`)
 - The System Admin cannot suspend their own account. (Proposed)
 - A suspended Business is re-activated: members regain access with the same grants. (Follows Prototype behavior of `b-sus` toggle)
 

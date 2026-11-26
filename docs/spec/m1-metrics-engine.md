@@ -7,14 +7,7 @@
 
 ## Open questions
 
-| ID | Question | Why it matters | Tickets |
-| --- | --- | --- | --- |
-| Q-ENG-2 | **Input shape.** M1 has no orders table (Q-FND-1, resolved) and no data is imported until M2. What does the engine read in M1, and how do its tests load records? Proposed: the engine is a pure function over a typed list of order records, so M4 only adds the database read path. | The engine cannot be tested without it. | T-25 |
-| Q-ENG-3 | "Tested against a sample dataset": which dataset, and where do the expected numbers come from? T-134 (seed) is a separate ticket and T-25 does not depend on it. | Golden values for the test. | T-25, T-134 |
-| Q-ENG-4 | Net revenue and order count. In the Prototype, order count is all orders in range (cancelled and returned included), and net revenue is the value of orders that are neither cancelled nor returned, after discounts. Brief 4 (Finance) lists "gross sales, seller-funded discounts, refunds and returns, net revenue". Is the Prototype's definition the intended one, and should "order count" in M1 mean all orders or only valid ones? | The first line of every report and card. | T-25 |
-| Q-ENG-6 | Unavailable data (Brief 7): the engine must say a value is unavailable, never 0. How does it signal this (a null with a reason, or a separate status)? | Needed by T-04, T-07 and every module. | T-25 |
-| Q-ENG-7 | Money type and rounding: integer VND or decimal. | Totals must match across screens. | T-25 |
-| Q-ENG-8 | Which comparison kind each metric uses (percent, amount, percentage points) and when a change counts as "flat". The Prototype uses a 0.05 percentage-point or 1 VND threshold and shows a dash when the previous value is 0. | Output of the engine's change object. | T-29 |
+None. Every question is resolved; see the next section.
 
 ## Resolved questions
 
@@ -23,6 +16,12 @@
 | Q-ENG-1 | **T-25 is narrowed to net revenue and order count. T-29 stays as a rule for M4.** Cost and profit are not processed in M1. | 2026-11-26, product owner |
 
 Questions about fees, shipping, packaging, cost of goods and allocation (Prototype `PLAT`, `SHIP_COST`, `PACK_COST`, `perOrder()`, `fixedBetween()`) belong to M4 and are not raised here.
+| Q-ENG-2 | The engine is a pure function over a typed list of order records passed in. M4 adds the database read. | 2026-11-26, product owner accepted the proposed default |
+| Q-ENG-3 | The engine test uses a small generated dataset like the Prototype's, with the expected numbers written down in the test. | 2026-11-26, product owner accepted the proposed default |
+| Q-ENG-4 | **Follow the Prototype exactly.** Order count is every order in the range and selected shops, including cancelled and returned orders (Prototype `calc()`: `m.n++` before the status check). Net revenue is the sum of order value over orders that are neither cancelled nor returned; orders still in progress (to ship, shipping) and completed orders count as valid. Order value is quantity x price - discount. | 2026-11-26, product owner |
+| Q-ENG-6 | An unavailable value is a null plus a reason. | 2026-11-26, product owner accepted the proposed default |
+| Q-ENG-7 | Money is integer VND. | 2026-11-26, product owner accepted the proposed default |
+| Q-ENG-8 | As the Prototype `delta()`: percent change is flat under 0.05%, amount change is flat under 1 VND, percentage-point change is flat under 0.05, and a dash is shown when the previous value is 0. | 2026-11-26, product owner accepted the proposed default |
 
 ## Sources
 
@@ -36,13 +35,13 @@ Questions about fees, shipping, packaging, cost of goods and allocation (Prototy
 
 - One module computes the numbers. Every screen, report, alert and AI answer reads from it and never recalculates (Plan, Data rules).
 - It is a pure function: given a Business scope, a date range and the order records, it returns a metrics object. The same call is made for the previous range to get the comparison.
-- M1 metrics, from the Prototype `calc()` (to confirm in Q-ENG-4):
+- M1 metrics, exactly as the Prototype `calc()` computes them (Q-ENG-4):
 
 | Metric | Definition in the Prototype |
 | --- | --- |
-| Order count | Count of all orders in range and in the selected shops. |
+| Order count | Count of all orders in range and in the selected shops, including cancelled and returned orders. |
 | Valid order | Not cancelled and not returned. |
-| Net revenue | Sum of order value over valid orders (value = quantity x price - discount). |
+| Net revenue | Sum of order value over valid orders (value = quantity x price - discount). Cancelled and returned orders are left out; completed and in-progress orders are included. |
 
 - Metrics that depend on inputs that do not exist yet (everything about cost and profit) are returned as unavailable, never 0 (Brief 7).
 - The engine is built so M4 can add cost and profit metrics without changing how callers read it.
