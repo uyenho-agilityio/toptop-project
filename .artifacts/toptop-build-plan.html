@@ -1,0 +1,932 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>TopTop Build Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: milestone overview strip, then one section per milestone with ticket rows in build order. */
+:root{--bg:#fffaf5;--surface:#ffffff;--fg:#2b1a0d;--muted:#7d5b44;--line:#f2dccb;--accent:#e8731a;--accent-ink:#ffffff;--accent-soft:#fde8d6;--chip:#fdf0e4;--ok:#1b7a4b;--ok-soft:#dcf2e5;--warn:#a85a00;--warn-soft:#fbefdc;--info:#2c5d8a;--info-soft:#e0ecf7;--bad:#b3261e;--bad-soft:#fbe3e1;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1a120c;--surface:#241913;--fg:#f5ebe0;--muted:#c2a58c;--line:#3d2c1f;--accent:#ff9a3c;--accent-ink:#1a120c;--accent-soft:#3a2716;--chip:#2e2016;--ok:#56c98b;--ok-soft:#173826;--warn:#f0a947;--warn-soft:#3a2c12;--info:#8fbbe6;--info-soft:#16283a;--bad:#ff8a80;--bad-soft:#3a1a18;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1a120c;--surface:#241913;--fg:#f5ebe0;--muted:#c2a58c;--line:#3d2c1f;--accent:#ff9a3c;--accent-ink:#1a120c;--accent-soft:#3a2716;--chip:#2e2016;--ok:#56c98b;--ok-soft:#173826;--warn:#f0a947;--warn-soft:#3a2c12;--info:#8fbbe6;--info-soft:#16283a;--bad:#ff8a80;--bad-soft:#3a1a18;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14.5px/1.55 "Geist",system-ui,-apple-system,"Segoe UI",sans-serif;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;padding-block:24px 64px}
+h1{font-size:25px;margin:0 0 4px;letter-spacing:-.015em;text-wrap:balance}
+h2{font-size:17px;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:0;max-width:75ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:18px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:11;background:var(--bg)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+input[type=search],select{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:9px;padding:7px 10px;min-height:36px;font:inherit;max-width:100%}
+select{-webkit-appearance:none;appearance:none;padding-right:34px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%23888' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:12px}
+input[type=search]{flex:1 1 220px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:6px 12px;min-height:36px;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--chip)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pill{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:3px 11px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.epic{margin-top:26px;scroll-margin-top:130px}
+.eh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-bottom:4px}
+.eh .code{font:500 12.5px "Geist Mono",ui-monospace,monospace;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:1px 8px}
+.eh .cnt{color:var(--muted);font-size:13px}
+.goal{color:var(--muted);margin:0 0 10px;font-size:13.5px;max-width:80ch}
+.feat{margin-top:16px;scroll-margin-top:130px}.fh{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin-bottom:6px}.fh h3{font-size:15px;margin:0}.fcode{font:500 12px "Geist Mono",ui-monospace,monospace;color:var(--info);background:var(--info-soft);border-radius:6px;padding:1px 8px}.fh .cnt{color:var(--muted);font-size:12.5px}
+.list{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.t{display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 12px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.t:last-child{border-bottom:0}
+.tid{font:500 13px "Geist Mono",ui-monospace,monospace;color:var(--muted);padding-top:2px}
+.tt{font-weight:650;margin:0;text-wrap:balance}
+.ac{margin:6px 0 8px;padding-left:18px;color:var(--fg)}
+.ac li{margin:1px 0}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-size:12px;font-weight:600;padding:1px 9px;border-radius:999px;background:var(--chip);color:var(--muted);white-space:nowrap}
+.chip.p0{background:var(--bad-soft);color:var(--bad)}.chip.p1{background:var(--warn-soft);color:var(--warn)}.chip.p2{background:var(--info-soft);color:var(--info)}
+.chip.dep{font-family:"Geist Mono",ui-monospace,monospace;font-weight:500}
+.open{font-size:12.5px;background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:4px 10px;margin-top:6px;display:inline-block}
+.empty{padding:40px 0;text-align:center;color:var(--muted)}
+.note{color:var(--muted);font-size:13px}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:6px}
+.plan ol{margin:6px 0 0;padding-left:20px}
+.plan li{margin:3px 0}
+.sec{margin-top:34px}
+.top{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}.tb{min-width:0}.tools{flex:none;flex-wrap:nowrap}.btn.icon{width:36px;padding:0;display:grid;place-items:center}
+@media (max-width:560px){.t{grid-template-columns:minmax(0,1fr)}.tid{padding:0}}
+
+
+.stkh{font-size:15px;margin:18px 0 6px}
+.dg{width:100%;height:auto;margin:10px 0 4px;display:block}
+.dg .b{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.dg .c{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1}
+.dg .x{fill:var(--chip);stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3}
+.dg text{fill:var(--fg);font:600 13px "Geist",system-ui,sans-serif}
+.dg text.s{fill:var(--muted);font:400 11.5px "Geist",system-ui,sans-serif}
+.dg line{stroke:var(--muted);stroke-width:1.2}
+.stk{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr);border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;margin-top:12px}
+.stk>div{padding:9px 14px;border-bottom:1px solid var(--line)}
+.stk>div:nth-last-child(-n+2){border-bottom:0}
+.stk .k{font-weight:650;background:var(--chip)}
+.prep{margin:4px 0 0;padding-left:20px}.prep li{margin:3px 0}
+@media (max-width:560px){.stk{grid-template-columns:minmax(0,1fr)}.stk .k{border-bottom:0;padding-bottom:2px}}
+.ms{margin-top:30px;scroll-margin-top:130px}
+.mh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.mh .code{font:600 13px "Geist Mono",ui-monospace,monospace;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:1px 9px}
+.mh .cnt{color:var(--muted);font-size:13px}
+.done{background:var(--ok-soft);color:var(--ok);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:13.5px;max-width:90ch}
+.done b{font-weight:700}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:16px 0}
+.card{display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;color:inherit;text-decoration:none}
+.card:hover{border-color:var(--accent)}
+.card b{font:600 12.5px "Geist Mono",ui-monospace,monospace;color:var(--accent)}
+.card .n{display:block;font-weight:650;margin:2px 0 6px;text-wrap:balance}
+.card .m{font-size:12.5px;color:var(--muted)}
+.prog{height:6px;border-radius:99px;background:var(--chip);overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;background:var(--ok);width:0}
+.chip.f{font-family:"Geist Mono",ui-monospace,monospace;font-weight:500;background:var(--info-soft);color:var(--info)}
+.chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.chk input{margin-top:4px;width:16px;height:16px;accent-color:var(--accent);flex:none}
+.t.isdone .tt{text-decoration:line-through;color:var(--muted)}
+a{color:var(--accent)}
+select.st{min-height:28px;padding:2px 28px 2px 10px;font-size:12.5px;font-weight:600;border-radius:999px;background-position:right 10px center;background-size:10px;margin-left:auto}
+select.st.ticketed{border-color:var(--info);color:var(--info)}
+select.st.done{border-color:var(--ok);color:var(--ok)}
+.foot{margin:28px 0 8px;font-size:13px;color:var(--muted);max-width:80ch}
+.upd{color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font-size:13.5px}
+
+/* Numbered sections, table of contents, board, tables */
+.sec{scroll-margin-top:16px}
+.sec>h2{font-size:19px;margin-bottom:8px;padding-top:6px;border-top:1px solid var(--line)}
+.sn{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.toc a{font-size:13px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);text-decoration:none}
+.toc a:hover{border-color:var(--accent);color:var(--accent)}
+.dl{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr);gap:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;margin:0}
+.dl dt,.dl dd{margin:0;padding:9px 14px;border-bottom:1px solid var(--line)}
+.dl dt{font-weight:650;background:var(--chip)}
+.dl dt:last-of-type,.dl dd:last-of-type{border-bottom:0}
+@media (max-width:560px){.dl{grid-template-columns:minmax(0,1fr)}.dl dt{border-bottom:0;padding-bottom:2px}}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:8px 0}
+.tw table{border-collapse:collapse;width:100%;min-width:480px;font-size:13.5px}
+.tw th,.tw td{text-align:left;vertical-align:top;padding:8px 12px;border-bottom:1px solid var(--line)}
+.tw th{background:var(--chip);font-weight:650;white-space:nowrap}
+.tw tr:last-child td{border-bottom:0}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:8px}
+.bcol{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px;min-width:0}
+.bcol h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:14px;margin:2px 4px 8px}
+.bcol .code{font:600 12px "Geist Mono",ui-monospace,monospace;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:1px 8px}
+.bt{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:5px 8px;border-radius:8px;color:var(--fg);text-decoration:none;font-size:13px}
+.bt:hover{background:var(--chip)}
+.bt b{font:500 12px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
+.bt .bn{flex:1 1 140px;min-width:0}
+.stc{font-size:11px;font-weight:600;padding:0 8px;border-radius:999px;background:var(--chip);color:var(--muted);white-space:nowrap}
+.stc.ticketed{background:var(--info-soft);color:var(--info)}.stc.done{background:var(--ok-soft);color:var(--ok)}
+.mh h3{font-size:17px;margin:0;text-wrap:balance}
+.t.flash,.ms.flash{background:var(--accent-soft)}
+.tref{font:500 12.5px "Geist Mono",ui-monospace,monospace}
+</style>
+<div class="wrap">
+  <div class="top">
+    <div class="tb">
+      <h1 id="h1">TopTop Build Plan</h1>
+      <p class="sub" id="sub"></p>
+      <div class="links" id="links"></div>
+    </div>
+    <div class="row tools">
+      <button class="btn" id="lang" type="button">VI</button>
+      <button class="btn icon" id="theme" type="button"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    </div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <nav class="toc" id="toc"></nav>
+  <section class="sec" id="overview"><h2 id="overview-h"></h2><div id="overview-b"></div></section>
+  <section class="sec" id="board"><h2 id="board-h"></h2><div id="board-b"></div></section>
+  <section class="sec" id="decisions"><h2 id="decisions-h"></h2><div id="decisions-b"></div></section>
+  <section class="sec" id="architecture"><h2 id="stackH"></h2><p class="note" id="stackNote"></p><div id="stackDiag"></div><div class="stk" id="stackTbl"></div></section>
+  <section class="sec" id="milestones"><h2 id="milestones-h"></h2><p class="note" id="milestones-b"></p>
+  <div class="strip" id="strip"></div>
+  <div class="bar" role="search">
+    <div class="row">
+      <input type="search" id="q" aria-label="Search">
+      <select id="ms" aria-label="Milestone"></select>
+      <select id="role" aria-label="Role"></select>
+      <button class="btn" id="copy" type="button">Copy CSV</button>
+    </div>
+  </div>
+  <div id="out"></div>
+  </section>
+  <section class="sec" id="rules"><h2 id="rules-h"></h2><div id="rules-b"></div></section>
+  <section class="sec" id="roles"><h2 id="roles-h"></h2><div id="roles-b"></div></section>
+  <section class="sec" id="data"><h2 id="data-h"></h2><div id="data-b"></div></section>
+  <section class="sec" id="integrations"><h2 id="integrations-h"></h2><div id="integrations-b"></div></section>
+  <section class="sec" id="security"><h2 id="security-h"></h2><div id="security-b"></div></section>
+  <section class="sec" id="testing"><h2 id="testing-h"></h2><div id="testing-b"></div></section>
+  <section class="sec" id="release"><h2 id="release-h"></h2><div id="release-b"></div></section>
+  <section class="sec" id="ai"><h2 id="ai-h"></h2><div id="ai-b"></div></section>
+  <section class="sec" id="i18n"><h2 id="i18n-h"></h2><div id="i18n-b"></div></section>
+  <section class="sec" id="deferred"><h2 id="deferred-h"></h2><div id="deferred-b"></div></section>
+
+  <p class="foot" id="foot"></p>
+</div>
+<script>
+
+const EPICS = [
+ ['E01','Nền tảng và dùng chung','Khung ứng dụng, mô hình dữ liệu mở rộng được và các quy ước dùng chung cho mọi module.'],
+ ['E02','Tài khoản và phân quyền','Đăng nhập, mời User, cấp quyền theo module. Chỉ Admin sửa dữ liệu, User chỉ xem.'],
+ ['E03','Bộ lọc kỳ, sàn, shop','Một bộ lọc dùng chung cho mọi module.'],
+ ['E04','Công cụ tính chỉ số','Một nơi duy nhất tính doanh thu thuần, chi phí, lợi nhuận, để mọi màn hình khớp nhau.'],
+ ['E05','Kết nối sàn và dữ liệu','API sàn, nhập CSV/Excel, nhập tay, xuất CSV. Nguồn dữ liệu của cả app.'],
+ ['E06','Tổng quan','Trang chủ: 6 thẻ, biểu đồ và danh sách việc cần chú ý.'],
+ ['E07','Bán hàng','Thấy sản phẩm bán chạy, bán chậm và có vấn đề.'],
+ ['E08','Marketing','Ads (TikTok Ads, Shopee Ads) và Affiliate theo từng creator.'],
+ ['E09','Tồn kho','Sản phẩm, SKU, điểm đặt hàng lại, lô và hạn dùng bật tắt theo sản phẩm.'],
+ ['E10','Nhà cung cấp','Nhà cung cấp, phiếu nhập, công nợ.'],
+ ['E11','Tài chính','Chuỗi lãi lỗ đến lợi nhuận trước thuế, chi phí do Admin nhập, dòng tiền.'],
+ ['E12','Thuế','Hồ sơ người nộp thuế, doanh thu theo dõi thuế, thuế sàn khấu trừ, lịch sử nộp, nhắc việc. App không tính thuế.'],
+ ['E13','Báo cáo và cảnh báo','Báo cáo ngày, tuần, tháng và 13 loại cảnh báo đột xuất do Admin cấu hình.'],
+ ['E14','Trợ lý AI','Hỏi đáp trên dữ liệu, chỉ Admin dùng.'],
+ ['E15','Cài đặt và Tích hợp','Thông tin Business, ngưỡng, thành viên và kênh thông báo.'],
+ ['E16','System Console','Màn riêng cho System Admin: duyệt đăng ký, tạo Business, theo dõi vận hành.'],
+ ['E17','Chất lượng và phát hành','Đa ngôn ngữ, sáng tối, responsive, bảo mật, dữ liệu mẫu.']
+];
+// [key, epic, title, acceptance (| separated), role, priority, size, deps (keys), open question]
+const T = [
+// E01
+['model','E01','Thiết kế mô hình dữ liệu mở rộng được','Business có nhiều shop; tài khoản về sau thuộc nhiều Business|Quyền lưu theo user, module, mức quyền|Hồ sơ người nộp thuế và kết nối sàn là bản ghi riêng|Loại người bán là danh sách (Cá nhân, Hộ kinh doanh), thêm Công ty sau được|Sơ đồ ER được duyệt','Hệ thống','P0','L','',''],
+['tenant','E01','Cô lập dữ liệu theo Business','Mọi truy vấn bắt buộc lọc theo Business|Test: Admin Business A không đọc được dữ liệu Business B','Hệ thống','P0','M','model',''],
+['source','E01','Lưu và hiện nguồn của mỗi bản ghi','Mỗi bản ghi có nguồn: API sàn, file nhập hoặc nhập tay|Hiện nhãn nguồn ở bảng và trang chi tiết','Hệ thống','P0','S','model',''],
+['empty','E01','Quy ước “chưa có” thay cho số 0','Component dùng chung hiện “chưa có” khi dữ liệu chưa được nhập hoặc đồng bộ|Số 0 thật vẫn hiện là 0|Áp dụng cho thẻ, bảng và biểu đồ','Hệ thống','P0','S','',''],
+['fmt','E01','Định dạng tiền, số, ngày','VND có dấu phân cách, ngày theo giờ Việt Nam|Một hàm dùng chung, đổi theo ngôn ngữ','Hệ thống','P0','S','',''],
+['shell','E01','Khung ứng dụng và menu','Sidebar 8 module, Trợ lý AI, Cài đặt|Menu ẩn module User không có quyền|Header có tên trang và bộ lọc|Tablet và điện thoại: menu dạng ngăn kéo','All','P0','M','model',''],
+['kpi','E01','Component thẻ chỉ số','Gồm nhãn, giá trị, dòng phụ, thay đổi so với kỳ trước, câu giải thích|Hỗ trợ trạng thái “chưa có”|Bấm vào thẻ mở module liên quan','Hệ thống','P0','S','empty,fmt',''],
+['audit','E01','Nhật ký thao tác dữ liệu','Ghi ai sửa gì, lúc nào cho mọi thao tác nhập và sửa của Admin|Admin xem được nhật ký','Admin','P1','M','model',''],
+// E02
+['login','E02','Đăng nhập bằng Google','Đăng nhập, đăng xuất, giữ phiên|Tài khoản mới được tạo với trạng thái Chờ duyệt','All','P0','M','model',''],
+['pending','E02','Màn hình chờ duyệt','Tài khoản Chờ duyệt chỉ thấy màn thông báo chờ System Admin|Chặn mọi API khác','All','P0','S','login',''],
+['invite','E02','Admin mời User qua email','Nhập email, chọn module được xem|Gửi lời mời, trạng thái Đã mời, thu hồi lời mời','Admin','P0','M','login',''],
+['accept','E02','User nhận lời mời và vào Business','Mở link, đăng nhập Google, vào đúng Business với quyền đã cấp','User','P0','S','invite',''],
+['perm','E02','Cấp quyền theo module','Mỗi User mỗi module một mức: Xem hoặc Không có quyền|Mặc định không có module nào|Đổi quyền có hiệu lực ngay','Admin','P0','M','invite',''],
+['enforce','E02','Chặn quyền ở cả giao diện và API','Route guard ở giao diện, kiểm tra quyền ở mọi API|Thẻ, biểu đồ, báo cáo, xuất file và AI chỉ dùng dữ liệu module được cấp','Hệ thống','P0','M','perm',''],
+['viewonly','E02','User chỉ xem, khóa mọi thao tác sửa','Ẩn hoặc khóa nút thêm, sửa, xóa, nhập file với User|API từ chối ghi dữ liệu từ User','User','P0','S','enforce',''],
+['taxhide','E02','Tab Thuế luôn ẩn với User','Không hiện trong menu, không truy cập được bằng URL hay API|Không có tùy chọn cấp quyền Thuế','User','P0','S','enforce',''],
+['sysnofin','E02','System Admin không tự xem tài chính và thuế','System Admin không có quyền đọc dữ liệu Tài chính, Thuế của Business|Có test tự động','System Admin','P0','S','enforce',''],
+['members','E02','Quản lý thành viên','Danh sách thành viên, vai trò, quyền|Sửa quyền, thu hồi, gỡ User','Admin','P0','S','perm',''],
+['profile','E02','Hồ sơ cá nhân và đăng xuất','Xem tên, email, vai trò, Business|Đổi ngôn ngữ và giao diện sáng tối','All','P1','S','shell',''],
+['bizswitch','E02','Chuyển Business (chuẩn bị cho nhiều Business)','Bộ chọn Business ở sidebar|Hiện nhiều Business khi tài khoản thuộc từ hai nơi trở lên','All','P2','S','model',''],
+// E03
+['period','E03','Bộ lọc kỳ Ngày, Tuần, Tháng','Ba nút nhanh dùng chung mọi module|Mỗi kỳ so với kỳ liền trước|Tên kỳ so sánh hiện một lần dưới lời chào','All','P0','M','shell',''],
+['custom','E03','Tùy chọn khoảng ngày bằng popup lịch','Chọn từ ngày, đến ngày trong popup lịch|Khi đang dùng Tùy chọn, ba nút nhanh mất hiệu lực|Bấm lại một trong ba nút để quay về','All','P0','M','period',''],
+['platshop','E03','Bộ lọc sàn và shop','Lọc theo TikTok Shop, Shopee và từng shop|Ẩn bộ lọc shop khi Business chỉ có một shop','All','P0','S','shell,shopmanage',''],
+['persist','E03','Giữ bộ lọc khi chuyển module','Bộ lọc nằm trong URL, chia sẻ được|Chuyển module không mất bộ lọc','All','P1','S','period',''],
+// E04
+['engine','E04','Công cụ tính chỉ số dùng chung','Một nơi tính doanh thu gộp, doanh thu thuần, giá vốn, chi phí, lợi nhuận|Mọi module đọc từ đây, không tự tính lại|Có test với bộ dữ liệu mẫu','Hệ thống','P0','L','model',''],
+['costs','E04','Tính phí sàn, phí giao dịch, vận chuyển, đóng gói theo đơn','Dùng số thực từ API khi có|Khi không có, dùng tỷ lệ Admin cấu hình|Ghi rõ số nào là thực tế, số nào là ước tính','Hệ thống','P0','L','engine',''],
+['cogs','E04','Giá vốn theo sản phẩm','Lấy giá vốn từ sản phẩm|Sản phẩm chưa có giá vốn thì báo “chưa có” và không tính lợi nhuận sai','Hệ thống','P0','M','engine,product',''],
+['alloc','E04','Phân bổ chi phí cố định theo kỳ và theo bộ lọc','Chi phí tháng chia theo số ngày của kỳ|Khi lọc theo shop hoặc sàn, phân bổ theo tỷ trọng doanh thu','Hệ thống','P0','M','engine,expense',''],
+['delta','E04','Quy tắc thay đổi của lợi nhuận là số tiền','Thay đổi lợi nhuận luôn hiện bằng số tiền, không bao giờ bằng phần trăm|Các chỉ số khác hiện phần trăm hoặc số tiền theo từng thẻ','Hệ thống','P0','S','engine',''],
+// E05
+['shopmanage','E05','Quản lý shop trong Business','Thêm, sửa tên, ngừng một shop|Mỗi shop thuộc một sàn|Bản ghi kết nối tách khỏi bản ghi shop','Admin','P0','M','model',''],
+['tiktok','E05','Kết nối TikTok Shop','Luồng cấp quyền OAuth, lưu token an toàn, làm mới token khi hết hạn|Ngắt kết nối, kết nối lại|Kiểm thử được bằng dữ liệu giả hoặc môi trường thử của sàn; không cần user thật','Admin','P0','L','shopmanage',''],
+['shopee','E05','Kết nối Shopee','Luồng cấp quyền, lưu token an toàn, làm mới token khi hết hạn|Ngắt kết nối, kết nối lại|Kiểm thử được bằng dữ liệu giả hoặc môi trường thử của sàn; không cần user thật','Admin','P0','L','shopmanage',''],
+['syncorders','E05','Đồng bộ đơn hàng','Chạy định kỳ, không tạo trùng khi chạy lại|Lưu trạng thái đơn, hủy, hoàn|Có lần đồng bộ lại thủ công','Hệ thống','P1','L','tiktok,shopee,source','Chỉ làm khi có user thật kết nối API; chưa có thì chờ'],
+['syncads','E05','Đồng bộ chi quảng cáo','Lấy campaign, chi thực tế, doanh thu quy gán, số đơn từ TikTok Ads và Shopee Ads','Hệ thống','P1','L','tiktok,shopee','Cần quyền API quảng cáo; chỉ làm khi có user thật kết nối API'],
+['syncsettle','E05','Đồng bộ quyết toán, ví sàn, phí và thuế khấu trừ','Lấy số dư ví, tiền chờ quyết toán, phí sàn thực tế, thuế sàn đã khấu trừ','Hệ thống','P1','L','tiktok,shopee','Cần quyền API thật; chỉ làm khi có user thật kết nối API'],
+['syncstatus','E05','Trạng thái kết nối từng shop','Hiện trạng thái kết nối, lần đồng bộ cuối (khi đã có đồng bộ), lỗi và nguyên nhân|Nút kết nối lại khi token hết hạn|Phát cảnh báo lỗi kết nối','Admin','P0','M','tiktok,shopee',''],
+['import','E05','Nhập file CSV hoặc Excel','Chọn loại dữ liệu, tải file, ánh xạ cột, xem trước, xác nhận mới lưu|Báo dòng lỗi rõ ràng|Chỉ Admin được nhập','Admin','P0','L','model,source',''],
+['importdedupe','E05','Chống trùng và lịch sử nhập','Mỗi dòng được xếp loại: mới, cập nhật, bỏ qua|Lịch sử nhập: thời gian, file, số dòng, người nhập','Admin','P0','M','import',''],
+['importtpl','E05','File mẫu để tải về','Có mẫu cho đơn hàng, sản phẩm, chi quảng cáo, quyết toán sàn, giá vốn, phiếu nhập','Admin','P1','S','import',''],
+['manual','E05','Khung nhập tay chuẩn','Form có kiểm tra dữ liệu|Có bước xác nhận trước khi lưu|Ghi nguồn là nhập tay','Admin','P0','M','source',''],
+['export','E05','Xuất CSV','Xuất đơn, sản phẩm, chi phí, phiếu nhập, báo cáo|Chỉ xuất dữ liệu của module được cấp|Có bộ lọc kỳ đang chọn','All','P1','M','enforce',''],
+// E06
+['ovcards','E06','Sáu thẻ chỉ số','Doanh thu thuần, Đơn hàng (kèm tỷ lệ hủy, hoàn), Lợi nhuận trước thuế (kèm biên), Tiền khả dụng, Chi quảng cáo (kèm ROAS), Hàng cần nhập|Mỗi thẻ có câu giải thích và so với kỳ trước','All','P0','L','kpi,engine,period',''],
+['ovperm','E06','Thẻ ẩn theo quyền, bấm để mở module','Thẻ ẩn khi User không mở được module tương ứng|Bấm thẻ mở module','User','P0','S','ovcards,enforce',''],
+['ovtrend','E06','Biểu đồ xu hướng','Doanh thu, lợi nhuận, đơn hàng: kỳ này so với kỳ trước','All','P0','M','ovcards',''],
+['ovsplit','E06','Biểu đồ theo sàn, shop, sản phẩm, chi phí','Doanh thu theo sàn và shop (chỉ khi có nhiều hơn một)|Sản phẩm bán chạy|Cơ cấu chi phí','All','P0','M','ovcards',''],
+['ovattn','E06','Danh sách việc cần chú ý','Tạo theo quy tắc, không dùng AI|Mỗi mục có mô tả, chỉ số, mức độ, liên kết module|Chỉ hiện mục thuộc module được phép','All','P0','M','ovcards,alertengine',''],
+['ovfold','E06','Mục “Xem thêm” mặc định đóng','Bảng sản phẩm, kiểm tra nhanh, báo cáo mới nhất nằm trong mục đóng','All','P1','S','ovcards',''],
+// E07
+['salesov','E07','Tổng quan bán hàng','Doanh thu gộp và thuần, tổng đơn, đơn hoàn tất, hủy, hoàn|Giá trị đơn trung bình, tỷ lệ hoàn tất, hủy, hoàn','All','P0','M','kpi,engine,period',''],
+['salestrend','E07','Xu hướng doanh thu và đơn hàng','Biểu đồ theo ngày, tuần hoặc tháng, kèm kỳ trước','All','P0','M','salesov',''],
+['salesdim','E07','Doanh thu theo sàn, shop, sản phẩm','Bảng và biểu đồ, bấm để lọc','All','P0','M','salesov',''],
+['salestop','E07','Sản phẩm bán chạy và shop hiệu quả nhất','Top N theo doanh thu và số lượng','All','P0','S','salesdim',''],
+['salesslow','E07','Sản phẩm bán chậm','Bán chậm = dưới 3 đơn trong 30 ngày, hoặc giảm từ 30% so với 30 ngày trước, hoặc tồn đủ bán trên 90 ngày (Admin chỉnh được)|Hiện lý do (ít đơn, giảm so với kỳ trước, tồn lâu)','All','P0','M','salesdim',''],
+['salesprob','E07','Sản phẩm có vấn đề','Gắn cờ: tỷ lệ hủy hoặc hoàn cao, doanh số giảm mạnh, đang bán khi hết hoặc gần hết hàng|Hiện lý do bên cạnh mỗi sản phẩm','All','P0','M','salesdim,stockcalc',''],
+['orderlist','E07','Danh sách đơn hàng','Cột: mã đơn, sàn và shop, ngày, sản phẩm và SKU, số lượng, giá, giảm giá, giá trị, trạng thái, hủy hoặc hoàn|Tìm, lọc, sắp xếp, phân trang','All','P0','M','import',''],
+['orderdetail','E07','Chi tiết đơn hàng','Ngăn bên hiện đủ thông tin đơn, lý do hủy hoặc hoàn, nguồn (quảng cáo, affiliate, tự nhiên)','All','P0','S','orderlist',''],
+['saleslink','E07','Chi tiết bán hàng của một sản phẩm','Bấm sản phẩm xem xu hướng, tỷ lệ hủy hoàn, tồn kho','All','P2','M','salesdim',''],
+// E08
+['mktov','E08','Tổng quan marketing','Tổng chi quảng cáo, doanh thu quy gán, ROAS, chi phí mỗi đơn, doanh thu affiliate, hoa hồng, tổng chi phí marketing trên doanh thu, số campaign đang chạy','All','P0','M','kpi,engine',''],
+['adslist','E08','Danh sách campaign quảng cáo','Tên, sàn, shop, ngân sách, chi thực tế, doanh thu quy gán, số đơn, sản phẩm đẩy, ngày, trạng thái','All','P0','M','import',''],
+['adsanalytics','E08','Phân tích quảng cáo','So sánh campaign, xu hướng chi, xu hướng doanh thu quy gán, so sánh ROAS, chi phí mỗi đơn','All','P0','M','adslist',''],
+['creatorcrud','E08','Admin quản lý creator và tỷ lệ hưởng doanh thu','Thêm, sửa, ngừng creator|Admin tự nhập tỷ lệ (ví dụ 3%, 5%, 8%, 10% hoặc số tùy chọn)|Tỷ lệ thuộc creator, không thuộc sản phẩm|User xem được, không sửa được','Admin','P0','M','manual',''],
+['creatorlist','E08','Bảng hiệu quả từng creator','Creator, sàn, shop, tỷ lệ, doanh thu quy gán, đơn, hoa hồng, lợi nhuận còn lại sau hoa hồng','All','P0','M','creatorcrud,affattrib',''],
+['affattrib','E08','Quy gán đơn cho creator và campaign','Mỗi đơn gắn nguồn: quảng cáo, affiliate hoặc tự nhiên|Dùng hoa hồng thực tế từ sàn khi có, tỷ lệ chỉ là số dự phòng','Hệ thống','P0','M','import,creatorcrud',''],
+['poas','E08','Nhận định marketing và POAS','Làm nổi bật campaign ROAS thấp, chi phí tăng, tiêu ngân sách chưa đủ doanh thu, creator hoa hồng ăn lợi nhuận|Có giá vốn thì hiện POAS|ROAS không bao giờ gọi là lợi nhuận','All','P1','M','adsanalytics,creatorlist,cogs',''],
+// E09
+['product','E09','Danh sách sản phẩm và SKU','Tên, SKU, danh mục, giá bán, giá vốn, nhà cung cấp, tồn, ngưỡng tối thiểu|Admin thêm, sửa, ngừng bán|Tìm, lọc','Admin','P0','M','manual',''],
+['skumap','E09','Ánh xạ SKU của sàn với SKU nội bộ','Đơn từ sàn tự khớp sản phẩm theo SKU|Có màn xử lý SKU chưa khớp|Cần thiết để tính giá vốn và tồn kho','Admin','P0','M','product,import',''],
+['attrs','E09','Thuộc tính sản phẩm là cấu hình','Đơn vị tính, biến thể, thời gian giao của nhà cung cấp, tồn an toàn|Không cột cố định cho một ngành','Admin','P0','M','product',''],
+['lottoggle','E09','Bật hoặc tắt theo dõi lô và hạn dùng theo sản phẩm','Sản phẩm tắt thì không hiện trường lô, hạn dùng|Bật thì bắt buộc nhập lô khi nhập kho','Admin','P0','M','attrs',''],
+['lotfefo','E09','Tồn kho theo lô và cảnh báo hạn dùng','Hiện tồn từng lô và hạn|Xuất kho theo hạn gần trước|Cảnh báo lô sắp hết hạn theo số ngày Admin đặt','All','P0','M','lottoggle,stockmoves',''],
+['stockcalc','E09','Điểm đặt hàng lại','Điểm đặt hàng lại = số bán mỗi ngày × thời gian giao + tồn an toàn|Số bán mỗi ngày tính từ đơn gần đây','Hệ thống','P0','M','product,import',''],
+['reorderover','E09','Ngưỡng tối thiểu do Admin đặt thay cho điểm tự tính','Khi có ngưỡng tay thì dùng ngưỡng tay|Hiện rõ sản phẩm nào đang dùng ngưỡng tay','Admin','P0','S','stockcalc',''],
+['reordermsg','E09','Danh sách hàng cần nhập và lời nhắc','Liệt kê sản phẩm hết hoặc chạm điểm đặt|Lời nhắc dạng “Đặt hàng hôm nay: nhà cung cấp giao sau 5 ngày”|Cấp dữ liệu cho thẻ Hàng cần nhập','All','P0','S','stockcalc,reorderover',''],
+['stockmoves','E09','Ghi nhận nhập, xuất, điều chỉnh, hoàn, hư hỏng','Admin ghi từng loại với lý do|Lịch sử xuất nhập xem được|Cập nhật tồn kho ngay','Admin','P0','M','product,manual',''],
+['stockauto','E09','Tự trừ tồn kho theo đơn sàn','Trừ tồn ngay khi có đơn|Đơn hủy trước khi giao: tự cộng lại tồn|Đơn hoàn sau khi giao: cộng lại khi Admin xác nhận đã nhận hàng (còn dùng được hay hư hỏng)|Có thể tắt','Hệ thống','P1','M','skumap,stockmoves',''],
+['invov','E09','Tổng quan tồn kho','Tổng sản phẩm, SKU, số lượng, giá trị tồn, sắp hết, đã hết, bán chậm','All','P0','M','product,kpi',''],
+['invanalytics','E09','Phân tích tồn kho','Báo cáo sắp hết, đã hết, bán chậm, tuổi tồn kho, lịch sử xuất nhập','All','P1','M','invov,stockmoves',''],
+// E10
+['supcrud','E10','Danh sách nhà cung cấp','Tên, người liên hệ, điện thoại, email, địa chỉ, ghi chú, thời gian giao|Admin thêm, sửa, ngừng','Admin','P0','S','manual',''],
+['purchase','E10','Tạo phiếu nhập hàng','Nhà cung cấp, ngày nhập, sản phẩm và SKU, số lượng, đơn giá, tổng, ngày đến hạn|Admin xác nhận mới lưu','Admin','P0','M','supcrud,product',''],
+['purchasepay','E10','Thanh toán phiếu nhập','Trạng thái Chưa trả, Trả một phần, Đã trả|Ghi từng lần thanh toán, ngày và nguồn tiền|Admin xác nhận mỗi lần','Admin','P0','M','purchase',''],
+['purchasestock','E10','Phiếu nhập cập nhật tồn kho và giá vốn','Xác nhận phiếu tạo nhập kho (kèm lô nếu có theo dõi)|Cập nhật lịch sử giá nhập','Admin','P0','M','purchase,stockmoves,lottoggle',''],
+['payables','E10','Công nợ và hóa đơn đến hạn','Tổng còn phải trả, sắp đến hạn, quá hạn|Cấp dữ liệu cho thẻ Tiền khả dụng','All','P0','S','purchasepay',''],
+['supanalytics','E10','Phân tích nhà cung cấp','Tổng giá trị nhập, theo nhà cung cấp, công nợ, lịch sử giá nhập, lần nhập gần nhất','All','P1','M','purchase',''],
+// E11
+['pnl','E11','Bảng lãi lỗ đến lợi nhuận trước thuế','Doanh thu gộp, giảm giá, hoàn tiền, doanh thu thuần|Giá vốn, lợi nhuận gộp|Chi phí biến đổi, lợi nhuận đóng góp|Chi phí cố định, lợi nhuận hoạt động|Thu chi khác, lợi nhuận trước thuế','All','P0','L','engine,costs,cogs,alloc',''],
+['expense','E11','Admin nhập chi phí cố định','Thuê kho, lương, kế toán, phần mềm, internet, chi khác|Nhập theo tháng, có phân loại|User chỉ xem','Admin','P0','M','manual',''],
+['other','E11','Thu chi khác','Admin nhập khoản như lãi vay, thưởng từ sàn|Dòng “thu chi khác” chỉ hiện trong lãi lỗ khi đã có dữ liệu','Admin','P0','S','pnl,manual',''],
+['cashflow','E11','Dòng tiền','Quyết toán của sàn, quyết toán chờ, tiền đã nhận, tiền đã chi, dòng tiền ròng|Tách rõ doanh thu và tiền thực nhận','All','P0','M','import,payables',''],
+['runway','E11','Số tháng tiền mặt đủ chi phí cố định','Tính từ tiền khả dụng và chi phí cố định hằng tháng','All','P1','S','cashflow,expense',''],
+['finperm','E11','Quyền xem Tài chính cho User','Chỉ User được Admin cấp mới thấy|Mọi trường hiển thị chỉ đọc','User','P0','S','enforce,pnl',''],
+// E12
+['taxprofile','E12','Hồ sơ người nộp thuế','Bắt buộc chỉ có 2 mục: loại người nộp thuế (cá nhân, hộ kinh doanh hay doanh nghiệp) và có thu nhập làm công hay không|Không bắt buộc: mã số thuế, thông tin kinh doanh, tình trạng, ghi chú|Tách riêng khỏi Business và shop','Admin','P0','M','model,taxhide',''],
+['taxrev','E12','Doanh thu theo dõi thuế','Theo kỳ, sàn, shop|Lấy từ dữ liệu bán hàng, ghi rõ nguồn','Admin','P0','M','engine,taxprofile',''],
+['taxwith','E12','Thuế sàn đã khấu trừ','Theo kỳ, sàn, shop|Lấy từ quyết toán của sàn hoặc nhập tay','Admin','P0','M','import,taxprofile',''],
+['taxpays','E12','Lịch sử nộp thuế','Ngày nộp, số tiền, loại thuế, kỳ nộp, số tham chiếu, ghi chú|Thêm, sửa, xóa','Admin','P0','M','taxprofile,manual',''],
+['taxrem','E12','Nhắc việc thuế','Tạo nhắc việc có ngày|Đánh dấu hoàn thành|Hiện ở danh sách cần chú ý và phát cảnh báo','Admin','P0','S','taxprofile',''],
+['taxnote','E12','Lời nhắc “App không tính thuế”','Hiện rõ ở đầu tab Thuế: chỉ quản lý thông tin, không khai thuế, không tư vấn','Admin','P0','S','taxprofile',''],
+// E13
+['repbuild','E13','Trình tạo báo cáo','Chọn loại, khoảng ngày, sàn, shop|Xem trước rồi tạo','All','P0','M','period',''],
+['repdaily','E13','Báo cáo ngày','Doanh thu, đơn, hủy hoàn, chi quảng cáo, chỉ số lợi nhuận có sẵn, vấn đề quan trọng|Tạo theo quy tắc, không dùng AI','All','P0','M','repbuild,engine',''],
+['repweekly','E13','Báo cáo tuần','Xu hướng doanh thu và đơn, so với tuần trước, marketing, tồn kho, tóm tắt chi phí, điểm nghẽn','All','P0','M','repbuild',''],
+['repmonthly','E13','Báo cáo tháng','Kết quả kinh doanh, doanh thu và lợi nhuận, cơ cấu chi phí, campaign, sản phẩm, tồn kho, dòng tiền','All','P0','M','repbuild',''],
+['repperm','E13','Báo cáo theo quyền','Chỉ chứa phần của module người xem được cấp','User','P0','S','repbuild,enforce',''],
+['rephist','E13','Lịch sử báo cáo và xuất file','Danh sách báo cáo đã tạo, mở lại, xuất khi hỗ trợ','All','P1','S','repbuild,export',''],
+['repsched','E13','Đặt lịch báo cáo','Bật tắt báo cáo ngày, tuần, tháng|Luôn xem được trong app, bật thì gửi thêm qua kênh thông báo ngoài app|Không phụ thuộc kênh ngoài','Admin','P0','M','repdaily,repweekly,repmonthly',''],
+['repai','E13','Nhận xét ngắn của AI cho báo cáo tuần và tháng','Chỉ báo cáo tuần và tháng có nhận xét|Nhận xét bám đúng số trong báo cáo','Hệ thống','P1','M','repweekly,repmonthly',''],
+['alertengine','E13','Bộ máy cảnh báo đột xuất','Đánh giá điều kiện định kỳ cho 13 loại|Không gửi lặp (thời gian chờ giữa hai lần)|Ghi lịch sử cảnh báo|Hiện trong danh sách cần chú ý','Hệ thống','P0','L','engine',''],
+['alertcfg','E13','Admin cấu hình cảnh báo','Bật, tắt từng loại, đặt ngưỡng, chọn người nhận|Người nhận chỉ gồm người được xem module liên quan','Admin','P0','M','alertengine',''],
+['alertinv','E13','Cảnh báo tồn kho','Chạm điểm đặt hàng lại|Hết hàng|Lô sắp hết hạn','Hệ thống','P0','M','alertengine,stockcalc,lotfefo',''],
+['alertsales','E13','Cảnh báo bán hàng','Doanh thu giảm mạnh|Tỷ lệ hủy hoặc hoàn cao','Hệ thống','P0','M','alertengine,salesov',''],
+['alertmkt','E13','Cảnh báo marketing','Campaign đang lỗ (POAS dưới ngưỡng)|Hoa hồng creator ăn hết lợi nhuận','Hệ thống','P1','M','alertengine,poas',''],
+['alertfin','E13','Cảnh báo tài chính và nhà cung cấp','Hóa đơn nhà cung cấp đến hạn hoặc quá hạn|Tiền mặt có thể thiếu|Biên lợi nhuận dưới mục tiêu|Quyết toán chờ quá lâu','Hệ thống','P0','M','alertengine,payables,cashflow',''],
+['alertsys','E13','Cảnh báo lỗi kết nối và nhắc việc thuế','Lỗi kết nối hoặc đồng bộ|Nhắc việc thuế đến hạn (chỉ gửi cho Admin)','Hệ thống','P0','S','alertengine,syncstatus,taxrem',''],
+['alertdelivery','E13','Gửi cảnh báo trong app và qua kênh ngoài','Thông báo trong app có trạng thái đã đọc|Gửi qua kênh thông báo ngoài khi đã kết nối','All','P0','M','alertengine,tgsend',''],
+// E14
+['aipanel','E14','Khung chat Trợ lý AI','Mở từ nút nổi, lưu hội thoại trong phiên|Hiện trạng thái đang trả lời','Admin','P0','M','shell',''],
+['aictx','E14','Giới hạn dữ liệu AI theo quyền','AI chỉ đọc dữ liệu của Business và shop đang chọn, qua công cụ chỉ đọc|Không đọc dữ liệu Thuế|User không thấy nút Ask AI và API từ chối User','Admin','P0','M','enforce',''],
+['aiqa','E14','Trả lời câu hỏi dựa trên dữ liệu','Trả lời theo số liệu thật, nêu kỳ và nguồn|Chưa có dữ liệu thì nói “chưa có”, không bịa|Gợi ý hành động khi phù hợp','Admin','P0','L','aipanel,aictx,engine',''],
+['aisugg','E14','Câu hỏi gợi ý','Gợi ý theo module','Admin','P1','S','aipanel',''],
+['aiquota','E14','Hạn mức dùng AI','Đếm số câu hỏi, báo khi gần hết, chặn khi hết','Admin','P1','S','aipanel',''],
+['aiguard','E14','Giới hạn vai trò của AI','AI chỉ đề xuất, không tự sửa dữ liệu, không tính thuế, không tư vấn pháp lý','Hệ thống','P0','S','aiqa',''],
+// E15
+['setbiz','E15','Thông tin Business','Tên, loại người bán, múi giờ|Admin sửa','Admin','P0','S','model',''],
+['setthr','E15','Ngưỡng mặc định và thiết lập tính toán','Giá trị mặc định (Admin chỉnh được): doanh thu giảm mạnh = giảm từ 30% so với kỳ trước; hủy hoặc hoàn cao = từ 10% số đơn; bán chậm = dưới 3 đơn trong 30 ngày hoặc giảm từ 30% so với 30 ngày trước hoặc tồn đủ bán trên 90 ngày; tồn an toàn = 7 ngày bán; lô sắp hết hạn = trước 30 ngày; quyết toán chờ quá lâu = quá 14 ngày; biên lợi nhuận dưới mục tiêu = dưới 10%; hóa đơn nhà cung cấp sắp đến hạn = trước 3 ngày; POAS dưới ngưỡng = dưới 1|Mỗi ngưỡng có giải thích','Admin','P1','M','alertcfg,costs',''],
+['setdata','E15','Trang nguồn dữ liệu','Gom trạng thái kết nối sàn, nhập file và lịch sử nhập một chỗ','Admin','P1','S','syncstatus,importdedupe',''],
+['tgconn','E15','Kết nối Telegram','Hướng dẫn tạo bot, nhập nhóm hoặc kênh, gửi tin thử|Ngắt kết nối','Admin','P0','M','setbiz',''],
+['tgsend','E15','Gửi tin qua Telegram','Gửi báo cáo theo lịch và cảnh báo|Thử lại khi lỗi, ghi lịch sử gửi','Hệ thống','P0','M','tgconn',''],
+['tgrecip','E15','Chọn người nhận trên Telegram','Admin chọn người hoặc nhóm nhận mỗi loại báo cáo, cảnh báo','Admin','P1','S','tgconn,alertcfg',''],
+// E16
+['sysguard','E16','Chỉ một System Admin do cấu hình máy chủ','Email System Admin đặt trong cấu hình|Không có màn hình tạo thêm','System Admin','P0','S','login',''],
+['sysreview','E16','Duyệt đăng ký','Danh sách tài khoản Chờ duyệt, duyệt hoặc từ chối','System Admin','P0','M','pending',''],
+['sysbiz','E16','Tạo Business và gán Admin','Tạo Business mới, gán người đã duyệt làm Admin','System Admin','P0','M','sysreview',''],
+['sysstatus','E16','Quản lý trạng thái tài khoản và Business','Khóa, mở, vô hiệu hóa, có ghi nhật ký','System Admin','P0','S','sysbiz',''],
+['sysmon','E16','Theo dõi lỗi API, tích hợp, đồng bộ','Danh sách lỗi theo thời gian và nơi xảy ra|Không hiện dữ liệu kinh doanh của Business','System Admin','P1','M','syncstatus',''],
+['syslog','E16','Nhật ký hệ thống','Ghi duyệt, tạo Business, đổi trạng thái','System Admin','P1','S','sysreview',''],
+['sysov','E16','Tổng quan System Console','Số tài khoản chờ duyệt, Business hoạt động, lỗi gần đây','System Admin','P1','S','sysmon',''],
+// E17
+['i18n','E17','Đa ngôn ngữ (i18n): Việt (VI) và Anh (EN)','Toàn bộ chữ, ngày, số, tiền đổi theo ngôn ngữ|Không còn chữ cứng trong code','All','P1','M','shell',''],
+['theme','E17','Giao diện sáng và tối','Theo hệ thống, có nút chọn tay|Mọi biểu đồ đọc rõ ở cả hai','All','P1','S','shell',''],
+['resp','E17','Responsive desktop, tablet, điện thoại','Kiểm tra từng màn ở ba kích thước|Bảng cuộn ngang trong khung riêng, không cuộn cả trang','All','P0','M','shell',''],
+['perf','E17','Hiệu năng với dữ liệu lớn','Phân trang, chỉ mục cho đơn hàng|Tải trang chính dưới 2 giây với 100 nghìn đơn','Hệ thống','P1','M','orderlist',''],
+['sec','E17','Bảo mật token và dữ liệu nhạy cảm','Mã hóa token sàn, không ghi log dữ liệu nhạy cảm|Rà soát quyền truy cập','Hệ thống','P0','M','tiktok,shopee',''],
+['seed','E17','Dữ liệu mẫu và tài khoản thử','Bộ dữ liệu mẫu khớp prototype: 4 vai trò mẫu và System Admin|Dùng cho demo và test','Hệ thống','P1','S','model',''],
+['a11y','E17','Truy cập được bằng bàn phím và đọc màn hình','Tiêu điểm thấy được, nhãn cho nút và biểu đồ, tương phản đạt','All','P2','M','shell',''],
+['e2e','E17','Kiểm thử đầu cuối và ma trận quyền','Playwright chạy 4 luồng: nhận lời mời và đăng nhập, User không thấy Thuế và Ask AI, nhập CSV, Admin Business A không thấy Business B|Test ma trận quyền ở tầng API (Vitest) cho 5 kịch bản: Admin, User kho, User bán hàng có Tài chính, User chỉ bán hàng và báo cáo, System Admin|Mỗi vai trò thấy đúng, không thấy sai','Hệ thống','P0','M','enforce',''],
+];
+
+const EPICS_EN = {
+E01:['Foundation and shared','App shell, an extensible data model and the conventions every module shares.'],
+E02:['Accounts and permissions','Sign-in, inviting Users, per-module access. Only the Admin edits data; Users view only.'],
+E03:['Period, platform and shop filters','One filter shared by every module.'],
+E04:['Metrics engine','One place that computes net revenue, costs and profit, so every screen shows the same numbers.'],
+E05:['Platform connections and data','Platform APIs, CSV/Excel import, manual entry and CSV export. The source of all data in the app.'],
+E06:['Overview','Landing page: 6 cards, charts and the list of what needs attention.'],
+E07:['Sales','See which products sell well, sell slowly and have problems.'],
+E08:['Marketing','Ads (TikTok Ads, Shopee Ads) and Affiliate per creator.'],
+E09:['Inventory','Products, SKUs, reorder point, lot and expiry tracking switched on or off per product.'],
+E10:['Suppliers','Suppliers, purchase records, payables.'],
+E11:['Finance','Profit and loss down to profit before tax, Admin-entered expenses, cash flow.'],
+E12:['Tax','Taxpayer profile, tax-tracking revenue, platform-withheld tax, payment history, reminders. The app does not calculate tax.'],
+E13:['Reports and alerts','Daily, weekly and monthly reports plus 13 triggered alerts the Admin configures.'],
+E14:['AI Assistant','Answers questions on the data; Admin only.'],
+E15:['Settings and Integrations','Business info, thresholds, members and the notification channel.'],
+E16:['System Console','Separate area for the System Admin: review registrations, create Businesses, monitor operations.'],
+E17:['Quality and release','Languages, light and dark themes, responsive layout, security, sample data.']
+};
+const OPEN_EN = {
+'Cần quyền API thật của TikTok Shop':'Needs real TikTok Shop API access',
+'Cần quyền API thật của Shopee':'Needs real Shopee API access',
+'Cần quyền API quảng cáo':'Needs ads API access',
+'Chỉ làm khi có user thật kết nối API; chưa có thì chờ':'Only built once a real user connects their API; wait otherwise',
+'Cần quyền API quảng cáo; chỉ làm khi có user thật kết nối API':'Needs ads API access; only built once a real user connects their API',
+'Cần quyền API thật; chỉ làm khi có user thật kết nối API':'Needs real API access; only built once a real user connects their API',
+'Cần quyền API thật':'Needs real API access',
+'Câu tóm tắt đang chờ duyệt lại':'The summary sentence is awaiting review',
+'Cần chốt định nghĩa “bán chậm”':'Needs a definition of “slow-selling”',
+'Cần ngưỡng mặc định':'Needs default thresholds',
+'Trường riêng theo ngành hàng còn chờ chốt':'Industry-specific fields still undecided',
+'Cần chốt thời điểm trừ tồn':'Needs a decision on when stock is deducted',
+'Cần chốt thông tin cơ bản của hồ sơ':'Needs the basic fields of the profile decided',
+'Chưa chốt User có cần tính năng này không':'Undecided whether Users need this'
+};
+const ROLE_EN = {'Admin':'Admin','User':'User','System Admin':'System Admin','Hệ thống':'System','All':'All'};
+const TEN = {
+model:['Design the extensible data model','A Business holds many shops; an account can later belong to several Businesses|Permissions stored per user, module and level|Taxpayer profile and platform connections are their own records|Seller type is a list (Individual, Household business) that can gain Company later|ER diagram approved'],
+tenant:['Isolate data per Business','Every query must filter by Business|Test: Admin of Business A cannot read Business B data'],
+source:['Store and show the source of every record','Each record has a source: platform API, import file or manual entry|Show a source label in tables and detail views'],
+empty:['“Not available yet” convention instead of 0','Shared component shows “not available yet” when data has not been entered or synced|A real 0 still shows as 0|Applies to cards, tables and charts'],
+fmt:['Format money, numbers and dates','VND with separators, dates in Vietnam time|One shared helper that follows the language'],
+shell:['App shell and menu','Sidebar with 8 modules, AI Assistant, Settings|Menu hides modules the User cannot access|Header with page title and filters|Tablet and phone: drawer menu'],
+kpi:['Metric card component','Label, value, sub line, change versus previous period, one-line explanation|Supports the “not available yet” state|Clicking a card opens its module'],
+audit:['Data change log','Record who changed what and when for every Admin entry and edit|Admin can view the log'],
+login:['Sign in with Google','Sign in, sign out, keep the session|A new account is created with status Pending'],
+pending:['Pending approval screen','A Pending account only sees a notice that it awaits the System Admin|Block every other API'],
+invite:['Admin invites a User by email','Enter email, choose the modules to view|Send the invitation; statuses Invited; revoke an invitation'],
+accept:['User accepts the invitation and joins the Business','Open the link, sign in with Google, land in the right Business with the granted access'],
+perm:['Grant access per module','One level per User per module: View or No Access|No modules by default|Changes take effect immediately'],
+enforce:['Enforce permissions in the UI and the API','Route guards in the UI, permission checks on every API|Cards, charts, reports, exports and AI use only the data of granted modules'],
+viewonly:['Users are view-only, lock every edit action','Hide or disable add, edit, delete and import buttons for Users|The API rejects writes from Users'],
+taxhide:['The Tax tab is always hidden from Users','Not in the menu, not reachable by URL or API|No option to grant Tax access'],
+sysnofin:['System Admin has no automatic access to finance and tax','System Admin cannot read a Business’s Finance or Tax data|Automated test'],
+members:['Manage members','Member list with role and access|Edit access, revoke, remove a User'],
+profile:['Personal profile and sign out','See name, email, role, Business|Change language and theme'],
+bizswitch:['Switch Business (prepares for multiple Businesses)','Business selector in the sidebar|Shows several Businesses when the account belongs to two or more'],
+period:['Period filter: Daily, Weekly, Monthly','Three quick buttons shared by every module|Each period compares with the one right before|The compared period is named once under the greeting'],
+custom:['Custom date range with a calendar popup','Pick start and end dates in a calendar popup|While Custom is active, the three quick buttons stop applying|Pressing one of them returns to quick mode'],
+platshop:['Platform and shop filters','Filter by TikTok Shop, Shopee and each shop|Hide the shop filter when the Business has only one shop'],
+persist:['Keep filters across modules','Filters live in the URL and can be shared|Switching modules keeps them'],
+engine:['Shared metrics engine','One place computes gross sales, net revenue, cost of goods, costs and profit|Every module reads from it and does not recalculate|Tested against a sample dataset'],
+costs:['Calculate platform fees, transaction fees, shipping and packaging per order','Use real numbers from the API when available|Otherwise use rates the Admin configures|Make clear which numbers are actual and which are estimates'],
+cogs:['Cost of goods per product','Take cost from the product|A product without cost shows “not available yet” and never produces a wrong profit'],
+alloc:['Allocate fixed expenses by period and filter','Monthly expenses are spread by the days of the period|When filtering by shop or platform, allocate by revenue share'],
+delta:['Rule: profit change is an amount of money','Profit change is always an amount, never a percentage|Other metrics show a percentage or an amount per card'],
+shopmanage:['Manage shops in a Business','Add, rename, deactivate a shop|Each shop belongs to one platform|The connection record is separate from the shop record'],
+tiktok:['Connect TikTok Shop','OAuth authorization flow, token stored securely, token refreshed on expiry|Disconnect, reconnect|Testable with mock data or the platform test environment; no real user needed'],
+shopee:['Connect Shopee','Authorization flow, token stored securely, token refreshed on expiry|Disconnect, reconnect|Testable with mock data or the platform test environment; no real user needed'],
+syncorders:['Sync orders','Runs on a schedule and never duplicates on re-run|Stores order status, cancellations, returns|Manual re-sync'],
+syncads:['Sync ad spend','Fetch campaigns, actual spend, attributed revenue and orders from TikTok Ads and Shopee Ads'],
+syncsettle:['Sync settlements, wallet, fees and withheld tax','Fetch wallet balance, pending settlement, actual platform fees and withheld tax'],
+syncstatus:['Connection status per shop','Show connection status, last sync (once sync exists), errors and their cause|Reconnect button when a token expires|Trigger a connection-error alert'],
+import:['Import CSV or Excel files','Pick a data type, upload, map columns, preview, save only after confirmation|Report error rows clearly|Admin only'],
+importdedupe:['Duplicate handling and import history','Each row is classified: new, updated, skipped|Import history: time, file, row counts, who imported'],
+importtpl:['Downloadable template files','Templates for orders, products, ad spend, platform settlements, cost of goods, purchases'],
+manual:['Standard manual entry form','Form with validation|Confirmation step before saving|Source recorded as manual entry'],
+export:['Export CSV','Export orders, products, expenses, purchases, reports|Only data of granted modules|Respects the selected period'],
+ovcards:['Six metric cards','Net revenue, Orders (with cancel and return rate), Profit before tax (with margin), Cash available, Ad spend (with ROAS), Products to reorder|Each card has an explanation and compares with the previous period'],
+ovperm:['Cards hidden by permission, click to open the module','A card is hidden when the User cannot open its module|Click a card to open the module'],
+ovtrend:['Trend charts','Revenue, profit, orders: current versus previous period'],
+ovsplit:['Charts by platform, shop, product and cost','Revenue by platform and shop (only when more than one)|Top-selling products|Expense breakdown'],
+ovattn:['Needs-attention list','Rule-based, not AI|Each item has a description, metric, severity and module link|Shows only items from permitted modules'],
+ovfold:['“Show details” fold, closed by default','Products table, quick checks and latest report sit in a closed fold'],
+salesov:['Sales overview','Gross sales and net revenue, total, completed, cancelled and returned orders|Average order value, completion, cancellation and return rates'],
+salestrend:['Revenue and order trends','Chart by day, week or month, with the previous period'],
+salesdim:['Revenue by platform, shop and product','Table and chart, click to filter'],
+salestop:['Top-selling products and best shops','Top N by revenue and by quantity'],
+salesslow:['Slow-selling products','Slow-selling = under 3 orders in 30 days, or down 30% or more vs the prior 30 days, or stock covering over 90 days (Admin can change)|Show the reason (few orders, down vs previous period, long-held stock)'],
+salesprob:['Products with problems','Flag high cancel or return rate, sharp sales drop, selling while out or nearly out of stock|Show the reason next to each product'],
+orderlist:['Order list','Columns: order ID, platform and shop, date, product and SKU, quantity, price, discount, value, status, cancel or return|Search, filter, sort, paginate'],
+orderdetail:['Order detail','Side panel with full order info, cancel or return reason, source (ads, affiliate, organic)'],
+saleslink:['Sales detail for one product','Click a product to see trend, cancel and return rate, stock'],
+mktov:['Marketing overview','Total ad spend, attributed revenue, ROAS, cost per order, affiliate revenue, commission, total marketing cost over revenue, active campaigns'],
+adslist:['Ad campaign list','Name, platform, shop, budget, actual spend, attributed revenue, orders, promoted products, dates, status'],
+adsanalytics:['Ads analytics','Campaign comparison, spend trend, attributed revenue trend, ROAS comparison, cost per order'],
+creatorcrud:['Admin manages creators and revenue share rates','Add, edit, deactivate a creator|Admin types each rate (for example 3%, 5%, 8%, 10% or a custom value)|The rate belongs to the creator, not the product|Users can view but not edit'],
+creatorlist:['Performance table per creator','Creator, platform, shop, rate, attributed revenue, orders, commission, profit left after commission'],
+affattrib:['Attribute orders to creators and campaigns','Each order is tagged: ads, affiliate or organic|Use the actual commission from the platform when available; the rate is only the fallback'],
+poas:['Marketing insights and POAS','Highlight campaigns with low ROAS, rising cost, budget spent without enough revenue, creators whose commission eats the profit|Show POAS when cost of goods exists|ROAS is never called profit'],
+product:['Product and SKU list','Name, SKU, category, price, cost, supplier, stock, minimum threshold|Admin adds, edits, deactivates|Search, filter'],
+skumap:['Map platform SKUs to internal SKUs','Platform orders match products by SKU automatically|A screen to resolve unmatched SKUs|Required for cost of goods and stock'],
+attrs:['Product attributes as configuration','Unit of measure, variants, supplier lead time, safety stock|No fixed columns for one industry'],
+lottoggle:['Switch lot and expiry tracking per product','When off, lot and expiry fields never show|When on, a lot is required when receiving stock'],
+lotfefo:['Stock by lot and expiry alerts','Show stock per lot with expiry|Pick first-expired-first-out|Alert on lots close to expiry by the number of days the Admin sets'],
+stockcalc:['Reorder point','Reorder point = units sold per day × supplier lead time + safety stock|Units per day computed from recent orders'],
+reorderover:['Admin minimum threshold replaces the calculated point','When a manual threshold exists, use it|Show clearly which products use a manual threshold'],
+reordermsg:['Products-to-reorder list and reminders','List products that are out or at their reorder point|Reminder like “Order today: the supplier delivers in 5 days”|Feeds the Products to reorder card'],
+stockmoves:['Record stock in, out, adjustment, returns and damage','Admin records each type with a reason|Movement history is viewable|Stock updates immediately'],
+stockauto:['Auto-deduct stock from platform orders','Deduct stock as soon as the order arrives|Cancelled before shipping: stock is added back automatically|Returned after delivery: stock is added back when the Admin confirms receipt (usable or damaged)|Can be turned off'],
+invov:['Inventory overview','Total products, SKUs, quantity, inventory value, low stock, out of stock, slow-moving'],
+invanalytics:['Inventory analytics','Low-stock and out-of-stock reports, slow-moving, inventory aging, movement history'],
+supcrud:['Supplier list','Name, contact, phone, email, address, notes, lead time|Admin adds, edits, deactivates'],
+purchase:['Create a purchase record','Supplier, purchase date, products and SKUs, quantity, unit price, total, due date|Saved only after the Admin confirms'],
+purchasepay:['Pay a purchase record','Statuses Unpaid, Partially paid, Paid|Record each payment with date and funding source|Admin confirms each payment'],
+purchasestock:['A purchase record updates stock and cost','Confirming a purchase creates stock in (with lot if tracked)|Updates purchase price history'],
+payables:['Payables and invoices due','Total owed, due soon, overdue|Feeds the Cash available card'],
+supanalytics:['Supplier analytics','Total purchase value, by supplier, payables, purchase price history, latest purchases'],
+pnl:['Profit and loss down to profit before tax','Gross sales, discounts, refunds, net revenue|Cost of goods, gross profit|Variable costs, contribution profit|Fixed expenses, operating profit|Other income and expenses, profit before tax'],
+expense:['Admin enters fixed expenses','Warehouse rent, salaries, accounting, software, internet, other|Monthly entry with categories|Users view only'],
+other:['Other income and expenses','Admin enters items such as loan interest or platform bonuses|The “other income and expenses” line shows in the P&L only once data exists'],
+cashflow:['Cash flow','Platform settlement, pending settlement, cash received, cash out, net cash flow|Revenue kept apart from cash actually received'],
+runway:['Months of cash covering fixed costs','Computed from cash available and monthly fixed expenses'],
+finperm:['Finance access for Users','Only Users the Admin grants access can see it|Everything shown is read-only'],
+taxprofile:['Taxpayer profile','Only two required items: taxpayer type (individual, household business or company) and whether there is salaried income|Optional: tax code, business details, status, notes|Kept separate from Business and shop'],
+taxrev:['Tax-tracking revenue','By period, platform and shop|Taken from sales data with the source shown'],
+taxwith:['Platform-withheld tax','By period, platform and shop|From platform settlements or manual entry'],
+taxpays:['Tax payment history','Payment date, amount, tax category, period, reference, notes|Add, edit, delete'],
+taxrem:['Tax reminders','Create reminders with a date|Mark as done|Show in needs-attention and trigger an alert'],
+taxnote:['“The app does not calculate tax” notice','Shown clearly at the top of the Tax tab: information management only, no filing, no advice'],
+repbuild:['Report builder','Choose type, date range, platform, shop|Preview, then generate'],
+repdaily:['Daily report','Revenue, orders, cancellations and returns, ad spend, available profit metrics, key issues|Built from rules, no AI'],
+repweekly:['Weekly report','Revenue and order trends, versus last week, marketing, inventory, expense summary, bottlenecks'],
+repmonthly:['Monthly report','Business results, revenue and profit, expense breakdown, campaigns, products, inventory, cash flow'],
+repperm:['Reports follow permissions','Contain only the modules the viewer is granted'],
+rephist:['Report history and export','List generated reports, reopen, export where supported'],
+repsched:['Schedule reports','Switch daily, weekly, monthly on or off|Always viewable in the app; when on, also sent through the external notification channel|Does not depend on the external channel'],
+repai:['Short AI comment on weekly and monthly reports','Only weekly and monthly reports get a comment|The comment matches the numbers in the report'],
+alertengine:['Triggered alert engine','Evaluates conditions regularly for 13 types|No repeats (cooldown between sends)|Keeps an alert history|Shows in the needs-attention list'],
+alertcfg:['Admin configures alerts','Switch each type on or off, set thresholds, choose recipients|Recipients are limited to people who can view the related module'],
+alertinv:['Inventory alerts','Reached reorder point|Out of stock|Lot close to expiry'],
+alertsales:['Sales alerts','Sales drop|High cancel or return rate'],
+alertmkt:['Marketing alerts','Campaign losing money (POAS below threshold)|Creator commission eats the profit'],
+alertfin:['Finance and supplier alerts','Supplier invoice due or overdue|Cash may fall short|Profit margin below target|Settlement pending too long'],
+alertsys:['Connection error and tax reminder alerts','Connection or sync error|Tax reminder due (sent to the Admin only)'],
+alertdelivery:['Deliver alerts in the app and through an external channel','In-app notifications with a read state|Send through the external notification channel when connected'],
+aipanel:['AI Assistant chat panel','Opens from a floating button, keeps the conversation for the session|Shows a typing state'],
+aictx:['Limit AI data by permission','AI reads only the selected Business and shop, through read-only tools|Never reads Tax data|Users do not see the Ask AI button and the API rejects them'],
+aiqa:['Answer questions from the data','Answers from real numbers, naming the period and source|Says “not available yet” when data is missing, never invents|Suggests actions where fitting'],
+aisugg:['Suggested questions','Suggestions by module'],
+aiquota:['AI usage quota','Count questions, warn when close, block when used up'],
+aiguard:['Limits on the AI’s role','AI only recommends, never edits data, never calculates tax, gives no legal advice'],
+setbiz:['Business information','Name, seller type, time zone|Admin edits'],
+setthr:['Default thresholds and calculation settings','Defaults (Admin can change): sharp revenue drop = down 30% or more vs the previous period; high cancel or return = 10% or more of orders; slow-selling = under 3 orders in 30 days, or down 30% or more vs the prior 30 days, or stock covering over 90 days; safety stock = 7 days of sales; lot near expiry = within 30 days; settlement waiting too long = over 14 days; profit margin below target = under 10%; supplier bill due soon = within 3 days; POAS below threshold = under 1|Each threshold has an explanation'],
+setdata:['Data sources page','One place for platform connection status, file imports and import history'],
+tgconn:['Connect Telegram','Guide to create a bot, enter a group or channel, send a test message|Disconnect'],
+tgsend:['Send messages via Telegram','Send scheduled reports and alerts|Retry on failure, keep a delivery history'],
+tgrecip:['Choose Telegram recipients','Admin picks who or which group receives each report and alert'],
+sysguard:['A single System Admin set by server configuration','System Admin email set in configuration|No screen to create more'],
+sysreview:['Review registrations','List of Pending accounts, approve or reject'],
+sysbiz:['Create a Business and assign an Admin','Create a new Business, assign an approved person as its Admin'],
+sysstatus:['Manage account and Business status','Lock, unlock, deactivate, with a log'],
+sysmon:['Monitor API, integration and sync errors','Errors by time and place|Never shows a Business’s commercial data'],
+syslog:['System log','Records approvals, Business creation, status changes'],
+sysov:['System Console overview','Accounts pending, active Businesses, recent errors'],
+i18n:['Multi-language (i18n): Vietnamese (VI) and English (EN)','All text, dates, numbers and money follow the language|No hard-coded text in code'],
+theme:['Light and dark themes','Follows the system, with a manual toggle|Every chart readable in both'],
+resp:['Responsive desktop, tablet, phone','Check every screen at three sizes|Tables scroll horizontally in their own box, not the whole page'],
+perf:['Performance with large data','Pagination and indexes for orders|Main pages load under 2 seconds with 100,000 orders'],
+sec:['Secure tokens and sensitive data','Encrypt platform tokens, no sensitive data in logs|Access review'],
+seed:['Sample data and test accounts','Sample dataset matching the prototype: 4 sample roles and a System Admin|For demos and tests'],
+a11y:['Keyboard and screen-reader access','Visible focus, labels on buttons and charts, sufficient contrast'],
+e2e:['End-to-end tests and permission matrix','Playwright runs 4 flows: accepting an invite and signing in, User cannot see Tax or Ask AI, CSV import, Business A Admin cannot see Business B|API-level permission-matrix tests (Vitest) for 5 scenarios: Admin, warehouse User, sales and marketing User with Finance, sales and reports User, System Admin|Each role sees exactly what it should and nothing more']
+};
+
+// [epic, VI name, EN name, ticket keys]
+const FEATS = [
+['E01','Mô hình dữ liệu và cô lập Business','Data model and Business isolation',['model','tenant','source']],
+['E01','Quy ước hiển thị dùng chung','Shared display conventions',['empty','fmt','kpi']],
+['E01','Khung ứng dụng và menu','App shell and menu',['shell']],
+['E01','Nhật ký thao tác dữ liệu','Data change log',['audit']],
+['E02','Đăng nhập và duyệt tài khoản','Sign-in and account approval',['login','pending']],
+['E02','Mời và quản lý thành viên','Invite and manage members',['invite','accept','members']],
+['E02','Phân quyền theo module','Per-module permissions',['perm','enforce','viewonly','taxhide','sysnofin']],
+['E02','Hồ sơ cá nhân và chuyển Business','Profile and Business switching',['profile','bizswitch']],
+['E03','Bộ lọc dùng chung: kỳ, sàn, shop','Shared filters: period, platform, shop',['period','custom','platshop','persist']],
+['E04','Công cụ tính chỉ số','Metrics engine',['engine','delta']],
+['E04','Chi phí, giá vốn và phân bổ','Costs, cost of goods and allocation',['costs','cogs','alloc']],
+['E05','Quản lý shop và kết nối sàn','Shops and platform connections',['shopmanage','tiktok','shopee']],
+['E05','Đồng bộ dữ liệu từ sàn','Platform data sync',['syncorders','syncads','syncsettle','syncstatus']],
+['E05','Nhập file CSV hoặc Excel','CSV and Excel import',['import','importdedupe','importtpl']],
+['E05','Nhập tay','Manual entry',['manual']],
+['E05','Xuất CSV','CSV export',['export']],
+['E06','Sáu thẻ chỉ số Tổng quan','Overview: six metric cards',['ovcards','ovperm']],
+['E06','Biểu đồ Tổng quan','Overview charts',['ovtrend','ovsplit','ovfold']],
+['E06','Việc cần chú ý','Needs-attention list',['ovattn']],
+['E07','Tổng quan và phân tích bán hàng','Sales overview and analytics',['salesov','salestrend','salesdim','salestop','saleslink']],
+['E07','Sản phẩm bán chậm và có vấn đề','Slow-selling and problem products',['salesslow','salesprob']],
+['E07','Đơn hàng','Orders',['orderlist','orderdetail']],
+['E08','Quảng cáo (Ads)','Ads',['mktov','adslist','adsanalytics']],
+['E08','Affiliate theo creator','Affiliate per creator',['creatorcrud','creatorlist','affattrib']],
+['E08','Nhận định marketing và POAS','Marketing insights and POAS',['poas']],
+['E09','Danh mục sản phẩm và SKU','Product and SKU catalog',['product','skumap','attrs']],
+['E09','Lô và hạn dùng','Lots and expiry',['lottoggle','lotfefo']],
+['E09','Điểm đặt hàng lại','Reorder point',['stockcalc','reorderover','reordermsg']],
+['E09','Biến động tồn kho','Stock movements',['stockmoves','stockauto']],
+['E09','Tổng quan và phân tích tồn kho','Inventory overview and analytics',['invov','invanalytics']],
+['E10','Danh sách nhà cung cấp','Supplier directory',['supcrud','supanalytics']],
+['E10','Nhập hàng và công nợ','Purchasing and payables',['purchase','purchasepay','purchasestock','payables']],
+['E11','Lãi lỗ và chi phí','Profit and loss and expenses',['pnl','expense','other','finperm']],
+['E11','Dòng tiền','Cash flow',['cashflow','runway']],
+['E12','Hồ sơ người nộp thuế','Taxpayer profile',['taxprofile','taxnote']],
+['E12','Theo dõi thuế và lịch sử nộp','Tax tracking and payment history',['taxrev','taxwith','taxpays']],
+['E12','Nhắc việc thuế','Tax reminders',['taxrem']],
+['E13','Báo cáo ngày, tuần, tháng','Daily, weekly and monthly reports',['repbuild','repdaily','repweekly','repmonthly','repperm','rephist']],
+['E13','Báo cáo theo lịch và nhận xét AI','Scheduled reports and AI comment',['repsched','repai']],
+['E13','Bộ máy và cấu hình cảnh báo','Alert engine and configuration',['alertengine','alertcfg','alertdelivery']],
+['E13','Mười ba loại cảnh báo','The 13 alert types',['alertinv','alertsales','alertmkt','alertfin','alertsys']],
+['E14','Khung chat Trợ lý AI','AI Assistant chat',['aipanel','aisugg','aiquota']],
+['E14','Trả lời trên dữ liệu và giới hạn','Data answers and limits',['aictx','aiqa','aiguard']],
+['E15','Cài đặt Business','Business settings',['setbiz','setthr','setdata']],
+['E15','Kênh thông báo ngoài app (Telegram)','External notification channel (Telegram)',['tgconn','tgsend','tgrecip']],
+['E16','Duyệt đăng ký và quản lý Business','Registrations and Businesses',['sysguard','sysreview','sysbiz','sysstatus']],
+['E16','Giám sát vận hành','Operations monitoring',['sysmon','syslog','sysov']],
+['E17','Trải nghiệm: ngôn ngữ, giao diện, responsive','Experience: language, theme, responsive',['i18n','theme','resp','a11y']],
+['E17','Chất lượng, bảo mật, dữ liệu mẫu','Quality, security, sample data',['perf','sec','seed','e2e']]
+];
+const FID = {}, FOF = {};
+FEATS.forEach((f,i)=>{ f.id = 'F-' + String(i+1).padStart(2,'0'); f[3].forEach(k=>{ FOF[k] = f; }); });
+
+const idOf = {}; T.forEach((t,i)=>{ idOf[t[0]] = 'T-' + String(i+1).padStart(2,'0'); });
+// Milestones: [id, nameVI, nameEN, goalVI, goalEN, doneVI, doneEN]
+const MS = [
+['M1','Nền móng và truy cập','Foundation and access','Dựng khung app, mô hình dữ liệu, đăng nhập, phân quyền, bộ lọc kỳ và bộ máy tính chỉ số.','Set up the app shell, data model, sign-in, permissions, period filter and the metrics engine.','Admin đăng nhập và mời được User; User vào đúng module và chỉ xem; Tab Thuế ẩn với User; System Admin duyệt đăng ký và tạo Business; test chặn quyền chạy xanh.','An Admin can sign in and invite a User; the User sees only granted modules, view-only; the Tax tab is hidden from Users; a System Admin approves sign-ups and creates a Business; the permission tests pass.'],
+['M2','Kết nối sàn và nhập dữ liệu','Platform connection and data import','Kết nối tài khoản sàn (cấp quyền OAuth, lưu token) và đưa dữ liệu vào app bằng nhập CSV hoặc Excel, hoặc nhập tay. Chưa kéo dữ liệu tự động; phần đó nằm ở M9.','Connect platform accounts (OAuth, token storage) and bring data in through CSV or Excel import or manual entry. No automatic data pull yet; that is M9.','Admin thêm shop, kết nối TikTok Shop và Shopee (hoặc chỉ nhập file); đơn hàng, chi quảng cáo và quyết toán nhập vào app có nhãn nguồn; nhập lại file không bị nhân đôi; thấy trạng thái kết nối. Luồng kết nối coi là xong khi chạy đúng với dữ liệu giả hoặc môi trường thử của sàn; kiểm tra với shop thật nằm ở M9.','An Admin adds a shop and connects TikTok Shop and Shopee (or only imports files); orders, ad spend and settlements arrive with a source label; re-importing a file does not duplicate rows; connection status is visible. The connection flow counts as done when it works against mock data or the platform test environment; checking with a real shop belongs to M9.'],
+['M3','Sản phẩm, tồn kho, nhà cung cấp','Products, inventory, suppliers','Danh mục sản phẩm và SKU, tồn kho tự tính, điểm đặt hàng lại, lô hạn dùng, nhập hàng và công nợ.','Product and SKU catalog, computed stock, reorder points, lots and expiry, purchasing and payables.','Admin tạo sản phẩm và SKU, ghép SKU sàn; tồn kho đổi theo đơn và phiếu nhập; có điểm đặt hàng lại và lô hạn dùng; công nợ nhà cung cấp đúng.','An Admin creates products and SKUs and maps platform SKUs; stock moves with orders and purchases; reorder points and lot expiry work; supplier payables are correct.'],
+['M4','Xem số: Tổng quan, Bán hàng, Tài chính','Reading the numbers: Overview, Sales, Finance','Ba module người bán mở mỗi ngày, cùng dùng một bộ máy tính nên số khớp nhau.','The three modules sellers open every day, all on one metrics engine so the numbers agree.','Tổng quan, Bán hàng và Tài chính hiện số khớp nhau; chuỗi lãi lỗ đến lợi nhuận trước thuế đúng với bộ dữ liệu mẫu; User chỉ thấy module được cấp.','Overview, Sales and Finance show matching numbers; the profit-and-loss chain down to profit before tax is correct on the sample data; Users see only granted modules.'],
+['M5','Marketing, dòng tiền và Thuế','Marketing, cash flow and Tax','Ads và Affiliate theo creator, POAS, dòng tiền, và hồ sơ cùng theo dõi thuế (app không tính thuế).','Ads and per-creator Affiliate, POAS, cash flow, and the tax profile and tracking (the app does not calculate tax).','Có số liệu Ads và Affiliate theo creator, POAS; dòng tiền theo đối soát sàn; Admin theo dõi doanh thu thuế, thuế sàn khấu trừ, lịch sử nộp và nhắc việc.','Ads and per-creator Affiliate numbers, POAS and cash flow from platform settlements are available; an Admin tracks tax revenue, platform-withheld tax, payment history and reminders.'],
+['M6','Cảnh báo và Thông báo','Alerts & Notifications','Bộ máy cảnh báo, 13 loại cảnh báo, ngưỡng do Admin cấu hình và gửi thông báo.','The alert engine, the 13 alert types, Admin-configured thresholds and notification delivery.','Admin chỉnh ngưỡng cảnh báo và cách nhận thông báo; 13 loại cảnh báo bắn đúng điều kiện; Tổng quan hiện danh sách việc cần chú ý.','An Admin tunes alert thresholds and how notifications are received; all 13 alert types fire on the right conditions; Overview shows the needs-attention list.'],
+['M7','Báo cáo, Trợ lý AI và giám sát','Reports, AI Assistant and monitoring','Báo cáo ngày, tuần, tháng theo lịch, Trợ lý AI trên dữ liệu có quyền, và màn giám sát cho System Admin.','Scheduled daily, weekly and monthly reports, the AI Assistant on permitted data, and the System Admin monitoring screens.','Báo cáo gửi đúng lịch và đúng quyền; Trợ lý AI trả lời trong phạm vi quyền và có giới hạn; System Admin thấy sức khỏe vận hành.','Reports go out on schedule and respect permissions; the AI Assistant answers within the user’s permissions and limits; the System Admin sees operational health.'],
+['M8','Hoàn thiện và phát hành','Polish and release','Responsive, trợ năng, hiệu năng, bảo mật và kiểm thử đầu cuối theo vai trò. Responsive nên được làm dần từ M1, M8 là bước kiểm lại.','Responsive layout, accessibility, performance, security and end-to-end tests per role. Build responsive gradually from M1; M8 is the final check.','Dùng tốt trên điện thoại; qua kiểm thử bảo mật; bộ test đầu cuối theo vai trò Admin, User, System Admin chạy xanh.','Works well on phones; passes the security review; the end-to-end tests for Admin, User and System Admin pass.'],
+['M9','Đồng bộ tự động từ sàn (cần user thật)','Automatic platform sync (needs a real user)','Chỉ làm khi có ít nhất một user thật đồng ý kết nối API của sàn; chưa có thì chờ, app vẫn dùng đủ bằng nhập file và nhập tay. Kéo đơn hàng, chi quảng cáo, quyết toán và phí về, ghi vào cùng các bảng với nhãn nguồn là API.','Only build this once at least one real user agrees to connect a platform API; until then wait, the app is fully usable with file import and manual entry. Pull orders, ad spend, settlements and fees into the same tables with the source label API.','Một shop thật kết nối và cấp quyền (đây là lần đầu kiểm tra luồng kết nối của M2 với shop thật); đơn hàng, chi quảng cáo và quyết toán về tự động theo lịch; chạy lại không nhân đôi; số khớp với dữ liệu nhập tay; lỗi hiện ở trạng thái kết nối.','One real shop connected and authorized (the first test of the M2 connection flow with a real shop); orders, ad spend and settlements arrive on a schedule; re-running does not duplicate; numbers match manually imported data; errors show in connection status.'],
+];
+const MSK = {
+M1:'model tenant source empty fmt kpi shell seed i18n theme persist profile period custom engine delta login pending invite accept perm enforce viewonly taxhide sysnofin members sysguard sysreview sysbiz sysstatus',
+M2:'audit shopmanage platshop tiktok shopee syncstatus import importdedupe importtpl manual export',
+M3:'product attrs skumap stockmoves stockcalc reorderover reordermsg lottoggle lotfefo stockauto invov invanalytics supcrud purchase purchasepay purchasestock payables supanalytics',
+M4:'costs cogs expense alloc other pnl finperm ovcards ovperm ovtrend ovsplit ovfold salesov salestrend salesdim salestop salesslow salesprob orderlist orderdetail',
+M5:'mktov adslist adsanalytics creatorcrud affattrib creatorlist poas cashflow runway taxprofile taxnote taxrev taxwith taxpays taxrem saleslink',
+M6:'setbiz setthr setdata tgconn tgsend tgrecip alertengine alertcfg alertdelivery alertinv alertsales alertmkt alertfin alertsys ovattn',
+M7:'repbuild repdaily repweekly repmonthly repperm rephist repsched repai aipanel aisugg aiquota aictx aiqa aiguard sysmon syslog sysov',
+M8:'resp a11y perf sec e2e bizswitch',
+M9:'syncorders syncads syncsettle'
+};
+const MOF = {};
+Object.keys(MSK).forEach(m => MSK[m].split(' ').forEach(k => { MOF[k] = m; }));
+
+const BRIEF='https://claude.ai/artifact/WegNRyW7ufz4FSgHXGaHNW', PROTO='https://claude.ai/artifact/LBCphaxGh1Mbxk8hh6byVd', FEATURES='https://claude.ai/artifact/CG2CgHFqsgZ2D226SqoJAq';
+const UI = {
+ vi:{title:'TopTop Build Plan',sub:'Kế hoạch làm TopTop theo milestone. Mỗi milestone là một đợt giao hàng có điều kiện hoàn thành. Ticket nằm trong milestone, xếp theo thứ tự nên làm (ticket phụ thuộc luôn đứng sau ticket nó cần). Mã ticket T-01 và mã feature F-01 giống trang TopTop Features.',
+  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'bản lưu trong repo',snapNote:'Bản lưu trong repo chụp ngày 2026-11-26 từ Prototype (phiên bản 1795564554-39ac) và Product Brief (phiên bản 1795506559-5f2d), phòng khi bản online bị xóa.',
+  ms:'Milestone',total:'Tổng ticket',pts:'Điểm công (S=1, M=3, L=5)',p0:'P0',
+  doneWhen:'Hoàn thành khi: ',tickets:'ticket',points:'điểm',doneN:(a,b)=>a+'/'+b+' xong',
+  search:'Tìm theo tên, mã ticket hoặc mã feature, ví dụ T-25, F-10 hoặc tồn kho',allRoles:'Mọi vai trò',allPrio:'Mọi ưu tiên',allMs:'Mọi milestone',copy:'Copy CSV',copied:n=>'Đã copy '+n+' ticket',copyFail:'Không copy được',
+  size:'Cỡ',needs:'Cần xong trước:',open:'Còn mở: ',none:'Không có ticket khớp bộ lọc.',stLabel:'Trạng thái',st:{todo:'Chưa làm',ticketed:'Đã tạo ticket',done:'Xong'},stDoneT:'Xong',stTicketT:'Đã tạo ticket',updated:'Cập nhật',foot:'Product Brief quyết định phạm vi, quyền và các luật đã chốt. Prototype quyết định giao diện và cách tương tác. Trang này quyết định thứ tự làm.',savedNote:'Trạng thái ticket chỉ lưu trên trình duyệt này.',
+  openH:'Việc còn mở cần chốt trước khi làm',openNote:'Ticket có nhãn “Còn mở” đang chờ một trong các quyết định này. Nếu chưa có user thật kết nối API của sàn, làm M1 đến M8 với nhập CSV hoặc Excel và nhập tay; M9 chờ.',
+  openList:['Quyền API thật của TikTok Shop và Shopee (ảnh hưởng T-31 đến T-35: kết nối ở M2, đồng bộ dữ liệu ở M9). Đồng bộ tự động chỉ làm khi có user thật kết nối API; chưa có thì chờ.'],
+  csv:['Milestone','ID','Feature','Epic','Tiêu đề','Tiêu chí nghiệm thu','Vai trò','Cỡ','Phụ thuộc','Trạng thái'],langBtn:'EN',themeAria:'Đổi giao diện sáng tối',langAria:'Đổi ngôn ngữ'},
+ en:{title:'TopTop Build Plan',sub:'The TopTop build plan, organized by milestone. Each milestone is a delivery step with a done-when check. Tickets sit inside milestones, in a sensible build order (a ticket always comes after the tickets it needs). Ticket codes T-01 and feature codes F-01 match the TopTop Features page.',
+  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'local snapshot',snapNote:'Local snapshots taken on 2026-11-26 from the Prototype (version 1795564554-39ac) and the Product Brief (version 1795506559-5f2d), in case the online copies are deleted.',
+  ms:'Milestones',total:'Total tickets',pts:'Effort points (S=1, M=3, L=5)',p0:'P0',
+  doneWhen:'Done when: ',tickets:'tickets',points:'points',doneN:(a,b)=>a+'/'+b+' done',
+  search:'Search by name, ticket or feature ID, for example T-25, F-10 or inventory',allRoles:'All roles',allPrio:'All priorities',allMs:'All milestones',copy:'Copy CSV',copied:n=>'Copied '+n+' tickets',copyFail:'Could not copy',
+  size:'Size',needs:'Needs first:',open:'Open: ',none:'No ticket matches the filters.',stLabel:'Status',st:{todo:'To do',ticketed:'Ticketed',done:'Done'},stDoneT:'Done',stTicketT:'Ticketed',updated:'Updated',foot:'The Product Brief decides scope, permissions and the rules already settled. The Prototype decides look and interaction. This page decides the build order.',savedNote:'Ticket status is saved in this browser only.',
+  openH:'Open decisions before building',openNote:'Tickets tagged “Open” wait on one of these decisions. If no real user has connected a platform API yet, build M1 to M8 with CSV or Excel import and manual entry; M9 waits.',
+  openList:['Real TikTok Shop and Shopee API access (affects T-31 to T-35: connection in M2, data sync in M9). Automatic sync is only built once a real user connects their API; wait otherwise.'],
+  csv:['Milestone','ID','Feature','Epic','Title','Acceptance criteria','Role','Size','Depends on','Status'],langBtn:'VI',themeAria:'Toggle light or dark theme',langAria:'Switch language'}
+};
+const S = {q:'', prio:'', ms:'', role:'', lang:'en'};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+const U = () => UI[S.lang];
+const epicName = e => S.lang === 'en' ? EPICS_EN[e[0]][0] : e[1];
+const tTitle = t => S.lang === 'en' ? TEN[t[0]][0] : t[2];
+const tAc = t => (S.lang === 'en' ? TEN[t[0]][1] : t[3]).split('|');
+const tOpen = t => !t[8] ? '' : (S.lang === 'en' ? (OPEN_EN[t[8]] || t[8]) : t[8]);
+const roleLabel = r => S.lang === 'en' ? ROLE_EN[r] : r;
+const fName = f => S.lang === 'en' ? f[2] : f[1];
+const msName = m => S.lang === 'en' ? m[2] : m[1];
+const msGoal = m => S.lang === 'en' ? m[4] : m[3];
+const msDone = m => S.lang === 'en' ? m[6] : m[5];
+const roleMatch = (r, f) => !f || r === f || r === 'All';
+const PTS = {S:1, M:3, L:5};
+const tix = {}; T.forEach(t => { tix[t[0]] = t; });
+// Build order inside each milestone: dependencies first, otherwise ticket number.
+const ORDER = {};
+MS.forEach(m => {
+  const keys = T.filter(t => MOF[t[0]] === m[0]).map(t => t[0]), out = [], seen = {};
+  const add = k => { if (seen[k] || MOF[k] !== m[0]) return; seen[k] = 1; (tix[k][7] ? tix[k][7].split(',') : []).forEach(add); out.push(k); };
+  keys.forEach(add); ORDER[m[0]] = out;
+});
+const UPDATED = '2026-11-26';
+let DONE = {};
+try { DONE = JSON.parse(store.get('tt-plan-done') || '{}') || {}; } catch (e) { DONE = {}; }
+
+function visible(t){
+  const id = idOf[t[0]];
+  if (S.ms && MOF[t[0]] !== S.ms) return false;
+  if (!roleMatch(t[4], S.role)) return false;
+  if (S.q){ const q = S.q.toLowerCase(); const fe = FOF[t[0]]; if (!(id.toLowerCase().includes(q) || fe.id.toLowerCase().includes(q) || fName(fe).toLowerCase().includes(q) || tTitle(t).toLowerCase().includes(q) || tAc(t).join(' ').toLowerCase().includes(q))) return false; }
+  return true;
+}
+function stOf(k){ const v = DONE[k]; return (v === 1 || v === 'done') ? 'done' : v === 'ticketed' ? 'ticketed' : 'todo'; }
+function doneCount(m){ const ks = ORDER[m[0]]; return [ks.filter(k => stOf(k) === 'done').length, ks.length]; }
+function render(){
+  const u = U(); let html = '';
+  MS.forEach(m => {
+    const vis = ORDER[m[0]].filter(k => visible(tix[k]));
+    if (!vis.length) return;
+    const pts = ORDER[m[0]].reduce((a,k) => a + PTS[tix[k][6]], 0), dc = doneCount(m);
+    html += `<section class="ms" id="${m[0]}"><div class="mh"><span class="code">${m[0]}</span><h3>${esc(msName(m))}</h3><span class="cnt">${dc[1]} ${u.tickets} · ${pts} ${u.points} · ${u.doneN(dc[0], dc[1])}</span></div><p class="goal">${esc(msGoal(m))}</p><p class="done"><b>${u.doneWhen}</b>${esc(msDone(m))}</p><div class="list">`;
+    vis.forEach(k => {
+      const t = tix[k], f = FOF[k], st = stOf(k), isd = st === 'done';
+      const deps = t[7] ? t[7].split(',').map(d => `<span class="chip dep" title="${MOF[d]}">${idOf[d]}</span>`).join('') : '';
+      html += `<article class="t${isd ? ' isdone' : ''}" id="t-${k}"><div class="tid">${idOf[k]}</div><div><h4 class="tt">${esc(tTitle(t))}</h4><ul class="ac">${tAc(t).map(a => `<li>${esc(a)}</li>`).join('')}</ul><div class="meta"><span class="chip f">${f.id}</span><span class="chip">${u.size} ${t[6]}</span><span class="chip">${esc(roleLabel(t[4]))}</span>${deps ? '<span class="note">' + u.needs + '</span>' + deps : ''}<select class="st ${st}" data-st="${k}" aria-label="${esc(u.stLabel)} ${idOf[k]}">${['todo','ticketed','done'].map(x => `<option value="${x}"${x === st ? ' selected' : ''}>${esc(u.st[x])}</option>`).join('')}</select></div></div></article>`;
+    });
+    html += '</div></section>';
+  });
+  $('out').innerHTML = html || `<div class="empty">${u.none}</div>`;
+}
+
+const STK = {
+ vi:{h:'Kiến trúc và tech stack',note:'Sơ đồ cho thấy người dùng vào một app duy nhất chạy trên Cloudflare; màu cam nhạt là phần nằm trong Cloudflare, nét đứt là dịch vụ bên ngoài.',
+  tbl:[['Nơi chạy','Next.js (giao diện và API) trên Cloudflare Workers, qua OpenNext. Thử vinext ở nhánh riêng.'],['Giao diện','Tailwind CSS và shadcn/ui.'],['Biểu đồ','shadcn/ui Chart (chạy trên Recharts), vẽ ở trình duyệt.'],['Database','Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive. Tạo kết nối mới cho mỗi request.'],['Đăng nhập và quyền','Better Auth với đăng nhập Google. Plugin Organization: mỗi Business là một organization và có nhiều shop; Admin và User theo từng Business. System Admin chỉ có một người.'],['Mời chủ Business','System Admin tạo Business rồi gửi link mời cho chủ Business; họ đăng nhập Google và thành Admin. Người không được mời không vào được.'],['Kết nối sàn','Adapter chung cho TikTok Shop, Shopee và nhập CSV. Luồng ủy quyền chạy từ M2 với dữ liệu giả. Webhook qua Cloudflare Queues, chỉ bật ở M9.'],['Nhập file','CSV đọc bằng Papa Parse, Excel (.xlsx) bằng SheetJS, đều chạy ở trình duyệt. Xem thử (số dòng, dòng lỗi) rồi mới ghi vào PostgreSQL. Không giữ file gốc.'],['Xuất file','CSV tạo ngay ở trình duyệt. PDF xuất bằng in từ trình duyệt (CSS in), cần file đẹp hơn thì dùng @react-pdf/renderer ở trình duyệt. Báo cáo theo lịch không đính kèm PDF.'],['Ask AI','Claude API. Chỉ Admin thấy. AI lấy dữ liệu qua công cụ chỉ đọc, lọc theo Business và shop đang chọn, không sửa được dữ liệu và không đọc dữ liệu Thuế.'],['Kiểm thử','Vitest và Testing Library, viết test trước (TDD) cho logic và component có hành vi. Playwright cho 4 luồng: nhận lời mời và đăng nhập, User không thấy Thuế và Ask AI, nhập CSV, Admin Business A không thấy dữ liệu Business B. Phân quyền theo từng vai trò kiểm bằng test ma trận quyền ở tầng API (Vitest).']],
+  d:{u:[['Admin','Sửa dữ liệu, Ask AI'],['User','Chỉ xem, không Thuế'],['System Admin','Một người duy nhất']],cf:'Cloudflare Workers: Next.js (OpenNext)',r1:[['Giao diện và API','Tailwind, shadcn/ui'],['Better Auth','Quyền theo Business'],['Ask AI','Công cụ chỉ đọc'],['Queues','Webhook, chỉ ở M9']],r2:[['Adapter kênh bán','TikTok, Shopee, CSV'],['Drizzle ORM','Truy vấn Postgres'],['Hyperdrive','Cầu nối tới Neon']],x:[['Google','Đăng nhập'],['Neon Postgres','Singapore'],['Claude API','Cho Ask AI'],['TikTok, Shopee','Ủy quyền, webhook']]}},
+ en:{h:'Architecture and tech stack',note:'Users reach one app running on Cloudflare; the tinted area runs inside Cloudflare and dashed boxes are outside services.',
+  tbl:[['Hosting','Next.js (UI and API) on Cloudflare Workers, through OpenNext. Try vinext on a side branch.'],['UI','Tailwind CSS and shadcn/ui.'],['Charts','shadcn/ui Chart (built on Recharts), drawn in the browser.'],['Database','Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive. Create a new connection per request.'],['Sign-in and roles','Better Auth with Google sign-in. Organization plugin: each Business is an organization that holds many shops, with Admin and User roles per Business. There is exactly one System Admin.'],['Inviting Business owners','The System Admin creates a Business and sends the owner an invite link; they sign in with Google and become Admin. Anyone not invited cannot get in.'],['Platform connection','One adapter shape for TikTok Shop, Shopee and CSV import. The authorization flow runs from M2 against mock data. Webhooks go through Cloudflare Queues, switched on only in M9.'],['File import','CSV is read with Papa Parse and Excel (.xlsx) with SheetJS, both in the browser. Preview (row count, bad rows), then write to PostgreSQL. The original file is not kept.'],['File export','CSV is built in the browser. PDF through browser print (print CSS); if a nicer file is needed, @react-pdf/renderer in the browser. Scheduled reports carry no PDF attachment.'],['Ask AI','Claude API. Only Admins see it. The AI reads data through read-only tools filtered to the selected Business and shop; it cannot change data and cannot read Tax data.'],['Testing','Vitest and Testing Library, test-first (TDD) for logic and components with behavior. Playwright for 4 flows: accepting an invite and signing in, User cannot see Tax or Ask AI, CSV import, Business A Admin cannot see Business B data. Per-role permissions are checked by permission-matrix tests at the API level (Vitest).']],
+  d:{u:[['Admin','Edits data, Ask AI'],['User','View only, no Tax'],['System Admin','One person only']],cf:'Cloudflare Workers: Next.js (OpenNext)',r1:[['UI and API','Tailwind, shadcn/ui'],['Better Auth','Per-Business roles'],['Ask AI','Read-only tools'],['Queues','Webhooks, M9 only']],r2:[['Channel adapter','TikTok, Shopee, CSV'],['Drizzle ORM','Postgres queries'],['Hyperdrive','Bridge to Neon']],x:[['Google','Sign-in'],['Neon Postgres','Singapore'],['Claude API','For Ask AI'],['TikTok, Shopee','Auth, webhooks']]}}
+};
+function stackSvg(d){
+  const bx=(x,y,w,h,cls,t)=>`<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><text x="${x+w/2}" y="${y+h/2-4}" text-anchor="middle" dominant-baseline="central">${esc(t[0])}</text><text class="s" x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" dominant-baseline="central">${esc(t[1])}</text>`;
+  const ln=(x,y1,y2)=>`<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/><path d="M${x-4} ${y2-6}L${x} ${y2}L${x+4} ${y2-6}" fill="none" stroke="var(--muted)" stroke-width="1.2"/>`;
+  let o=`<svg class="dg" viewBox="0 0 680 450" role="img" aria-label="${esc(d.cf)}">`;
+  [40,270,500].forEach((x,i)=>{o+=bx(x,16,140,52,'b',d.u[i])+ln(x+70,68,104);});
+  o+=`<rect class="c" x="40" y="108" width="600" height="206" rx="16"/><text x="58" y="132">${esc(d.cf)}</text>`;
+  [[52,130],[194,130],[336,130],[478,150]].forEach((p,i)=>{o+=bx(p[0],148,p[1],56,'b',d.r1[i]);});
+  [[52,190],[254,190],[456,172]].forEach((p,i)=>{o+=bx(p[0],236,p[1],56,'b',d.r2[i]);});
+  [110,263,416,569].forEach(x=>{o+=ln(x,314,366);});
+  [[40,140],[193,140],[346,140],[499,141]].forEach((p,i)=>{o+=bx(p[0],370,p[1],56,'x',d.x[i]);});
+  return o+'</svg>';
+}
+function stack(){
+  const k=STK[S.lang], d=k.d;
+  $('stackH').textContent=k.h; $('stackNote').textContent=k.note;
+  $('stackDiag').innerHTML=stackSvg(d);
+  $('stackTbl').innerHTML=k.tbl.map(r=>`<div class="k">${esc(r[0])}</div><div>${esc(r[1])}</div>`).join('');
+}
+function strip(){
+  const u = U();
+  $('strip').innerHTML = MS.map(m => { const ks = ORDER[m[0]], pts = ks.reduce((a,k) => a + PTS[tix[k][6]], 0), dc = doneCount(m); return `<a class="card" href="#${m[0]}" data-go="${m[0]}"><b>${m[0]}</b><span class="n">${esc(msName(m))}</span><span class="m">${ks.length} ${u.tickets} · ${pts} ${u.points}</span><div class="prog"><i style="width:${Math.round(dc[0] / dc[1] * 100)}%"></i></div></a>`; }).join('');
+}
+// ---- Numbered sections (sections 1-3 and 6-16; 4 is the stack block, 5 is the ticket list) ----
+const SECIDS = ['overview','board','decisions','architecture','milestones','rules','roles','data','integrations','security','testing','release','ai','i18n','deferred'];
+const SEC = {
+ vi:{
+  toc:'Mục lục',
+  titles:{overview:'Tổng quan',board:'Bảng kế hoạch',decisions:'Quyết định',architecture:'Kiến trúc và tech stack',milestones:'Milestone và ticket',rules:'Quy tắc',roles:'Vai trò và quyền',data:'Mô hình dữ liệu',integrations:'Tích hợp và thông báo',security:'Bảo mật',testing:'Kiểm thử',release:'Phát hành',ai:'Thành phần AI',i18n:'Ngôn ngữ và trợ năng',deferred:'Hoãn lại'},
+  undecided:'Chưa chốt',
+  ov:[['Là gì','Ứng dụng quản lý shop cho người bán TikTok Shop và Shopee tại Việt Nam: bán hàng, marketing, tồn kho, nhà cung cấp, tài chính, thuế, báo cáo và cảnh báo, cùng trợ lý AI.'],['Dành cho ai','Người bán là cá nhân và hộ kinh doanh. Mỗi shop có Admin và các User chỉ xem; toàn hệ thống có một System Admin.'],['Nền tảng','Web app, responsive trên desktop, tablet và điện thoại.'],['Hosting','Cloudflare Workers và Neon PostgreSQL (Singapore).']],
+  ovScope:'Phạm vi', ovScopeV:(t,e,m,a,b)=>`${t} ticket, ${e} epic, ${m} milestone (${a} đến ${b}).`,
+  boardNote:'Mỗi cột là một milestone; ticket xếp theo thứ tự nên làm. Bấm vào ticket để nhảy tới chi tiết ở mục 5.',
+  decNote:'Không xóa dòng; khi đổi quyết định thì thêm dòng mới.',
+  decHead:['Chủ đề','Quyết định','Nguồn'],
+  dec:[
+   ['Quyền sửa dữ liệu','Chỉ Admin sửa hoặc nhập; User chỉ xem.','Product Brief'],
+   ['Tab Thuế','Luôn ẩn với User, không có tùy chọn cấp quyền.','Product Brief'],
+   ['System Admin','Không tự có quyền Tài chính, Thuế.','Product Brief'],
+   ['Tính thuế','App không tính thuế, chỉ quản lý thông tin.','Product Brief'],
+   ['Hosting','Next.js trên Cloudflare Workers qua OpenNext; thử vinext ở nhánh riêng.','Bạn, 2026-11-25'],
+   ['UI','Tailwind CSS và shadcn/ui; biểu đồ dùng shadcn/ui Chart (Recharts).','Bạn, 2026-11-25'],
+   ['Database','Neon PostgreSQL Singapore, gói Free lúc đầu; Drizzle ORM; Hyperdrive.','Bạn, 2026-11-25'],
+   ['Đăng nhập','Better Auth, Google, plugin Organization, mời bằng link thủ công.','Bạn, 2026-11-25'],
+   ['Kết nối sàn','Adapter chung TikTok Shop, Shopee, CSV; webhook Cloudflare Queues bật ở M9.','Bạn, 2026-11-25'],
+   ['Đồng bộ tự động','Chỉ làm ở M9, khi có user thật kết nối API.','Build Plan'],
+   ['Nhập và xuất file','Papa Parse, SheetJS, CSV ở trình duyệt, PDF bằng in trình duyệt.','Bạn, 2026-11-25'],
+   ['Ask AI','Claude API, chỉ Admin thấy, công cụ chỉ đọc, không đọc Thuế.','Bạn, 2026-11-25'],
+   ['Kiểm thử','Vitest và Testing Library viết test trước; 4 luồng Playwright.','Bạn, 2026-11-25'],
+   ['Ask AI','Chỉ Admin dùng; User không thấy nút và API từ chối User.','Bạn, 2026-11-26'],
+   ['Organization','Mỗi Business là một organization trong Better Auth, chứa nhiều shop; quyền Admin và User theo Business.','Bạn, 2026-11-26'],
+   ['Kiểm thử','Playwright 4 luồng; 5 kịch bản theo vai trò kiểm bằng test ma trận quyền ở tầng API (Vitest), nhanh và rẻ hơn mà phủ đủ vai trò.','Claude đề xuất, bạn đồng ý 2026-11-26']
+  ],
+  msNote:'Cỡ S=1, M=3, L=5 điểm công. Mã ticket T-xx và mã feature F-xx giống trang TopTop Features.',
+  rulesH:'Quy tắc sản phẩm đã chốt',
+  rules:['Chỉ Admin sửa hoặc nhập dữ liệu; User chỉ xem.','Tab Thuế luôn ẩn với User, không có tùy chọn cấp quyền.','System Admin không tự có quyền Tài chính, Thuế.','App không tính thuế, chỉ quản lý thông tin.'],
+  rulesH2:'Quy tắc dữ liệu (đã nằm trong ticket)',
+  rules2:['Một nguồn tính số: mọi module đọc từ công cụ tính chỉ số (E04).','Dữ liệu chưa có hiện “chưa có”, không hiện 0.','Thay đổi lợi nhuận luôn là số tiền.','Mọi bản ghi lưu nguồn (API, file, nhập tay).'],
+  git:'Git workflow, quy ước branch và PR',
+  roleHead:['Vai trò','Thấy','Sửa được','Ghi chú'],
+  roles:[
+   ['Admin','Mọi module của Business mình (mọi shop), gồm Tài chính và Thuế; Cài đặt, thành viên, nhật ký thao tác.','Nhập, sửa, xóa dữ liệu; nhập file; mời User, cấp quyền theo module, gỡ User; cấu hình ngưỡng cảnh báo.','Dùng được Ask AI.'],
+   ['User','Chỉ module được cấp (mặc định không có module nào). Không bao giờ thấy Tab Thuế.','Không sửa được gì; nút sửa bị khóa và API từ chối ghi.','Xuất CSV được với module được cấp. Mỗi module một mức: Xem hoặc Không có quyền. Không dùng được Ask AI.'],
+   ['System Admin','System Console: duyệt đăng ký, Business, trạng thái, giám sát vận hành. Không đọc Tài chính, Thuế của Business.','Duyệt hoặc từ chối đăng ký; tạo Business và gán Admin; khóa, mở, vô hiệu hóa tài khoản và Business.','Chỉ một người, email đặt trong cấu hình máy chủ. Tài khoản mới ở trạng thái Chờ duyệt.']
+  ],
+  dataH:['Mô hình','Truy vấn và lưu trữ'],
+  data:['Business có nhiều shop; tài khoản về sau thuộc nhiều Business.','Quyền lưu theo user, module, mức quyền.','Hồ sơ người nộp thuế và kết nối sàn là bản ghi riêng.','Loại người bán là danh sách (Cá nhân, Hộ kinh doanh), thêm Công ty sau được.','Mọi truy vấn bắt buộc lọc theo Business; test Admin Business A không đọc được Business B.','Mỗi bản ghi lưu nguồn: API sàn, file nhập hoặc nhập tay.','Database: Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive.'],
+  dataMig:'Migration: Chưa chốt (cách quản lý và công cụ chạy migration chưa được quyết).',
+  dataRef:'Ticket liên quan: ',
+  intHead:['Tích hợp','Mục đích','Milestone'],
+  ints:[['TikTok Shop','Kết nối tài khoản bằng OAuth, nhập đơn hàng, chi quảng cáo, quyết toán.','OAuth ở M2; đồng bộ ở M9'],['Shopee','Kết nối tài khoản bằng OAuth, nhập đơn hàng, chi quảng cáo, quyết toán.','OAuth ở M2; đồng bộ ở M9'],['Nhập CSV, Excel','Đưa dữ liệu vào app khi chưa có đồng bộ tự động (Papa Parse, SheetJS).','M2'],['Telegram','Gửi báo cáo theo lịch và cảnh báo; Admin chọn người nhận ({tgconn}, {tgsend}).','M6'],['Đăng nhập Google','Đăng nhập qua Better Auth.','M1'],['Claude API','Cho Ask AI và nhận xét báo cáo.','M7'],['Cloudflare Queues','Nhận webhook từ sàn.','M9']],
+  secLead:'Các biện pháp bảo mật nằm trong ticket:',
+  secKeys:['tenant','enforce','sec','taxhide','sysnofin','audit','aiguard'],
+  testLead:'Bộ kiểm thử gồm hai lớp:',
+  testStack:'Kiểm thử',
+  testE2e:'Ticket kiểm thử đầu cuối:',
+  testOpen:'Vì sao chia như vậy: test ma trận quyền ở tầng API chạy nhanh và rẻ hơn test trình duyệt, lại phủ đủ mọi tổ hợp vai trò và module; Playwright chỉ giữ 4 luồng quan trọng nhất (chốt 2026-11-26).',
+  relM8:'M8 hoàn thành khi: ',relM9:'M9 chờ user thật: ',relPilot:'Chạy thử với người dùng thật và cách triển khai dần',
+  aiLead:'Ask AI: ',aiTickets:'Ticket Trợ lý AI (E14) và nhận xét báo cáo:',aiOpen:'Chỉ Admin dùng Ask AI; User không thấy nút và API từ chối (chốt 2026-11-26).',
+  i18nLead:'Ticket liên quan:',
+  defHead:['Tính năng','Vì sao','Khi nào'],
+  def:[['Tự đồng bộ từ sàn','Chờ ít nhất một user thật đồng ý kết nối API của sàn.','M9, chờ user thật'],['vinext','Thử thay OpenNext; chỉ thử ở nhánh riêng.','Thử ở nhánh riêng'],['Nhiều Business cho một tài khoản','Chỉ chuẩn bị bộ chọn Business (ticket {bizswitch}, P2).','P2'],['Loại người bán Công ty','Mô hình dữ liệu đã cho phép thêm sau.','Thêm sau']],
+  defApi:'Quyền API thật của TikTok Shop và Shopee',
+  defApiWhen:'M9, khi có user thật',
+ },
+ en:{
+  toc:'Contents',
+  titles:{overview:'Overview',board:'Plan board',decisions:'Decisions',architecture:'Architecture and tech stack',milestones:'Milestones and tasks',rules:'Rules',roles:'Roles and permissions',data:'Data model',integrations:'Integrations and notifications',security:'Security',testing:'Testing',release:'Release',ai:'AI components',i18n:'Language and accessibility',deferred:'Deferred'},
+  undecided:'Not decided yet',
+  ov:[['What','Shop management for TikTok Shop and Shopee sellers in Vietnam: sales, marketing, inventory, suppliers, finance, tax, reports and alerts, plus an AI assistant.'],['For whom','Sellers: individuals and household businesses. Each shop has an Admin and view-only Users; the whole system has one System Admin.'],['Platform','Web app, responsive on desktop, tablet and phone.'],['Hosting','Cloudflare Workers and Neon PostgreSQL (Singapore).']],
+  ovScope:'Scope', ovScopeV:(t,e,m,a,b)=>`${t} tickets, ${e} epics, ${m} milestones (${a} to ${b}).`,
+  boardNote:'One column per milestone; tickets are in build order. Click a ticket to jump to its detail in section 5.',
+  decNote:'Do not delete rows; when a decision changes, add a new row.',
+  decHead:['Topic','Decision','Source'],
+  dec:[
+   ['Who edits data','Only Admins edit or import; Users are view-only.','Product Brief'],
+   ['Tax tab','Always hidden from Users, with no permission option.','Product Brief'],
+   ['System Admin','Does not automatically get Finance or Tax access.','Product Brief'],
+   ['Tax calculation','The app does not calculate tax; it only manages information.','Product Brief'],
+   ['Hosting','Next.js on Cloudflare Workers through OpenNext; try vinext on a side branch.','You, 2026-11-25'],
+   ['UI','Tailwind CSS and shadcn/ui; charts use shadcn/ui Chart (Recharts).','You, 2026-11-25'],
+   ['Database','Neon PostgreSQL Singapore, Free plan at first; Drizzle ORM; Hyperdrive.','You, 2026-11-25'],
+   ['Sign-in','Better Auth, Google, Organization plugin, invites by manual link.','You, 2026-11-25'],
+   ['Platform connection','One adapter for TikTok Shop, Shopee, CSV; Cloudflare Queues webhooks switched on in M9.','You, 2026-11-25'],
+   ['Automatic sync','Built only in M9, once a real user connects their API.','Build Plan'],
+   ['File import and export','Papa Parse, SheetJS, CSV in the browser, PDF through browser print.','You, 2026-11-25'],
+   ['Ask AI','Claude API, only Admins see it, read-only tools, cannot read Tax.','You, 2026-11-25'],
+   ['Testing','Vitest and Testing Library, tests written first; 4 Playwright flows.','You, 2026-11-25'],
+   ['Ask AI','Admin only; Users do not see the button and the API rejects them.','You, 2026-11-26'],
+   ['Organization','Each Business is one Better Auth organization holding many shops; Admin and User roles are per Business.','You, 2026-11-26'],
+   ['Testing','Playwright for 4 flows; the 5 role scenarios are checked by API-level permission-matrix tests (Vitest), faster and cheaper while covering every role.','Proposed by Claude, approved by you 2026-11-26']
+  ],
+  msNote:'Size S=1, M=3, L=5 effort points. Ticket IDs T-xx and feature IDs F-xx match the TopTop Features page.',
+  rulesH:'Fixed product rules',
+  rules:['Only Admins edit or import data; Users are view-only.','The Tax tab is always hidden from Users, with no permission option.','The System Admin does not automatically get Finance or Tax access.','The app does not calculate tax; it only manages information.'],
+  rulesH2:'Data rules (already in tickets)',
+  rules2:['One source of numbers: every module reads from the metrics engine (E04).','Missing data shows “not available yet”, never 0.','A profit change is always an amount of money.','Every record stores its source (API, file or manual entry).'],
+  git:'Git workflow, branch and PR conventions',
+  roleHead:['Role','Sees','Can edit','Notes'],
+  roles:[
+   ['Admin','Every module of their own Business (all its shops), including Finance and Tax; Settings, members, the activity log.','Enter, edit and delete data; import files; invite Users, grant permissions per module, remove Users; configure alert thresholds.','Can use Ask AI.'],
+   ['User','Only granted modules (none by default). Never sees the Tax tab.','Nothing; edit buttons are locked and the API rejects writes.','Can export CSV for granted modules. One level per module: View or No access. Cannot use Ask AI.'],
+   ['System Admin','The System Console: sign-up approval, Businesses, status, operations monitoring. Cannot read a Business’s Finance or Tax data.','Approve or reject sign-ups; create a Business and assign its Admin; lock, unlock or disable accounts and Businesses.','One person only, with the email set in server configuration. New accounts start as Pending approval.']
+  ],
+  dataH:['Model','Queries and storage'],
+  data:['A Business has many shops; an account may later belong to several Businesses.','Permissions are stored per user, module and level.','The taxpayer profile and platform connections are separate records.','Seller type is a list (Individual, Household business); adding Company later must be possible.','Every query must filter by Business; test: an Admin of Business A cannot read Business B.','Every record stores its source: platform API, imported file or manual entry.','Database: Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive.'],
+  dataMig:'Migrations: Not decided yet (how they are managed and which tool runs them).',
+  dataRef:'Related tickets: ',
+  intHead:['Integration','Purpose','Milestone'],
+  ints:[['TikTok Shop','Connect the account with OAuth; bring in orders, ad spend and settlements.','OAuth in M2; sync in M9'],['Shopee','Connect the account with OAuth; bring in orders, ad spend and settlements.','OAuth in M2; sync in M9'],['CSV, Excel import','Bring data in while there is no automatic sync (Papa Parse, SheetJS).','M2'],['Telegram','Send scheduled reports and alerts; the Admin picks recipients ({tgconn}, {tgsend}).','M6'],['Google sign-in','Sign-in through Better Auth.','M1'],['Claude API','For Ask AI and report commentary.','M7'],['Cloudflare Queues','Receive webhooks from the platforms.','M9']],
+  secLead:'Security measures live in these tickets:',
+  secKeys:['tenant','enforce','sec','taxhide','sysnofin','audit','aiguard'],
+  testLead:'Testing has two layers:',
+  testStack:'Testing',
+  testE2e:'End-to-end ticket:',
+  testOpen:'Why this split: API-level permission-matrix tests are faster and cheaper than browser tests and cover every role and module combination; Playwright keeps only the 4 most important flows (decided 2026-11-26).',
+  relM8:'M8 is done when: ',relM9:'M9 waits for a real user: ',relPilot:'Pilot with real users and gradual rollout',
+  aiLead:'Ask AI: ',aiTickets:'AI Assistant tickets (E14) and report commentary:',aiOpen:'Only Admins use Ask AI; Users do not see the button and the API rejects them (decided 2026-11-26).',
+  i18nLead:'Related tickets:',
+  defHead:['Feature','Why','When'],
+  def:[['Automatic sync from the platforms','Waits for at least one real user who agrees to connect a platform API.','M9, waits for a real user'],['vinext','A possible replacement for OpenNext; only tried on a side branch.','Tried on a side branch'],['Several Businesses per account','Only the Business switcher is prepared (ticket {bizswitch}, P2).','P2'],['Company seller type','The data model already allows adding it later.','Added later']],
+  defApi:'Real TikTok Shop and Shopee API access',
+  defApiWhen:'M9, when a real user exists',
+ }
+};
+const SK = () => SEC[S.lang];
+const fill = s => esc(s).replace(/\{(\w+)\}/g, (m, k) => idOf[k] || m);
+const secNo = id => SECIDS.indexOf(id) + 1;
+const tbl = (heads, rows) => `<div class="tw"><table><thead><tr>${heads.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${fill(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const ul = items => `<ul class="prep">${items.map(i => `<li>${fill(i)}</li>`).join('')}</ul>`;
+const tref = k => `<a class="tref" href="#t-${k}" data-goto="${k}">${idOf[k]}</a> ${esc(tTitle(tix[k]))}`;
+const trefs = (keys, ac) => `<ul class="prep">${keys.map(k => `<li>${tref(k)}${ac ? `<span class="note"> (${esc(tAc(tix[k]).join('; '))})</span>` : ''}</li>`).join('')}</ul>`;
+const stkRow = name => { const i = STK.vi.tbl.findIndex(r => r[0] === name); return i < 0 ? null : STK[S.lang].tbl[i]; };
+function secBodies(){
+  const k = SK(), u = U(), b = {}, msById = id => MS.find(m => m[0] === id);
+  b.overview = `<dl class="dl">${k.ov.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}<dt>${esc(k.ovScope)}</dt><dd>${esc(k.ovScopeV(T.length, EPICS.length, MS.length, MS[0][0], MS[MS.length - 1][0]))}</dd></dl>`;
+  b.board = `<p class="note">${esc(k.boardNote)}</p><div class="board">${MS.map(m => `<div class="bcol"><h3><span class="code">${m[0]}</span> ${esc(msName(m))}</h3>${ORDER[m[0]].map(key => { const st = stOf(key); return `<a class="bt" href="#t-${key}" data-goto="${key}"><b>${idOf[key]}</b><span class="bn">${esc(tTitle(tix[key]))}</span><span class="stc ${st}">${esc(u.st[st])}</span></a>`; }).join('')}</div>`).join('')}</div>`;
+  b.decisions = `<p class="note">${esc(k.decNote)}</p>${tbl(k.decHead, k.dec)}`;
+  b.milestones = esc(k.msNote);
+  b.rules = `<h3 class="stkh">${esc(k.rulesH)}</h3>${ul(k.rules)}<h3 class="stkh">${esc(k.rulesH2)}</h3>${ul(k.rules2)}<p>${esc(k.git)}: <b>${esc(k.undecided)}</b></p>`;
+  b.roles = tbl(k.roleHead, k.roles);
+  b.data = ul(k.data) + `<p>${esc(k.dataMig)}</p><p class="note">${esc(k.dataRef)}${['model','tenant','source'].map(tref).join(' · ')}</p>`;
+  b.integrations = tbl(k.intHead, k.ints);
+  b.security = `<p>${esc(k.secLead)}</p>${trefs(k.secKeys, true)}`;
+  const tr = stkRow('Kiểm thử');
+  b.testing = `<p>${esc(k.testLead)}</p>${tr ? `<ul class="prep"><li><b>${esc(tr[0])}:</b> ${esc(tr[1])}</li></ul>` : ''}<p>${esc(k.testE2e)}</p>${trefs(['e2e'], true)}<p class="note">${esc(k.testOpen)}</p>`;
+  b.release = `<div class="done"><b>${esc(k.relM8)}</b>${esc(msDone(msById('M8')))}</div><div class="done"><b>${esc(k.relM9)}</b>${esc(msGoal(msById('M9')))}</div><p>${esc(k.relPilot)}: <b>${esc(k.undecided)}</b></p>`;
+  const ar = stkRow('Ask AI');
+  b.ai = `${ar ? `<p><b>${esc(ar[0])}:</b> ${esc(ar[1])}</p>` : ''}<p>${esc(k.aiTickets)}</p>${trefs(['aipanel','aictx','aiqa','aisugg','aiquota','aiguard','repai'], true)}<p class="note">${esc(k.aiOpen)}</p>`;
+  b.i18n = `<p>${esc(k.i18nLead)}</p>${trefs(['i18n','theme','resp','a11y'], true)}`;
+  b.deferred = tbl(k.defHead, k.def.concat([[k.defApi, u.openList[0], k.defApiWhen]]));
+  return b;
+}
+function secs(){
+  const k = SK(), b = secBodies();
+  $('toc').setAttribute('aria-label', k.toc);
+  $('toc').innerHTML = SECIDS.map(id => `<a href="#${id}">${secNo(id)}. ${esc(k.titles[id])}</a>`).join('');
+  SECIDS.forEach(id => {
+    const h = $(id === 'architecture' ? 'stackH' : id + '-h'); if (!h) return;
+    h.textContent = '';
+    const n = document.createElement('span'); n.className = 'sn'; n.textContent = secNo(id) + '.';
+    h.appendChild(n); h.appendChild(document.createTextNode(' ' + k.titles[id]));
+    if (id !== 'architecture' && b[id] !== undefined) $(id + '-b').innerHTML = b[id];
+  });
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-goto],[data-go]'); if (!a) return;
+  const id = a.dataset.goto ? 't-' + a.dataset.goto : a.dataset.go;
+  if (!$(id)) { S.q = ''; S.ms = ''; S.role = ''; $('q').value = ''; $('ms').value = ''; $('role').value = ''; render(); }
+  const el = $(id); if (!el) return;
+  e.preventDefault(); history.replaceState(null, '', '#' + id); el.scrollIntoView({block: 'start'});
+  el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1600);
+});
+function chrome(){
+  const u = U(), c = p => T.filter(t => t[5] === p).length, pts = T.reduce((a,t) => a + PTS[t[6]], 0);
+  document.documentElement.lang = S.lang;
+  $('h1').textContent = u.title; $('sub').textContent = u.sub;
+  $('links').innerHTML = u.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>` + (l[2] ? `<span class="upd">(<a href="${l[2]}" target="_blank" rel="noopener">${esc(u.snap)}</a>)</span>` : '')).join('') + `<span class="upd" title="${esc(u.snapNote)}">${esc(u.updated)}: ${UPDATED}</span>`; $('foot').textContent = u.foot + ' ' + u.snapNote;
+  $('stats').innerHTML = [[u.ms, MS.length], [u.total, T.length], [u.pts, pts], [u.stDoneT, T.filter(t => stOf(t[0]) === 'done').length + '/' + T.length], [u.stTicketT, T.filter(t => stOf(t[0]) === 'ticketed').length]].map(s => `<div class="stat"><b>${s[1]}</b><span>${s[0]}</span></div>`).join('');
+  strip(); stack(); secs();
+  $('q').placeholder = u.search;
+  const sel = $('role'); const cur = S.role;
+  sel.innerHTML = `<option value="">${u.allRoles}</option>` + ['Admin','User','System Admin','Hệ thống'].map(r => `<option value="${r}">${esc(roleLabel(r))}</option>`).join('');
+  sel.value = cur;
+  $('copy').textContent = u.copy; $('lang').textContent = u.langBtn; $('lang').setAttribute('aria-label', u.langAria); $('theme').setAttribute('aria-label', u.themeAria);
+  const ms = $('ms'), mc = S.ms;
+  ms.innerHTML = `<option value="">${esc(u.allMs)}</option>` + MS.map(m => `<option value="${m[0]}">${esc(m[0] + ' ' + msName(m))}</option>`).join('');
+  ms.value = mc;
+}
+function setTheme(t){ if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
+function curTheme(){ const a = document.documentElement.getAttribute('data-theme'); if (a) return a; return window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+document.addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  S[b.dataset.k] = b.dataset.v; chrome(); render();
+});
+document.addEventListener('change', e => {
+  const c = e.target.closest('select[data-st]'); if (!c) return;
+  if (c.value === 'todo') delete DONE[c.dataset.st]; else DONE[c.dataset.st] = c.value;
+  store.set('tt-plan-done', JSON.stringify(DONE)); chrome(); render();
+});
+$('q').addEventListener('input', e => { S.q = e.target.value.trim(); render(); });
+$('ms').addEventListener('change', e => { S.ms = e.target.value; render(); });
+$('role').addEventListener('change', e => { S.role = e.target.value; render(); });
+$('lang').addEventListener('click', () => { S.lang = S.lang === 'en' ? 'vi' : 'en'; store.set('tt-feat-lang', S.lang); chrome(); render(); });
+$('theme').addEventListener('click', () => { const n = curTheme() === 'dark' ? 'light' : 'dark'; setTheme(n); store.set('tt-feat-theme', n); });
+$('copy').addEventListener('click', async () => {
+  const u = U(), q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const lines = [u.csv.map(q).join(',')];
+  MS.forEach(m => ORDER[m[0]].filter(k => visible(tix[k])).forEach(k => { const t = tix[k], f = FOF[k]; lines.push([m[0] + ' ' + msName(m), idOf[k], f.id + ' ' + fName(f), t[1] + ' ' + epicName(EPICS.find(e => e[0] === t[1])), tTitle(t), tAc(t).map(a => '- ' + a).join('\n'), roleLabel(t[4]), t[6], t[7] ? t[7].split(',').map(d => idOf[d]).join(', ') : '', u.st[stOf(k)]].map(q).join(',')); }));
+  const text = lines.join('\n'), btn = $('copy');
+  try { await navigator.clipboard.writeText(text); btn.textContent = u.copied(lines.length - 1); }
+  catch (err) { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); btn.textContent = u.copied(lines.length - 1); } catch (e2) { btn.textContent = u.copyFail; } ta.remove(); }
+  setTimeout(() => { btn.textContent = U().copy; }, 1800);
+});
+(function init(){
+  const l = store.get('tt-feat-lang'); S.lang = (l === 'vi' || l === 'en') ? l : 'en';
+  const th = store.get('tt-feat-theme'); if (th === 'light' || th === 'dark') setTheme(th);
+  chrome(); render();
+})();
+</script>
+
+</body></html>
