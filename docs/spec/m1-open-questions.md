@@ -60,4 +60,4 @@ The Plan's own footer says "the Product Brief decides scope, permissions and fix
 
 ## Build Plan PR (#3)
 
-The Build Plan PR has no questions of its own. It has one confirmation request: the wording of T-127 and T-128 ("invitations" and "pending invitations" instead of approvals). It also mirrors the decisions above.
+The Build Plan PR has no questions of its own. The wording of T-127 and T-128 ("invitations" and "pending invitations" instead of approvals) was confirmed by the product owner on 2026-11-26. It mirrors the decisions above.
