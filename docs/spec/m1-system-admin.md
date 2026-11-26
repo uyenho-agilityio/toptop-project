@@ -7,7 +7,6 @@
 
 | ID | Question | Why it matters | Tickets |
 | --- | --- | --- | --- |
-| Q-SYS-1b | When the System Admin changes (the config email is changed and the app is redeployed), does the previous System Admin lose access at once? Proposed: yes, because the role is read from the config on every request. | Security of role changes. | T-122 |
 | Q-SYS-3 | With no Pending list, what does T-123 "Review registrations" become? Options to decide: drop it, or keep a list of blocked sign-in attempts the System Admin can act on by sending an invitation. | T-123 has no purpose as written. | T-123, T-124 |
 | Q-SYS-4 | The Prototype lets the System Admin assign a person to an existing Business as an Admin. Can a Business have more than one Admin? (Same as Q-AUTH-10.) | Roles and member management. | T-124 |
 | Q-SYS-5 | Status words differ: T-125 says "Lock, unlock, deactivate", Brief 8 says "Activate or suspend", the Prototype only toggles active and suspended. Which statuses exist for accounts and Businesses? | Data model and wording. | T-125 |
@@ -18,6 +17,7 @@
 
 | ID | Answer | Date |
 | --- | --- | --- |
+| Q-SYS-1b | **When `SYSTEM_ADMIN_EMAIL` changes, the previous System Admin loses access immediately.** The role is read from the config, so the old account is treated as an ordinary account with no invitation (blocked). | 2026-11-26, product owner |
 | Q-SYS-1 | **The first System Admin is set by an email in server configuration.** The config key is `SYSTEM_ADMIN_EMAIL` (placeholder name; the real value is set per environment by the product owner and is never committed to the repo). When that Google account signs in, it becomes the System Admin without an invitation. Options (b) one-time script and (c) first sign-in on an empty database were not chosen. | 2026-11-26, product owner |
 
 ## Sources
