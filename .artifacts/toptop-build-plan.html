@@ -96,6 +96,39 @@ select.st.done{border-color:var(--ok);color:var(--ok)}
 .foot{margin:28px 0 8px;font-size:13px;color:var(--muted);max-width:80ch}
 .upd{color:var(--muted)}
 .links{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font-size:13.5px}
+
+/* Numbered sections, table of contents, board, tables */
+.sec{scroll-margin-top:16px}
+.sec>h2{font-size:19px;margin-bottom:8px;padding-top:6px;border-top:1px solid var(--line)}
+.sn{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:2px}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.toc a{font-size:13px;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);text-decoration:none}
+.toc a:hover{border-color:var(--accent);color:var(--accent)}
+.dl{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr);gap:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;margin:0}
+.dl dt,.dl dd{margin:0;padding:9px 14px;border-bottom:1px solid var(--line)}
+.dl dt{font-weight:650;background:var(--chip)}
+.dl dt:last-of-type,.dl dd:last-of-type{border-bottom:0}
+@media (max-width:560px){.dl{grid-template-columns:minmax(0,1fr)}.dl dt{border-bottom:0;padding-bottom:2px}}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:8px 0}
+.tw table{border-collapse:collapse;width:100%;min-width:480px;font-size:13.5px}
+.tw th,.tw td{text-align:left;vertical-align:top;padding:8px 12px;border-bottom:1px solid var(--line)}
+.tw th{background:var(--chip);font-weight:650;white-space:nowrap}
+.tw tr:last-child td{border-bottom:0}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:8px}
+.bcol{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px;min-width:0}
+.bcol h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:14px;margin:2px 4px 8px}
+.bcol .code{font:600 12px "Geist Mono",ui-monospace,monospace;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:1px 8px}
+.bt{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:5px 8px;border-radius:8px;color:var(--fg);text-decoration:none;font-size:13px}
+.bt:hover{background:var(--chip)}
+.bt b{font:500 12px "Geist Mono",ui-monospace,monospace;color:var(--muted)}
+.bt .bn{flex:1 1 140px;min-width:0}
+.stc{font-size:11px;font-weight:600;padding:0 8px;border-radius:999px;background:var(--chip);color:var(--muted);white-space:nowrap}
+.stc.ticketed{background:var(--info-soft);color:var(--info)}.stc.done{background:var(--ok-soft);color:var(--ok)}
+.mh h3{font-size:17px;margin:0;text-wrap:balance}
+.open.obox{display:block;font-size:14px;padding:10px 16px;border-radius:12px;margin-top:0}
+.open.obox p{margin:0 0 4px;font-weight:650}.open.obox ol{margin:0;padding-left:20px}.open.obox li{margin:4px 0}
+.t.flash,.ms.flash{background:var(--accent-soft)}
+.tref{font:500 12.5px "Geist Mono",ui-monospace,monospace}
 </style>
 <div class="wrap">
   <div class="top">
@@ -110,8 +143,13 @@ select.st.done{border-color:var(--ok);color:var(--ok)}
     </div>
   </div>
   <div class="stats" id="stats"></div>
+  <nav class="toc" id="toc"></nav>
+  <section class="sec" id="overview"><h2 id="overview-h"></h2><div id="overview-b"></div></section>
+  <section class="sec" id="board"><h2 id="board-h"></h2><div id="board-b"></div></section>
+  <section class="sec" id="decisions"><h2 id="decisions-h"></h2><div id="decisions-b"></div></section>
+  <section class="sec" id="architecture"><h2 id="stackH"></h2><p class="note" id="stackNote"></p><div id="stackDiag"></div><div class="stk" id="stackTbl"></div></section>
+  <section class="sec" id="milestones"><h2 id="milestones-h"></h2><p class="note" id="milestones-b"></p>
   <div class="strip" id="strip"></div>
-
   <div class="bar" role="search">
     <div class="row">
       <input type="search" id="q" aria-label="Search">
@@ -121,8 +159,18 @@ select.st.done{border-color:var(--ok);color:var(--ok)}
     </div>
   </div>
   <div id="out"></div>
-
-  <section class="sec" id="stack"><h2 id="stackH"></h2><p class="note" id="stackNote"></p><div id="stackDiag"></div><div class="stk" id="stackTbl"></div></section>
+  </section>
+  <section class="sec" id="rules"><h2 id="rules-h"></h2><div id="rules-b"></div></section>
+  <section class="sec" id="roles"><h2 id="roles-h"></h2><div id="roles-b"></div></section>
+  <section class="sec" id="data"><h2 id="data-h"></h2><div id="data-b"></div></section>
+  <section class="sec" id="integrations"><h2 id="integrations-h"></h2><div id="integrations-b"></div></section>
+  <section class="sec" id="security"><h2 id="security-h"></h2><div id="security-b"></div></section>
+  <section class="sec" id="testing"><h2 id="testing-h"></h2><div id="testing-b"></div></section>
+  <section class="sec" id="release"><h2 id="release-h"></h2><div id="release-b"></div></section>
+  <section class="sec" id="ai"><h2 id="ai-h"></h2><div id="ai-b"></div></section>
+  <section class="sec" id="i18n"><h2 id="i18n-h"></h2><div id="i18n-b"></div></section>
+  <section class="sec" id="deferred"><h2 id="deferred-h"></h2><div id="deferred-b"></div></section>
+  <section class="sec" id="open"><h2 id="open-h"></h2><div id="open-b"></div></section>
 
   <p class="foot" id="foot"></p>
 </div>
@@ -625,11 +673,11 @@ function render(){
     const vis = ORDER[m[0]].filter(k => visible(tix[k]));
     if (!vis.length) return;
     const pts = ORDER[m[0]].reduce((a,k) => a + PTS[tix[k][6]], 0), dc = doneCount(m);
-    html += `<section class="ms" id="${m[0]}"><div class="mh"><span class="code">${m[0]}</span><h2>${esc(msName(m))}</h2><span class="cnt">${dc[1]} ${u.tickets} · ${pts} ${u.points} · ${u.doneN(dc[0], dc[1])}</span></div><p class="goal">${esc(msGoal(m))}</p><p class="done"><b>${u.doneWhen}</b>${esc(msDone(m))}</p><div class="list">`;
+    html += `<section class="ms" id="${m[0]}"><div class="mh"><span class="code">${m[0]}</span><h3>${esc(msName(m))}</h3><span class="cnt">${dc[1]} ${u.tickets} · ${pts} ${u.points} · ${u.doneN(dc[0], dc[1])}</span></div><p class="goal">${esc(msGoal(m))}</p><p class="done"><b>${u.doneWhen}</b>${esc(msDone(m))}</p><div class="list">`;
     vis.forEach(k => {
       const t = tix[k], f = FOF[k], st = stOf(k), isd = st === 'done';
       const deps = t[7] ? t[7].split(',').map(d => `<span class="chip dep" title="${MOF[d]}">${idOf[d]}</span>`).join('') : '';
-      html += `<article class="t${isd ? ' isdone' : ''}"><div class="tid">${idOf[k]}</div><div><h4 class="tt">${esc(tTitle(t))}</h4><ul class="ac">${tAc(t).map(a => `<li>${esc(a)}</li>`).join('')}</ul><div class="meta"><span class="chip f">${f.id}</span><span class="chip">${u.size} ${t[6]}</span><span class="chip">${esc(roleLabel(t[4]))}</span>${deps ? '<span class="note">' + u.needs + '</span>' + deps : ''}<select class="st ${st}" data-st="${k}" aria-label="${esc(u.stLabel)} ${idOf[k]}">${['todo','ticketed','done'].map(x => `<option value="${x}"${x === st ? ' selected' : ''}>${esc(u.st[x])}</option>`).join('')}</select></div></div></article>`;
+      html += `<article class="t${isd ? ' isdone' : ''}" id="t-${k}"><div class="tid">${idOf[k]}</div><div><h4 class="tt">${esc(tTitle(t))}</h4><ul class="ac">${tAc(t).map(a => `<li>${esc(a)}</li>`).join('')}</ul><div class="meta"><span class="chip f">${f.id}</span><span class="chip">${u.size} ${t[6]}</span><span class="chip">${esc(roleLabel(t[4]))}</span>${deps ? '<span class="note">' + u.needs + '</span>' + deps : ''}<select class="st ${st}" data-st="${k}" aria-label="${esc(u.stLabel)} ${idOf[k]}">${['todo','ticketed','done'].map(x => `<option value="${x}"${x === st ? ' selected' : ''}>${esc(u.st[x])}</option>`).join('')}</select></div></div></article>`;
     });
     html += '</div></section>';
   });
@@ -666,13 +714,192 @@ function strip(){
   const u = U();
   $('strip').innerHTML = MS.map(m => { const ks = ORDER[m[0]], pts = ks.reduce((a,k) => a + PTS[tix[k][6]], 0), dc = doneCount(m); return `<a class="card" href="#${m[0]}" data-go="${m[0]}"><b>${m[0]}</b><span class="n">${esc(msName(m))}</span><span class="m">${ks.length} ${u.tickets} · ${pts} ${u.points}</span><div class="prog"><i style="width:${Math.round(dc[0] / dc[1] * 100)}%"></i></div></a>`; }).join('');
 }
+// ---- Numbered sections (sections 1-3 and 6-16; 4 is the stack block, 5 is the ticket list) ----
+const SECIDS = ['overview','board','decisions','architecture','milestones','rules','roles','data','integrations','security','testing','release','ai','i18n','deferred','open'];
+const SEC = {
+ vi:{
+  toc:'Mục lục',
+  titles:{overview:'Tổng quan',board:'Bảng kế hoạch',decisions:'Quyết định',architecture:'Kiến trúc và tech stack',milestones:'Milestone và ticket',rules:'Quy tắc',roles:'Vai trò và quyền',data:'Mô hình dữ liệu',integrations:'Tích hợp và thông báo',security:'Bảo mật',testing:'Kiểm thử',release:'Phát hành',ai:'Thành phần AI',i18n:'Ngôn ngữ và trợ năng',deferred:'Hoãn lại',open:'Việc cần chốt'},
+  undecided:'Chưa chốt',
+  ov:[['Là gì','Ứng dụng quản lý shop cho người bán TikTok Shop và Shopee tại Việt Nam: bán hàng, marketing, tồn kho, nhà cung cấp, tài chính, thuế, báo cáo và cảnh báo, cùng trợ lý AI.'],['Dành cho ai','Người bán là cá nhân và hộ kinh doanh. Mỗi shop có Admin và các User chỉ xem; toàn hệ thống có một System Admin.'],['Nền tảng','Web app, responsive trên desktop, tablet và điện thoại.'],['Hosting','Cloudflare Workers và Neon PostgreSQL (Singapore).']],
+  ovScope:'Phạm vi', ovScopeV:(t,e,m,a,b)=>`${t} ticket, ${e} epic, ${m} milestone (${a} đến ${b}).`,
+  boardNote:'Mỗi cột là một milestone; ticket xếp theo thứ tự nên làm. Bấm vào ticket để nhảy tới chi tiết ở mục 5.',
+  decNote:'Không xóa dòng; khi đổi quyết định thì thêm dòng mới.',
+  decHead:['Chủ đề','Quyết định','Nguồn'],
+  dec:[
+   ['Quyền sửa dữ liệu','Chỉ Admin sửa hoặc nhập; User chỉ xem.','Product Brief'],
+   ['Tab Thuế','Luôn ẩn với User, không có tùy chọn cấp quyền.','Product Brief'],
+   ['System Admin','Không tự có quyền Tài chính, Thuế.','Product Brief'],
+   ['Tính thuế','App không tính thuế, chỉ quản lý thông tin.','Product Brief'],
+   ['Hosting','Next.js trên Cloudflare Workers qua OpenNext; thử vinext ở nhánh riêng.','Bạn, 2026-11-25'],
+   ['UI','Tailwind CSS và shadcn/ui; biểu đồ dùng shadcn/ui Chart (Recharts).','Bạn, 2026-11-25'],
+   ['Database','Neon PostgreSQL Singapore, gói Free lúc đầu; Drizzle ORM; Hyperdrive.','Bạn, 2026-11-25'],
+   ['Đăng nhập','Better Auth, Google, plugin Organization, mời bằng link thủ công.','Bạn, 2026-11-25'],
+   ['Kết nối sàn','Adapter chung TikTok Shop, Shopee, CSV; webhook Cloudflare Queues bật ở M9.','Bạn, 2026-11-25'],
+   ['Đồng bộ tự động','Chỉ làm ở M9, khi có user thật kết nối API.','Build Plan'],
+   ['Nhập và xuất file','Papa Parse, SheetJS, CSV ở trình duyệt, PDF bằng in trình duyệt.','Bạn, 2026-11-25'],
+   ['Ask AI','Claude API, chỉ Admin thấy, công cụ chỉ đọc, không đọc Thuế.','Bạn, 2026-11-25'],
+   ['Kiểm thử','Vitest và Testing Library viết test trước; 4 luồng Playwright.','Bạn, 2026-11-25']
+  ],
+  msNote:'Cỡ S=1, M=3, L=5 điểm công. Mã ticket T-xx và mã feature F-xx giống trang TopTop Features.',
+  rulesH:'Quy tắc sản phẩm đã chốt',
+  rules:['Chỉ Admin sửa hoặc nhập dữ liệu; User chỉ xem.','Tab Thuế luôn ẩn với User, không có tùy chọn cấp quyền.','System Admin không tự có quyền Tài chính, Thuế.','App không tính thuế, chỉ quản lý thông tin.'],
+  rulesH2:'Quy tắc dữ liệu (đã nằm trong ticket)',
+  rules2:['Một nguồn tính số: mọi module đọc từ công cụ tính chỉ số (E04).','Dữ liệu chưa có hiện “chưa có”, không hiện 0.','Thay đổi lợi nhuận luôn là số tiền.','Mọi bản ghi lưu nguồn (API, file, nhập tay).'],
+  git:'Git workflow, quy ước branch và PR',
+  roleHead:['Vai trò','Thấy','Sửa được','Ghi chú'],
+  roles:[
+   ['Admin','Mọi module của shop mình, gồm Tài chính và Thuế; Cài đặt, thành viên, nhật ký thao tác.','Nhập, sửa, xóa dữ liệu; nhập file; mời User, cấp quyền theo module, gỡ User; cấu hình ngưỡng cảnh báo.','Ask AI: xem mục 16.'],
+   ['User','Chỉ module được cấp (mặc định không có module nào). Không bao giờ thấy Tab Thuế.','Không sửa được gì; nút sửa bị khóa và API từ chối ghi.','Xuất CSV được với module được cấp. Mỗi module một mức: Xem hoặc Không có quyền. Ask AI: Chưa chốt.'],
+   ['System Admin','System Console: duyệt đăng ký, Business, trạng thái, giám sát vận hành. Không đọc Tài chính, Thuế của Business.','Duyệt hoặc từ chối đăng ký; tạo Business và gán Admin; khóa, mở, vô hiệu hóa tài khoản và Business.','Chỉ một người, email đặt trong cấu hình máy chủ. Tài khoản mới ở trạng thái Chờ duyệt.']
+  ],
+  dataH:['Mô hình','Truy vấn và lưu trữ'],
+  data:['Business có nhiều shop; tài khoản về sau thuộc nhiều Business.','Quyền lưu theo user, module, mức quyền.','Hồ sơ người nộp thuế và kết nối sàn là bản ghi riêng.','Loại người bán là danh sách (Cá nhân, Hộ kinh doanh), thêm Công ty sau được.','Mọi truy vấn bắt buộc lọc theo Business; test Admin Business A không đọc được Business B.','Mỗi bản ghi lưu nguồn: API sàn, file nhập hoặc nhập tay.','Database: Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive.'],
+  dataMig:'Migration: Chưa chốt (cách quản lý và công cụ chạy migration chưa được quyết).',
+  dataRef:'Ticket liên quan: ',
+  dataOpen:'Cách tổ chức shop và Business trong dữ liệu còn một điểm cần chốt, xem mục 16.',
+  intHead:['Tích hợp','Mục đích','Milestone'],
+  ints:[['TikTok Shop','Kết nối tài khoản bằng OAuth, nhập đơn hàng, chi quảng cáo, quyết toán.','OAuth ở M2; đồng bộ ở M9'],['Shopee','Kết nối tài khoản bằng OAuth, nhập đơn hàng, chi quảng cáo, quyết toán.','OAuth ở M2; đồng bộ ở M9'],['Nhập CSV, Excel','Đưa dữ liệu vào app khi chưa có đồng bộ tự động (Papa Parse, SheetJS).','M2'],['Telegram','Gửi báo cáo theo lịch và cảnh báo; Admin chọn người nhận ({tgconn}, {tgsend}).','M6'],['Đăng nhập Google','Đăng nhập qua Better Auth.','M1'],['Claude API','Cho Ask AI và nhận xét báo cáo.','M7'],['Cloudflare Queues','Nhận webhook từ sàn.','M9']],
+  secLead:'Các biện pháp bảo mật nằm trong ticket:',
+  secKeys:['tenant','enforce','sec','taxhide','sysnofin','audit','aiguard'],
+  testLead:'Bộ kiểm thử gồm hai lớp:',
+  testStack:'Kiểm thử',
+  testE2e:'Ticket kiểm thử đầu cuối:',
+  testOpen:'Số luồng và kịch bản đầu cuối còn một điểm cần chốt, xem mục 16.',
+  relM8:'M8 hoàn thành khi: ',relM9:'M9 chờ user thật: ',relPilot:'Chạy thử với người dùng thật và cách triển khai dần',
+  aiLead:'Ask AI: ',aiTickets:'Ticket Trợ lý AI (E14) và nhận xét báo cáo:',aiOpen:'Việc User có dùng Ask AI hay không còn cần chốt, xem mục 16.',
+  i18nLead:'Ticket liên quan:',
+  defHead:['Tính năng','Vì sao','Khi nào'],
+  def:[['Tự đồng bộ từ sàn','Chờ ít nhất một user thật đồng ý kết nối API của sàn.','M9, chờ user thật'],['vinext','Thử thay OpenNext; chỉ thử ở nhánh riêng.','Thử ở nhánh riêng'],['Nhiều Business cho một tài khoản','Chỉ chuẩn bị bộ chọn Business (ticket {bizswitch}, P2).','P2'],['Loại người bán Công ty','Mô hình dữ liệu đã cho phép thêm sau.','Thêm sau']],
+  defApi:'Quyền API thật của TikTok Shop và Shopee',
+  defApiWhen:'M9, khi có user thật',
+  openLead:'Cần chốt trước khi làm:',
+  openQ:[
+   'Ask AI: tech stack ghi chỉ Admin thấy, nhưng các ticket E14 ({aipanel} khung chat, {aictx} giới hạn dữ liệu) ghi vai trò All và có quy tắc cho User. Cần chốt User có dùng Ask AI không.',
+   'Tổ chức dữ liệu: tech stack ghi mỗi shop là một organization, còn ticket mô hình dữ liệu ({model}) ghi một Business có nhiều shop. Cần chốt organization ứng với shop hay Business.',
+   'Kiểm thử đầu cuối: tech stack ghi 4 luồng Playwright, ticket e2e ({e2e}) liệt kê 5 kịch bản theo vai trò. Cần chốt.'
+  ]
+ },
+ en:{
+  toc:'Contents',
+  titles:{overview:'Overview',board:'Plan board',decisions:'Decisions',architecture:'Architecture and tech stack',milestones:'Milestones and tasks',rules:'Rules',roles:'Roles and permissions',data:'Data model',integrations:'Integrations and notifications',security:'Security',testing:'Testing',release:'Release',ai:'AI components',i18n:'Language and accessibility',deferred:'Deferred',open:'Open questions'},
+  undecided:'Not decided yet',
+  ov:[['What','Shop management for TikTok Shop and Shopee sellers in Vietnam: sales, marketing, inventory, suppliers, finance, tax, reports and alerts, plus an AI assistant.'],['For whom','Sellers: individuals and household businesses. Each shop has an Admin and view-only Users; the whole system has one System Admin.'],['Platform','Web app, responsive on desktop, tablet and phone.'],['Hosting','Cloudflare Workers and Neon PostgreSQL (Singapore).']],
+  ovScope:'Scope', ovScopeV:(t,e,m,a,b)=>`${t} tickets, ${e} epics, ${m} milestones (${a} to ${b}).`,
+  boardNote:'One column per milestone; tickets are in build order. Click a ticket to jump to its detail in section 5.',
+  decNote:'Do not delete rows; when a decision changes, add a new row.',
+  decHead:['Topic','Decision','Source'],
+  dec:[
+   ['Who edits data','Only Admins edit or import; Users are view-only.','Product Brief'],
+   ['Tax tab','Always hidden from Users, with no permission option.','Product Brief'],
+   ['System Admin','Does not automatically get Finance or Tax access.','Product Brief'],
+   ['Tax calculation','The app does not calculate tax; it only manages information.','Product Brief'],
+   ['Hosting','Next.js on Cloudflare Workers through OpenNext; try vinext on a side branch.','You, 2026-11-25'],
+   ['UI','Tailwind CSS and shadcn/ui; charts use shadcn/ui Chart (Recharts).','You, 2026-11-25'],
+   ['Database','Neon PostgreSQL Singapore, Free plan at first; Drizzle ORM; Hyperdrive.','You, 2026-11-25'],
+   ['Sign-in','Better Auth, Google, Organization plugin, invites by manual link.','You, 2026-11-25'],
+   ['Platform connection','One adapter for TikTok Shop, Shopee, CSV; Cloudflare Queues webhooks switched on in M9.','You, 2026-11-25'],
+   ['Automatic sync','Built only in M9, once a real user connects their API.','Build Plan'],
+   ['File import and export','Papa Parse, SheetJS, CSV in the browser, PDF through browser print.','You, 2026-11-25'],
+   ['Ask AI','Claude API, only Admins see it, read-only tools, cannot read Tax.','You, 2026-11-25'],
+   ['Testing','Vitest and Testing Library, tests written first; 4 Playwright flows.','You, 2026-11-25']
+  ],
+  msNote:'Size S=1, M=3, L=5 effort points. Ticket IDs T-xx and feature IDs F-xx match the TopTop Features page.',
+  rulesH:'Fixed product rules',
+  rules:['Only Admins edit or import data; Users are view-only.','The Tax tab is always hidden from Users, with no permission option.','The System Admin does not automatically get Finance or Tax access.','The app does not calculate tax; it only manages information.'],
+  rulesH2:'Data rules (already in tickets)',
+  rules2:['One source of numbers: every module reads from the metrics engine (E04).','Missing data shows “not available yet”, never 0.','A profit change is always an amount of money.','Every record stores its source (API, file or manual entry).'],
+  git:'Git workflow, branch and PR conventions',
+  roleHead:['Role','Sees','Can edit','Notes'],
+  roles:[
+   ['Admin','Every module of their own shop, including Finance and Tax; Settings, members, the activity log.','Enter, edit and delete data; import files; invite Users, grant permissions per module, remove Users; configure alert thresholds.','Ask AI: see section 16.'],
+   ['User','Only granted modules (none by default). Never sees the Tax tab.','Nothing; edit buttons are locked and the API rejects writes.','Can export CSV for granted modules. One level per module: View or No access. Ask AI: Not decided yet.'],
+   ['System Admin','The System Console: sign-up approval, Businesses, status, operations monitoring. Cannot read a Business’s Finance or Tax data.','Approve or reject sign-ups; create a Business and assign its Admin; lock, unlock or disable accounts and Businesses.','One person only, with the email set in server configuration. New accounts start as Pending approval.']
+  ],
+  dataH:['Model','Queries and storage'],
+  data:['A Business has many shops; an account may later belong to several Businesses.','Permissions are stored per user, module and level.','The taxpayer profile and platform connections are separate records.','Seller type is a list (Individual, Household business); adding Company later must be possible.','Every query must filter by Business; test: an Admin of Business A cannot read Business B.','Every record stores its source: platform API, imported file or manual entry.','Database: Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive.'],
+  dataMig:'Migrations: Not decided yet (how they are managed and which tool runs them).',
+  dataRef:'Related tickets: ',
+  dataOpen:'How shops and Businesses map onto the data still needs a decision, see section 16.',
+  intHead:['Integration','Purpose','Milestone'],
+  ints:[['TikTok Shop','Connect the account with OAuth; bring in orders, ad spend and settlements.','OAuth in M2; sync in M9'],['Shopee','Connect the account with OAuth; bring in orders, ad spend and settlements.','OAuth in M2; sync in M9'],['CSV, Excel import','Bring data in while there is no automatic sync (Papa Parse, SheetJS).','M2'],['Telegram','Send scheduled reports and alerts; the Admin picks recipients ({tgconn}, {tgsend}).','M6'],['Google sign-in','Sign-in through Better Auth.','M1'],['Claude API','For Ask AI and report commentary.','M7'],['Cloudflare Queues','Receive webhooks from the platforms.','M9']],
+  secLead:'Security measures live in these tickets:',
+  secKeys:['tenant','enforce','sec','taxhide','sysnofin','audit','aiguard'],
+  testLead:'Testing has two layers:',
+  testStack:'Testing',
+  testE2e:'End-to-end ticket:',
+  testOpen:'The number of end-to-end flows and scenarios still needs a decision, see section 16.',
+  relM8:'M8 is done when: ',relM9:'M9 waits for a real user: ',relPilot:'Pilot with real users and gradual rollout',
+  aiLead:'Ask AI: ',aiTickets:'AI Assistant tickets (E14) and report commentary:',aiOpen:'Whether Users get Ask AI still needs a decision, see section 16.',
+  i18nLead:'Related tickets:',
+  defHead:['Feature','Why','When'],
+  def:[['Automatic sync from the platforms','Waits for at least one real user who agrees to connect a platform API.','M9, waits for a real user'],['vinext','A possible replacement for OpenNext; only tried on a side branch.','Tried on a side branch'],['Several Businesses per account','Only the Business switcher is prepared (ticket {bizswitch}, P2).','P2'],['Company seller type','The data model already allows adding it later.','Added later']],
+  defApi:'Real TikTok Shop and Shopee API access',
+  defApiWhen:'M9, when a real user exists',
+  openLead:'To decide before building:',
+  openQ:[
+   'Ask AI: the tech stack says only Admins see it, but the E14 tickets ({aipanel} chat panel, {aictx} data limits) list the role as All and include a rule for Users. Decide whether Users get Ask AI.',
+   'Data organization: the tech stack says each shop is an organization, while the data model ticket ({model}) says one Business has many shops. Decide whether an organization maps to a shop or to a Business.',
+   'End-to-end testing: the tech stack says 4 Playwright flows, while the e2e ticket ({e2e}) lists 5 role-based scenarios. Decide which.'
+  ]
+ }
+};
+const SK = () => SEC[S.lang];
+const fill = s => esc(s).replace(/\{(\w+)\}/g, (m, k) => idOf[k] || m);
+const secNo = id => SECIDS.indexOf(id) + 1;
+const tbl = (heads, rows) => `<div class="tw"><table><thead><tr>${heads.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${fill(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const ul = items => `<ul class="prep">${items.map(i => `<li>${fill(i)}</li>`).join('')}</ul>`;
+const tref = k => `<a class="tref" href="#t-${k}" data-goto="${k}">${idOf[k]}</a> ${esc(tTitle(tix[k]))}`;
+const trefs = (keys, ac) => `<ul class="prep">${keys.map(k => `<li>${tref(k)}${ac ? `<span class="note"> (${esc(tAc(tix[k]).join('; '))})</span>` : ''}</li>`).join('')}</ul>`;
+const stkRow = name => { const i = STK.vi.tbl.findIndex(r => r[0] === name); return i < 0 ? null : STK[S.lang].tbl[i]; };
+function secBodies(){
+  const k = SK(), u = U(), b = {}, msById = id => MS.find(m => m[0] === id);
+  b.overview = `<dl class="dl">${k.ov.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}<dt>${esc(k.ovScope)}</dt><dd>${esc(k.ovScopeV(T.length, EPICS.length, MS.length, MS[0][0], MS[MS.length - 1][0]))}</dd></dl>`;
+  b.board = `<p class="note">${esc(k.boardNote)}</p><div class="board">${MS.map(m => `<div class="bcol"><h3><span class="code">${m[0]}</span> ${esc(msName(m))}</h3>${ORDER[m[0]].map(key => { const st = stOf(key); return `<a class="bt" href="#t-${key}" data-goto="${key}"><b>${idOf[key]}</b><span class="bn">${esc(tTitle(tix[key]))}</span><span class="stc ${st}">${esc(u.st[st])}</span></a>`; }).join('')}</div>`).join('')}</div>`;
+  b.decisions = `<p class="note">${esc(k.decNote)}</p>${tbl(k.decHead, k.dec)}`;
+  b.milestones = esc(k.msNote);
+  b.rules = `<h3 class="stkh">${esc(k.rulesH)}</h3>${ul(k.rules)}<h3 class="stkh">${esc(k.rulesH2)}</h3>${ul(k.rules2)}<p>${esc(k.git)}: <b>${esc(k.undecided)}</b></p>`;
+  b.roles = tbl(k.roleHead, k.roles);
+  b.data = ul(k.data) + `<p>${esc(k.dataMig)}</p><p class="note">${esc(k.dataRef)}${['model','tenant','source'].map(tref).join(' · ')}</p><p class="note">${esc(k.dataOpen)}</p>`;
+  b.integrations = tbl(k.intHead, k.ints);
+  b.security = `<p>${esc(k.secLead)}</p>${trefs(k.secKeys, true)}`;
+  const tr = stkRow('Kiểm thử');
+  b.testing = `<p>${esc(k.testLead)}</p>${tr ? `<ul class="prep"><li><b>${esc(tr[0])}:</b> ${esc(tr[1])}</li></ul>` : ''}<p>${esc(k.testE2e)}</p>${trefs(['e2e'], true)}<p class="note">${esc(k.testOpen)}</p>`;
+  b.release = `<div class="done"><b>${esc(k.relM8)}</b>${esc(msDone(msById('M8')))}</div><div class="done"><b>${esc(k.relM9)}</b>${esc(msGoal(msById('M9')))}</div><p>${esc(k.relPilot)}: <b>${esc(k.undecided)}</b></p>`;
+  const ar = stkRow('Ask AI');
+  b.ai = `${ar ? `<p><b>${esc(ar[0])}:</b> ${esc(ar[1])}</p>` : ''}<p>${esc(k.aiTickets)}</p>${trefs(['aipanel','aictx','aiqa','aisugg','aiquota','aiguard','repai'], true)}<p class="note">${esc(k.aiOpen)}</p>`;
+  b.i18n = `<p>${esc(k.i18nLead)}</p>${trefs(['i18n','theme','resp','a11y'], true)}`;
+  b.deferred = tbl(k.defHead, k.def.concat([[k.defApi, u.openList[0], k.defApiWhen]]));
+  b.open = `<div class="open obox"><p class="oh">${esc(k.openLead)}</p><ol>${k.openQ.map(q => `<li>${fill(q)}</li>`).join('')}</ol></div>`;
+  return b;
+}
+function secs(){
+  const k = SK(), b = secBodies();
+  $('toc').setAttribute('aria-label', k.toc);
+  $('toc').innerHTML = SECIDS.map(id => `<a href="#${id}">${secNo(id)}. ${esc(k.titles[id])}</a>`).join('');
+  SECIDS.forEach(id => {
+    const h = $(id === 'architecture' ? 'stackH' : id + '-h'); if (!h) return;
+    h.textContent = '';
+    const n = document.createElement('span'); n.className = 'sn'; n.textContent = secNo(id) + '.';
+    h.appendChild(n); h.appendChild(document.createTextNode(' ' + k.titles[id]));
+    if (id !== 'architecture' && b[id] !== undefined) $(id + '-b').innerHTML = b[id];
+  });
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-goto],[data-go]'); if (!a) return;
+  const id = a.dataset.goto ? 't-' + a.dataset.goto : a.dataset.go;
+  if (!$(id)) { S.q = ''; S.ms = ''; S.role = ''; $('q').value = ''; $('ms').value = ''; $('role').value = ''; render(); }
+  const el = $(id); if (!el) return;
+  e.preventDefault(); history.replaceState(null, '', '#' + id); el.scrollIntoView({block: 'start'});
+  el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1600);
+});
 function chrome(){
   const u = U(), c = p => T.filter(t => t[5] === p).length, pts = T.reduce((a,t) => a + PTS[t[6]], 0);
   document.documentElement.lang = S.lang;
   $('h1').textContent = u.title; $('sub').textContent = u.sub;
   $('links').innerHTML = u.links.map(l => `<a href="${l[1]}" target="_blank" rel="noopener">${esc(l[0])} ↗</a>`).join('') + `<span class="upd">${esc(u.updated)}: ${UPDATED}</span>`; $('foot').textContent = u.foot;
   $('stats').innerHTML = [[u.ms, MS.length], [u.total, T.length], [u.pts, pts], [u.stDoneT, T.filter(t => stOf(t[0]) === 'done').length + '/' + T.length], [u.stTicketT, T.filter(t => stOf(t[0]) === 'ticketed').length]].map(s => `<div class="stat"><b>${s[1]}</b><span>${s[0]}</span></div>`).join('');
-  strip(); stack();
+  strip(); stack(); secs();
   $('q').placeholder = u.search;
   const sel = $('role'); const cur = S.role;
   sel.innerHTML = `<option value="">${u.allRoles}</option>` + ['Admin','User','System Admin','Hệ thống'].map(r => `<option value="${r}">${esc(roleLabel(r))}</option>`).join('');
