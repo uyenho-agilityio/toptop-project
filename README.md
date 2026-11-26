@@ -1,27 +1,27 @@
 # TopTop
 
-Nền tảng quản lý shop online cho người bán TikTok Shop và Shopee ở Việt Nam: bán hàng, marketing, tồn kho, nhà cung cấp, tài chính, thuế, báo cáo và Trợ lý AI trong một app.
+An online shop management platform for TikTok Shop and Shopee sellers in Vietnam: sales, marketing, inventory, suppliers, finance, tax, reports and an AI assistant in one app.
 
-## Quy tắc cố định
+## Fixed rules
 
-- Chỉ Admin được sửa hoặc nhập dữ liệu; User chỉ xem.
-- Tab Thuế luôn ẩn với User.
-- System Admin không tự động có quyền xem tài chính hay thuế.
-- App không tính thuế, chỉ quản lý thông tin.
+- Only the Admin can edit or enter data; Users are view-only.
+- The Tax tab is always hidden from Users.
+- The System Admin does not automatically get access to finance or tax data.
+- The app does not calculate tax; it only manages tax information.
 
 ## Build Plan
 
-136 ticket chia 9 milestone (M1–M9), song ngữ VI/EN, sáng/tối, kèm phần kiến trúc và tech stack.
+136 tickets across 9 milestones (M1–M9), with a Vietnamese/English toggle (English by default), light and dark themes, and an architecture and tech stack section.
 
-- Trong repo: [`.artifacts/toptop-build-plan.html`](.artifacts/toptop-build-plan.html) (mở bằng trình duyệt)
-- Bản online: https://claude.ai/artifact/YRix9AvmjDcds8r2FmyyuY
+- In this repo: [`.artifacts/toptop-build-plan.html`](.artifacts/toptop-build-plan.html) (open it in a browser)
+- Online version: https://claude.ai/artifact/YRix9AvmjDcds8r2FmyyuY
 
 ## Tech stack
 
-- Next.js trên Cloudflare Workers qua OpenNext (`@opennextjs/cloudflare`)
-- Tailwind CSS + shadcn/ui
-- Neon PostgreSQL (Singapore) + Drizzle ORM, kết nối qua Hyperdrive
-- Better Auth (Google sign-in, Organization plugin: mỗi Business là một organization, chứa nhiều shop)
-- Adapter chung cho TikTok Shop, Shopee và CSV; webhook qua Cloudflare Queues
-- Ask AI dùng Claude API (chỉ Admin, tool chỉ đọc, không đọc dữ liệu Thuế)
-- Test: Vitest + Testing Library, Playwright cho 4 luồng chính
+- Next.js on Cloudflare Workers through OpenNext (`@opennextjs/cloudflare`)
+- Tailwind CSS and shadcn/ui
+- Neon PostgreSQL (Singapore) with Drizzle ORM, connected through Hyperdrive
+- Better Auth (Google sign-in, Organization plugin: each Business is an organization that holds many shops)
+- One adapter shape for TikTok Shop, Shopee and CSV; webhooks through Cloudflare Queues
+- Ask AI uses the Claude API (Admin only, read-only tools, cannot read Tax data)
+- Tests: Vitest and Testing Library (tests first), Playwright for 4 flows, and API-level permission-matrix tests for role scenarios
