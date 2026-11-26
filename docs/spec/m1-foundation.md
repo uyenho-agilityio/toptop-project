@@ -7,13 +7,18 @@
 
 | ID | Question | Why it matters | Tickets |
 | --- | --- | --- | --- |
-| Q-FND-1 | T-01 lists Business, shops, permissions, taxpayer profile, platform connections and seller type, but not orders, products, costs or ad spend. Does the ER diagram include the normalized commerce records (Brief 7), or does each later milestone add its own tables? | The metrics engine (T-25) needs an input shape, and T-25 depends only on T-01. | T-01, T-25 |
 | Q-FND-2 | How is "every query filters by Business" enforced: a shared query helper in code, Postgres row-level security, or both? | The Plan states the rule and a test, not the mechanism. The choice changes how T-02 is built and tested. | T-02 |
 | Q-FND-3 | Migrations: which tool runs them and how are they managed? | The Plan marks this "Not decided yet" (Data model section). The first schema ships in this milestone. | T-01 |
 | Q-FND-4 | Money display: T-05 says "VND with separators". The Prototype shows compact amounts on cards ("1,2 triệu", "1.2M ₫", "tỷ"/"B") and full amounts elsewhere. Which format applies where? | One shared helper has to cover both. | T-05, T-07 |
 | Q-FND-5 | Time zone: T-05 says "Vietnam time", while Brief 6.1 makes time zone a Business setting. Is Vietnam time fixed for the whole app in M1? | Period boundaries (T-21) depend on it. | T-05, T-21 |
 | Q-FND-6 | The Plan puts the AI Assistant in the sidebar (T-06). Brief 9 and the Prototype put it behind one shared button in the header. In M1, where does the AI entry appear, and does it exist at all before M7? | Layout of the shell. | T-06 |
 | Q-FND-7 | The eight module screens do not exist until M3 to M7. What does a menu item open in M1: a placeholder page, or is the item hidden until its module ships? | T-06 AC "Sidebar with 8 modules". | T-06 |
+
+## Resolved questions
+
+| ID | Answer | Date |
+| --- | --- | --- |
+| Q-FND-1 | **No.** M1 does not add orders or cost tables and does not process cost or profit. M4 adds them. T-01 stays as written in the Build Plan. | 2026-11-26, product owner |
 
 ## Sources
 
@@ -25,6 +30,7 @@
 
 ### Data model (T-01)
 
+- **No orders or cost tables in M1.** Cost and profit are processed from M4 on (Build Plan, tickets T-26 to T-28). M4 adds the orders and cost tables then. The M1 model only has to stay open to that: a later milestone can add tables without restructuring Business, shop, permission or source records.
 - A Business holds one or more shops. Each Business is one Better Auth organization (Plan, Decisions, 2026-11-26).
 - An account can later belong to several Businesses, with a different role in each. M1 only needs the structure to allow it (Brief 2.5).
 - Permissions are rows of (user, module, level). Only View and No Access are offered now. More levels and roles must be addable without a structural change (Brief 2.5).
@@ -58,7 +64,7 @@
 ### App shell and menu (T-06)
 
 - Sidebar: Business selector, the eight modules in this order: Overview, Sales, Marketing, Inventory, Supplier, Finance, Tax, Reports; then Settings, then the user profile (Brief 9).
-- A User sees only the modules granted, never the Tax tab (Brief 9, Brief 2.3). An Admin also sees Settings. The Prototype hides Settings from Users and from the System Admin.
+- A User sees only the modules granted, never the Tax tab (Brief 9, Brief 2.3). An Admin also sees Settings. The AI Assistant entry is shown to Admins only (Ask AI is Admin only, see `m1-auth-permissions.md`). The Prototype hides Settings from Users and from the System Admin.
 - The System Admin does not see the Business workspace shell. They see the separate System Console (see `m1-system-admin.md`).
 - Header: page title, Business and shop context, the shared period filter (see `m1-period-filter.md`), and quick actions.
 - Tablet and phone: the menu becomes a drawer. The Prototype's breakpoints are 560, 900 and 1100 px wide.
@@ -81,7 +87,7 @@
 
 ## Acceptance criteria
 
-- [ ] The ER diagram covers Business, shops, per-user per-module permissions, taxpayer profile, platform connection, seller type list and record source, and is approved.
+- [ ] The ER diagram covers Business, shops, per-user per-module permissions, taxpayer profile, platform connection, seller type list, record source, and is approved.
 - [ ] A query without a Business scope is rejected, and the test "Admin of Business A cannot read Business B data" passes.
 - [ ] A record shows its source label in a table and in a detail view.
 - [ ] The shared component shows "not available yet" for missing data and 0 for a real zero, in a card, a table and a chart.
@@ -93,3 +99,4 @@
 
 - The data change log (T-08, M2) and per-shop filters (M2).
 - Real module screens behind the menu items.
+- Orders and cost tables (M4).

@@ -7,9 +7,8 @@
 
 | ID | Question | Why it matters | Tickets |
 | --- | --- | --- | --- |
-| Q-SYS-1 | When the configured System Admin email signs in for the first time, does it become System Admin directly (no Pending step)? What happens when the configured email changes: does the previous person lose access? | First-run setup and security. | T-122 |
-| Q-SYS-2 | **Reject.** T-123 says "approve or reject", but neither the Brief nor the Prototype defines rejection. What does a rejected account see, can it register again, and is the reason recorded? | Behavior and data for a rejected status. | T-123 |
-| Q-SYS-3 | Approval and Business creation: Brief 2.4 lists them as separate steps and the Plan has separate tickets (T-123, T-124), while the Prototype does both in one dialog ("Approve and assign as Admin": new or existing Business). Which flow? Can a person be approved but not yet assigned, and what do they see? | Flow and screens. | T-123, T-124 |
+| Q-SYS-1 | **Open, for the product owner to choose.** Sign-in is invite-only, so nobody can invite the very first System Admin. How do they get in? Options (the spec does not choose):<br>**(a) Email in server configuration.** One email is set as an environment variable. When that Google account signs in, it becomes System Admin. Simple, matches Brief 2.1 and Plan Roles ("email set in server configuration"). To change the System Admin you change the config and redeploy. Anyone who controls that Google account has full platform control, so it should be a protected account.<br>**(b) One-time setup script.** A developer runs a script once that creates the System Admin record for a given email. No special-case sign-in code, and the email is not left in config. It needs a developer to run it, and an extra step per environment.<br>**(c) First sign-in on an empty database.** Whoever signs in first becomes System Admin. No setup at all, but a stranger who finds a fresh deployment first takes it over. Not recommended.<br>Whichever is chosen, also decide what happens when the System Admin changes (does the old one lose access at once?). | First-run setup and security. | T-122 |
+| Q-SYS-3 | With no Pending list, what does T-123 "Review registrations" become? Options to decide: drop it, or keep a list of blocked sign-in attempts the System Admin can act on by sending an invitation. | T-123 has no purpose as written. | T-123, T-124 |
 | Q-SYS-4 | The Prototype lets the System Admin assign a person to an existing Business as an Admin. Can a Business have more than one Admin? (Same as Q-AUTH-10.) | Roles and member management. | T-124 |
 | Q-SYS-5 | Status words differ: T-125 says "Lock, unlock, deactivate", Brief 8 says "Activate or suspend", the Prototype only toggles active and suspended. Which statuses exist for accounts and Businesses? | Data model and wording. | T-125 |
 | Q-SYS-6 | Log: Brief 8 says every System Admin action goes to an audit log, T-125 says "with a log", and the log viewer is in M7 (`syslog`). In M1, do we store the entries only? Which fields, and for how long? | What T-123 to T-125 must write. | T-123 to T-125 |
@@ -17,7 +16,7 @@
 
 ## Sources
 
-- Brief 2.1 (System Admin), 2.4 (Registration and onboarding), 8 (System Console), 11 (Acceptance criteria).
+- Brief 2.1 (System Admin), 2.4 (Registration and onboarding; the Pending step in it is replaced by the invite-only rule), 8 (System Console), 11 (Acceptance criteria).
 - Prototype: `PAGES.console`, `ACT['u-appr']`, `ACT['u-appr-go']`, `ACT['b-add']`, `ACT['b-add-go']`, `ACT['u-sus']`, `ACT['b-sus']`, `ACT['b-mem']`, `ACT['u-det']`, `SYS_LOG`, `pendingView()`.
 - Plan: Fixed product rules, Roles and permissions (System Admin row), Decisions (Organization), Architecture ("Inviting Business owners").
 
@@ -25,20 +24,19 @@
 
 ### A single System Admin (T-122)
 
-- There is exactly one System Admin. Their email is set in server configuration (Brief 2.1; Plan, Roles).
+- There is exactly one System Admin (Brief 2.1; Plan, Roles). Plan Roles says their email is set in server configuration; how the first one gets in is open (Q-SYS-1).
 - There is no screen to create another. The role cannot be granted through any API.
 - The System Admin lands in the System Console, a separate interface from the Business workspace (Brief 8, Brief 9).
 
-### Review registrations (T-123)
+### Review registrations (T-123, blocked by Q-SYS-3)
 
-- The console lists accounts with status Pending: name, email, request date.
-- The System Admin can approve or reject each one. Approving leads to Business assignment (T-124). See Q-SYS-2 and Q-SYS-3.
-- Approving, rejecting and assigning each write a log entry.
+- The Build Plan describes a list of Pending accounts with approve and reject. Sign-in is now invite-only (Q-AUTH-1), so there are no Pending accounts. What this ticket delivers is open (Q-SYS-3). Do not build it until that is answered.
+- Whatever it becomes, each action writes a log entry.
 
 ### Create a Business and assign an Admin (T-124)
 
-- The System Admin creates a new Business and assigns an approved person as its Admin (Brief 2.4). The person becomes the Business's Admin with access to all modules.
-- The Prototype offers a new Business (name required) or an existing one, and in the Business dialog lists only users who do not belong to a Business yet.
+- The System Admin creates a new Business and invites a person as its Admin (Plan Architecture: the System Admin sends the owner an invite link). The invited Admin gets **all modules** (Q-AUTH-2, resolved).
+- The Prototype offers a new Business (name required) or an existing one, and in the Business dialog lists only users who do not belong to a Business yet. With invite-only sign-in the person is chosen by email, not from a list of registered users.
 - A Business is one Better Auth organization (Plan, Decisions). It starts active and with no data.
 - The System Admin can view a Business's member list (name, role, modules). That is account information, not business data (Prototype `ACT['b-mem']`, Brief 8).
 
@@ -51,7 +49,7 @@
 ## Edge cases
 
 - The configured email is missing or invalid at startup: no System Admin exists; the app must still start and show no console to anyone, and log a clear configuration error. (Proposed)
-- Approving an account that is no longer Pending (another tab already handled it): the action fails with a clear message, not a duplicate assignment. (Proposed)
+- Inviting the same email twice: the second request fails with a clear message, not a duplicate. (Proposed)
 - Creating a Business with an empty or duplicate name: validation error. (Prototype requires a name; duplicate rule is Proposed)
 - Suspending the account of a Business's only Admin: allowed, and the Business keeps its other members. (Proposed)
 - The System Admin cannot suspend their own account. (Proposed)
@@ -60,10 +58,10 @@
 ## Acceptance criteria
 
 - [ ] Only the configured email can be System Admin; no screen or API creates another.
-- [ ] The Console lists Pending accounts and lets the System Admin approve them; rejection works as decided in Q-SYS-2.
-- [ ] The System Admin can create a Business and assign an approved person as its Admin; that person lands in the Business with every module.
+- [ ] The Console covers registrations as decided in Q-SYS-3.
+- [ ] The System Admin can create a Business and invite a person as its Admin; that person lands in the Business with every module.
 - [ ] The System Admin can lock, unlock or deactivate accounts and Businesses; affected users are blocked on their next request.
-- [ ] Every approval, rejection, assignment and status change is logged with who, what and when.
+- [ ] Every invitation, assignment and status change (and any approval or rejection that Q-SYS-3 keeps) is logged with who, what and when.
 - [ ] The System Admin cannot reach any Business's Finance or Tax data (also covered by T-17).
 
 ## Out of scope for M1
