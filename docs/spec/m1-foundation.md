@@ -68,7 +68,7 @@
 
 - Parts: label, value, sub line, change versus previous period, one-line explanation (Brief, Module 01).
 - States: normal, and "not available yet" (T-04). A negative profit value uses a negative style.
-- A card links to its module. If the user cannot open that module, the card is not rendered at all (Brief, Module 01: "hidden when the user ...").
+- A card links to its module. If the user cannot open that module, the card is not rendered at all (Brief, Module 01).
 - The change line takes its value and format from the metrics engine (see `m1-metrics-engine.md`). The component does not compute anything.
 
 ## Edge cases
@@ -91,5 +91,5 @@
 
 ## Out of scope for M1
 
-- The data change log (T-xx `audit`, M2) and per-shop filters (M2).
+- The data change log (T-08, M2) and per-shop filters (M2).
 - Real module screens behind the menu items.
