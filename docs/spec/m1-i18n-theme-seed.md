@@ -38,8 +38,48 @@
 ### Light and dark themes (T-130)
 
 - By default the theme follows the system setting. A manual toggle overrides it and is remembered (Prototype `ACT.theme`).
-- Every color is a token with a light and a dark value, including the chart series colors the Prototype names `--c1` to `--c5`. Every chart must stay readable in both themes. No chart ships in M1, so M1 delivers the tokens and a readability check that later chart tickets reuse.
+- Every color is a token with a light and a dark value, including the chart series colors `--chart-1` to `--chart-5` (the Prototype's `--c1` to `--c5`). Every chart must stay readable in both themes. No chart ships in M1, so M1 delivers the tokens and a readability check that later chart tickets reuse.
+- The MVP has two themes only: light and dark. There is no color picker and no extra color theme. The theme choice stays in `localStorage` (Q-I18N-2, Q-THEME-1).
+- The tokens are semantic (named by meaning, not by color) and are defined once, in `src/themes/globals.css` (`@theme`), by T-06. T-130 adds the toggle and the readability check on top of them. No file outside `globals.css` hard-codes a color. Orange is only the value of `primary`, so a later color theme is one more block of token values, with no component change.
 - The login screen and the blocked screen also follow the theme and language (Prototype `put()` shows the toggles there).
+
+#### Color tokens
+
+The light theme follows the approved reference screen: an orange primary color, a light peach page behind the app, white cards with large rounded corners and a soft shadow, and green, amber and red status labels. **All values are approximate**, estimated from the reference image; T-06 may adjust them to pass the readability check, but keeps the names and meanings.
+
+| Token | Meaning | Light (approx.) | Dark (approx.) |
+| --- | --- | --- | --- |
+| `--primary` | Main action color: primary buttons, active menu item, selected state | `#FF5A1F` | `#FF7A45` |
+| `--primary-foreground` | Text and icons on `primary` | `#FFFFFF` | `#1A120C` |
+| `--ring` | Focus ring | `#FF5A1F` | `#FF7A45` |
+| `--page` | Outer page background, behind the shell | `#FDEDE4` (light peach) | `#140E0A` |
+| `--background` | App content background | `#FFF8F3` (light cream) | `#1A120C` |
+| `--surface` | Cards, panels, popovers | `#FFFFFF` | `#241913` |
+| `--border` | Card and input borders, dividers | `#F1E6DE` (very light) | `#3D2C1F` |
+| `--foreground` | Main text | `#1F1A17` | `#F5EBE0` |
+| `--muted-foreground` | Secondary text, labels, hints | `#756A63` | `#C2A58C` |
+| `--success` | Positive status text and icons (In Stock, Active) | `#15803D` | `#56C98B` |
+| `--success-soft` | Background of a success label | `#E7F7EE` | `#173826` |
+| `--warning` | Warning status text and icons (Low Stock) | `#B45309` | `#F0A947` |
+| `--warning-soft` | Background of a warning label | `#FEF3E2` | `#3A2C12` |
+| `--danger` | Error status text and icons (Out of Stock) | `#B91C1C` | `#FF8A80` |
+| `--danger-soft` | Background of a danger label | `#FDE8E8` | `#3A1A18` |
+| `--chart-1` | Chart series 1 | `#FF5A1F` | `#FF7A45` |
+| `--chart-2` | Chart series 2 | `#2F7F86` | `#5CC0C8` |
+| `--chart-3` | Chart series 3 | `#8B4F8F` | `#D08AD4` |
+| `--chart-4` | Chart series 4 | `#7A8A2E` | `#B5C65A` |
+| `--chart-5` | Chart series 5 | `#4D607A` | `#8FA6C4` |
+
+Shape tokens, the same in both themes:
+
+| Token | Meaning | Value (approx.) |
+| --- | --- | --- |
+| `--radius-card` | Corner radius of cards and panels | `16px` |
+| `--shadow-card` | Soft card shadow | `0 4px 16px rgb(0 0 0 / 0.06)` in light; near zero in dark, where the border carries the edge |
+
+- A status label uses its color on its `-soft` background (for example `text-warning bg-warning-soft` for Low Stock). Text on `primary` is always `primary-foreground`.
+- Readability: the text tokens above reach at least 4.5:1 on their background. White on the light `primary` is about 3.1:1, enough for button labels (bold or large text, 3:1) but not for small body text, so `primary` is not used as a small text color on light backgrounds. In dark, white on the lighter orange is too faint, so `primary-foreground` is dark ink there.
+- Chart series 2 to 5 keep the Prototype's hues; series 1 uses the primary orange.
 
 ### Sample data and test accounts (T-134)
 
@@ -64,7 +104,7 @@
 - [ ] The app opens in English by default, and the whole app can be used in Vietnamese and in English, with no hard-coded text, and the language can be switched at any time.
 - [ ] Dates, numbers and money follow the language.
 - [ ] The theme follows the system by default, has a manual toggle, and the choice is remembered.
-- [ ] Every color token has a light and a dark value and passes a readability check in both themes.
+- [ ] Every color token in "Color tokens" has a light and a dark value, is defined only in `src/themes/globals.css`, and passes a readability check in both themes; no other file hard-codes a color.
 - [ ] The seed creates the sample accounts, Businesses and shops listed above, with the module grants shown, and can be re-run safely.
 - [ ] A dev-only account picker lets tests and demos sign in as each sample account, and it is disabled in production (Q-SEED-3).
 
