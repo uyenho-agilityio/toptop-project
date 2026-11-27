@@ -1,2 +1,2 @@
-export const LOCALES = ['en', 'vi'] as const;
-export const DEFAULT_LOCALE = 'en';
+export * from './locale';
+export * from './time';
