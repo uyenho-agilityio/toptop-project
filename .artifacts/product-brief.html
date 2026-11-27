@@ -111,26 +111,26 @@ tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spac
 <p class="vi">Nền tảng có ba vai trò.</p>
 <h3 class="en">2.1 System Admin</h3>
 <h3 class="vi">2.1 System Admin</h3>
-<p class="en">Manages the whole SaaS platform through a separate System Console (section 8): reviews registrations, creates Business workspaces, assigns Business Admins, manages the status of accounts and Businesses, and monitors operations and technical issues. There is exactly one System Admin in this version, fixed by server configuration. The System Admin has no automatic access to a Business's financial or tax information.</p>
-<p class="vi">Quản lý toàn bộ nền tảng SaaS qua System Console riêng (mục 8): duyệt đăng ký, tạo không gian làm việc Business, gán Admin cho Business, quản lý trạng thái tài khoản và Business, và theo dõi vận hành cùng lỗi kỹ thuật. Ở phiên bản này chỉ có đúng một System Admin, do cấu hình máy chủ quy định. System Admin không tự động được xem thông tin tài chính hay thuế của Business.</p>
+<p class="en">Manages the whole SaaS platform through a separate System Console (section 8): creates Business workspaces, invites Business Admins, manages the status of accounts and Businesses, and monitors operations and technical issues. There is exactly one System Admin in this version. The first System Admin is set by an email in the server configuration; if that email is changed, the previous person loses access at once. The System Admin has no automatic access to a Business's financial or tax information.</p>
+<p class="vi">Quản lý toàn bộ nền tảng SaaS qua System Console riêng (mục 8): tạo không gian làm việc Business, mời Admin cho Business, quản lý trạng thái tài khoản và Business, và theo dõi vận hành cùng lỗi kỹ thuật. Ở phiên bản này chỉ có đúng một System Admin. System Admin đầu tiên được đặt bằng một email trong cấu hình máy chủ; đổi email thì người cũ mất quyền ngay. System Admin không tự động được xem thông tin tài chính hay thuế của Business.</p>
 <h3 class="en">2.2 Admin</h3>
 <h3 class="vi">2.2 Admin</h3>
 <p class="en">The Business owner. Admin has full access to their Business and is the only role that edits or enters data. Responsibilities:</p>
 <p class="vi">Chủ Business. Admin có toàn quyền trong Business của mình và là vai trò duy nhất được sửa hoặc nhập dữ liệu. Trách nhiệm:</p>
-<ul class="en"><li>Manage Business information, shops and platform connections.</li><li>Access every module, including Finance and Tax.</li><li>Enter and edit business records: expenses, other income and expenses, products and costs, purchases and payments, tax records; import data.</li><li>Invite Users, grant or revoke access per module, and remove Users.</li><li>Manage integrations and reports.</li></ul>
-<ul class="vi"><li>Quản lý thông tin Business, các shop và kết nối nền tảng.</li><li>Truy cập mọi module, kể cả Tài chính và Thuế.</li><li>Nhập và sửa dữ liệu kinh doanh: chi phí, thu chi khác, sản phẩm và giá vốn, phiếu nhập và thanh toán, hồ sơ thuế; nhập file dữ liệu.</li><li>Mời User, cấp hoặc thu hồi quyền theo module và gỡ User.</li><li>Quản lý tích hợp và báo cáo.</li></ul>
+<ul class="en"><li>Manage Business information, shops and platform connections.</li><li>Access every module, including Finance and Tax.</li><li>Enter and edit business records: expenses, other income and expenses, products and costs, purchases and payments, tax records; import data.</li><li>Invite Users, grant or revoke access per module, and remove Users.</li><li>Manage integrations and reports.</li><li>Use the AI Assistant (only the Admin can).</li></ul>
+<ul class="vi"><li>Quản lý thông tin Business, các shop và kết nối nền tảng.</li><li>Truy cập mọi module, kể cả Tài chính và Thuế.</li><li>Nhập và sửa dữ liệu kinh doanh: chi phí, thu chi khác, sản phẩm và giá vốn, phiếu nhập và thanh toán, hồ sơ thuế; nhập file dữ liệu.</li><li>Mời User, cấp hoặc thu hồi quyền theo module và gỡ User.</li><li>Quản lý tích hợp và báo cáo.</li><li>Dùng Trợ lý AI (chỉ Admin được dùng).</li></ul>
 <h3 class="en">2.3 User</h3>
 <h3 class="vi">2.3 User</h3>
 <p class="en">An employee or manager the Admin invites. A User can only view; the Admin decides which modules a User may open, and a User sees exactly what the module shows. Rules:</p>
 <p class="vi">Nhân viên hoặc quản lý do Admin mời. User chỉ được xem; Admin quyết định User được mở module nào, và User thấy đúng những gì module đó hiển thị. Quy tắc:</p>
-<ul class="en"><li>No module access by default; the Admin grants access one module at a time.</li><li>View only: a User checks, compares and tells the Admin about problems. A User cannot edit or import data.</li><li>Cannot manage members or change permissions.</li><li>The Tax tab is never visible to a User: it is hidden by default and cannot be granted, whatever the other permissions.</li><li>Can open Finance only when the Admin grants it.</li><li>Can use the AI Assistant, reports and exports only with the data of the modules granted.</li></ul>
-<ul class="vi"><li>Mặc định không có module nào; Admin cấp từng module một.</li><li>Chỉ xem: User xem, đối chiếu, kiểm tra và báo lại cho Admin. User không sửa hay nhập dữ liệu.</li><li>Không quản lý thành viên và không đổi quyền.</li><li>Tab Thuế không bao giờ hiện với User: mặc định luôn ẩn và không thể cấp, dù có quyền nào khác.</li><li>Chỉ mở được Tài chính khi Admin cấp.</li><li>Chỉ dùng trợ lý AI, báo cáo và xuất dữ liệu với dữ liệu của các module được cấp.</li></ul>
+<ul class="en"><li>A new User starts with no module access; the Admin grants access one module at a time.</li><li>View only: a User checks, compares and tells the Admin about problems. A User cannot edit or import data.</li><li>Cannot manage members or change permissions.</li><li>The Tax tab is never visible to a User: it is hidden by default and cannot be granted, whatever the other permissions.</li><li>Can open Finance only when the Admin grants it.</li><li>Can use reports and exports only with the data of the modules granted.</li><li>Cannot use the AI Assistant: it is not shown to Users.</li></ul>
+<ul class="vi"><li>User mới chưa có module nào; Admin cấp từng module một.</li><li>Chỉ xem: User xem, đối chiếu, kiểm tra và báo lại cho Admin. User không sửa hay nhập dữ liệu.</li><li>Không quản lý thành viên và không đổi quyền.</li><li>Tab Thuế không bao giờ hiện với User: mặc định luôn ẩn và không thể cấp, dù có quyền nào khác.</li><li>Chỉ mở được Tài chính khi Admin cấp.</li><li>Chỉ dùng báo cáo và xuất dữ liệu với dữ liệu của các module được cấp.</li><li>Không dùng được Trợ lý AI: tính năng này không hiện với User.</li></ul>
 <p class="en note">Permission model (MVP): one level per module, View or No Access. The Admin has full access. Importing data and changing business records are Admin-only.</p>
 <p class="vi note">Mô hình phân quyền (MVP): mỗi module một mức, Xem hoặc Không có quyền. Admin có toàn quyền. Nhập dữ liệu và sửa dữ liệu kinh doanh chỉ dành cho Admin.</p>
-<h3 class="en">2.4 Registration and onboarding</h3>
-<h3 class="vi">2.4 Đăng ký và tiếp nhận</h3>
-<ol class="en"><li>A person registers through the app (Google sign-in).</li><li>The new account has the status Pending.</li><li>The System Admin reviews the registration.</li><li>The System Admin creates or selects a Business.</li><li>The System Admin assigns the person as the Business Admin.</li><li>The Admin invites additional Users.</li><li>The Admin grants module access to each User.</li></ol>
-<ol class="vi"><li>Người dùng đăng ký trong app (đăng nhập Google).</li><li>Tài khoản mới ở trạng thái Chờ duyệt.</li><li>System Admin xem xét đăng ký.</li><li>System Admin tạo hoặc chọn một Business.</li><li>System Admin gán người đó làm Admin của Business.</li><li>Admin mời thêm User.</li><li>Admin cấp quyền module cho từng User.</li></ol>
+<h3 class="en">2.4 Sign-in and onboarding (by invitation only)</h3>
+<h3 class="vi">2.4 Đăng nhập và tiếp nhận (chỉ bằng lời mời)</h3>
+<ol class="en"><li>The System Admin creates a Business and sends an invitation to the person who will be its Admin. Each Business has one Admin.</li><li>The person opens the invitation link and signs in with Google. An invited Admin gets every module.</li><li>The Admin invites additional Users in the same way. A new User has no module until the Admin grants one.</li><li>An invitation is single-use and expires after 7 days.</li><li>Someone who signs in with Google without an invitation sees a notice: no access yet, contact your Admin. There is no sign-up and no pending-approval step.</li></ol>
+<ol class="vi"><li>System Admin tạo một Business và gửi lời mời cho người sẽ làm Admin của Business đó. Mỗi Business có một Admin.</li><li>Người đó mở link lời mời và đăng nhập bằng Google. Admin được mời có đủ module.</li><li>Admin mời thêm User theo cách tương tự. User mới chưa có module nào cho đến khi Admin cấp.</li><li>Lời mời dùng một lần và hết hạn sau 7 ngày.</li><li>Người đăng nhập Google mà chưa có lời mời thấy thông báo: chưa có quyền truy cập, liên hệ Admin. Không có đăng ký và không có bước chờ duyệt.</li></ol>
 <h3 class="en">2.5 Designed to grow</h3>
 <h3 class="vi">2.5 Thiết kế để mở rộng</h3>
 <p class="en">Features can grow later, so the data is designed to grow with them from the start:</p>
@@ -274,8 +274,8 @@ tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spac
 </section>
 <section class="panel" id="s5">
 <h2><span class="en">5. AI Assistant</span><span class="vi">5. Trợ lý AI</span></h2>
-<p class="en"><strong>Purpose:</strong> help users understand business data, identify problems and receive recommendations they can act on. The AI Assistant is available throughout the app through one shared button.</p>
-<p class="vi"><strong>Mục đích:</strong> giúp người dùng hiểu dữ liệu kinh doanh, nhận ra vấn đề và nhận các đề xuất có thể hành động. Trợ lý AI có mặt trong toàn app qua một nút dùng chung.</p>
+<p class="en"><strong>Purpose:</strong> help the Admin understand business data, identify problems and receive recommendations they can act on. The AI Assistant is available to the Admin only, throughout the app through one shared button.</p>
+<p class="vi"><strong>Mục đích:</strong> giúp Admin hiểu dữ liệu kinh doanh, nhận ra vấn đề và nhận các đề xuất có thể hành động. Trợ lý AI chỉ dành cho Admin, có mặt trong toàn app qua một nút dùng chung.</p>
 <h3 class="en">5.1 Business Q&amp;A</h3>
 <h3 class="vi">5.1 Hỏi đáp kinh doanh</h3>
 <p class="en">Users ask in natural language, for example:</p>
@@ -292,8 +292,8 @@ tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spac
 <p class="vi">AI giải thích thông tin kinh doanh liên quan và gợi ý các bước tiếp theo. Mỗi câu trả lời có số liệu liên quan, khoảng ngày và ngữ cảnh dữ liệu, và tách rõ điều đã xác nhận với lời giải thích có thể xảy ra. Mọi con số đến từ phép tính của chính app; AI chỉ giải thích. Mỗi Business có hạn mức câu hỏi mỗi ngày.</p>
 <h3 class="en">5.4 Permission control</h3>
 <h3 class="vi">5.4 Kiểm soát quyền</h3>
-<p class="en">The AI can only use information the current user is allowed to view. A User with Marketing access can ask about campaign performance; a User without Finance access cannot ask about financial details; nobody but the Admin can ask about Tax; the Admin can ask about every module. The AI provides analysis and recommendations only; it does not run business operations by itself.</p>
-<p class="vi">AI chỉ dùng thông tin mà người dùng hiện tại được phép xem. User có quyền Marketing hỏi được về hiệu quả campaign; User không có quyền Tài chính không hỏi được về chi tiết tài chính; chỉ Admin hỏi được về Thuế; Admin hỏi được mọi module. AI chỉ phân tích và đề xuất; AI không tự chạy nghiệp vụ.</p>
+<p class="en">Only the Admin can use the AI Assistant; Users do not see it and cannot ask. The AI can only use information of the Business the Admin has selected. The AI provides analysis and recommendations only; it does not run business operations by itself.</p>
+<p class="vi">Chỉ Admin dùng được Trợ lý AI; User không thấy và không hỏi được. AI chỉ dùng thông tin của Business mà Admin đang chọn. AI chỉ phân tích và đề xuất; AI không tự chạy nghiệp vụ.</p>
 </section>
 <section class="panel" id="s6">
 <h2><span class="en">6. Settings and integrations</span><span class="vi">6. Cài đặt và tích hợp</span></h2>
@@ -339,12 +339,12 @@ tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spac
 <p class="vi">System Admin dùng một giao diện quản trị riêng.</p>
 <h3 class="en">System dashboard</h3>
 <h3 class="vi">Bảng điều khiển hệ thống</h3>
-<ul class="en"><li>Total users and pending accounts.</li><li>Active Businesses.</li><li>Recent system activity.</li><li>Platform status.</li></ul>
-<ul class="vi"><li>Tổng số người dùng và tài khoản chờ duyệt.</li><li>Các Business đang hoạt động.</li><li>Hoạt động hệ thống gần đây.</li><li>Trạng thái nền tảng.</li></ul>
+<ul class="en"><li>Total users and pending invitations.</li><li>Active Businesses.</li><li>Recent system activity.</li><li>Platform status.</li></ul>
+<ul class="vi"><li>Tổng số người dùng và lời mời đang chờ.</li><li>Các Business đang hoạt động.</li><li>Hoạt động hệ thống gần đây.</li><li>Trạng thái nền tảng.</li></ul>
 <h3 class="en">User management</h3>
 <h3 class="vi">Quản lý người dùng</h3>
-<ul class="en"><li>View users and account details.</li><li>Approve accounts.</li><li>Activate or suspend accounts.</li><li>Assign a Business Admin.</li></ul>
-<ul class="vi"><li>Xem người dùng và chi tiết tài khoản.</li><li>Duyệt tài khoản.</li><li>Kích hoạt hoặc tạm khóa tài khoản.</li><li>Gán Admin cho Business.</li></ul>
+<ul class="en"><li>View users and account details.</li><li>Activate or suspend accounts.</li><li>Create a Business and invite its Admin.</li></ul>
+<ul class="vi"><li>Xem người dùng và chi tiết tài khoản.</li><li>Kích hoạt hoặc tạm khóa tài khoản.</li><li>Tạo Business và mời Admin cho Business.</li></ul>
 <h3 class="en">Business management</h3>
 <h3 class="vi">Quản lý Business</h3>
 <ul class="en"><li>Create and view Businesses.</li><li>Assign an Admin.</li><li>Activate or suspend a Business.</li><li>View a Business's membership.</li></ul>
@@ -379,8 +379,8 @@ tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spac
 <ul class="vi"><li>System Console cho System Admin.</li><li>Không gian làm việc Business.</li><li>Vai trò Admin và User với quyền Xem theo module.</li><li>Tổng quan, Bán hàng, Marketing, Tồn kho, Nhà cung cấp, Tài chính, Thuế và Báo cáo.</li><li>Giao diện Trợ lý AI.</li><li>Giao diện Cài đặt và Tích hợp.</li></ul>
 <h3 class="en">Can be mocked in the initial prototype</h3>
 <h3 class="vi">Có thể làm giả lập trong prototype ban đầu</h3>
-<ul class="en"><li>Authentication and account approval.</li><li>External platform connections and data synchronisation.</li><li>AI responses.</li><li>Report generation.</li><li>The Telegram connection.</li></ul>
-<ul class="vi"><li>Đăng nhập và duyệt tài khoản.</li><li>Kết nối với sàn bên ngoài và đồng bộ dữ liệu.</li><li>Câu trả lời của AI.</li><li>Việc tạo báo cáo.</li><li>Kết nối Telegram.</li></ul>
+<ul class="en"><li>Authentication and invitations.</li><li>External platform connections and data synchronisation.</li><li>AI responses.</li><li>Report generation.</li><li>The Telegram connection.</li></ul>
+<ul class="vi"><li>Đăng nhập và lời mời.</li><li>Kết nối với sàn bên ngoài và đồng bộ dữ liệu.</li><li>Câu trả lời của AI.</li><li>Việc tạo báo cáo.</li><li>Kết nối Telegram.</li></ul>
 <p class="en note">The prototype uses realistic, consistent sample data across all modules.</p>
 <p class="vi note">Prototype dùng dữ liệu mẫu thực tế và nhất quán trên mọi module.</p>
 <h3 class="en">Out of scope</h3>
@@ -392,8 +392,8 @@ tr.grp th{background:var(--chip);color:var(--fg);text-transform:none;letter-spac
 <h2><span class="en">11. Acceptance criteria</span><span class="vi">11. Tiêu chí nghiệm thu</span></h2>
 <p class="en">Accepted when it shows that:</p>
 <p class="vi">Được nghiệm thu khi chứng minh được rằng:</p>
-<ol class="en"><li>A System Admin can approve a registration, create a Business and assign its Admin.</li><li>An Admin can open every module of the Business and manage members.</li><li>An Admin can grant a User View access to individual modules.</li><li>A User can open only the modules granted.</li><li>The Tax tab is hidden from every User.</li><li>Finance information is restricted by permission.</li><li>The AI Assistant respects module permissions.</li><li>The dashboard adapts to the connected platforms.</li><li>A User can view business reports.</li><li>Reports stay independent of the Telegram integration.</li><li>Settings offers an integration management interface.</li><li>All modules use consistent and realistic mock data.</li></ol>
-<ol class="vi"><li>System Admin duyệt được một đăng ký, tạo Business và gán Admin cho Business đó.</li><li>Admin mở được mọi module của Business và quản lý được thành viên.</li><li>Admin cấp được cho User quyền Xem ở từng module.</li><li>User chỉ mở được các module đã được cấp.</li><li>Tab Thuế bị ẩn với mọi User.</li><li>Thông tin tài chính bị giới hạn theo quyền.</li><li>Trợ lý AI tuân theo quyền theo module.</li><li>Dashboard thích ứng với các sàn đã kết nối.</li><li>User xem được các báo cáo kinh doanh.</li><li>Báo cáo độc lập với tích hợp Telegram.</li><li>Cài đặt có giao diện quản lý tích hợp.</li><li>Mọi module dùng dữ liệu mẫu nhất quán và thực tế.</li></ol>
+<ol class="en"><li>A System Admin can create a Business and invite its Admin.</li><li>An Admin can open every module of the Business and manage members.</li><li>An Admin can grant a User View access to individual modules.</li><li>A User can open only the modules granted.</li><li>The Tax tab is hidden from every User.</li><li>Finance information is restricted by permission.</li><li>The AI Assistant is visible to the Admin only.</li><li>The dashboard adapts to the connected platforms.</li><li>A User can view business reports.</li><li>Reports stay independent of the Telegram integration.</li><li>Settings offers an integration management interface.</li><li>All modules use consistent and realistic mock data.</li></ol>
+<ol class="vi"><li>System Admin tạo được một Business và mời Admin cho Business đó.</li><li>Admin mở được mọi module của Business và quản lý được thành viên.</li><li>Admin cấp được cho User quyền Xem ở từng module.</li><li>User chỉ mở được các module đã được cấp.</li><li>Tab Thuế bị ẩn với mọi User.</li><li>Thông tin tài chính bị giới hạn theo quyền.</li><li>Trợ lý AI chỉ hiện với Admin.</li><li>Dashboard thích ứng với các sàn đã kết nối.</li><li>User xem được các báo cáo kinh doanh.</li><li>Báo cáo độc lập với tích hợp Telegram.</li><li>Cài đặt có giao diện quản lý tích hợp.</li><li>Mọi module dùng dữ liệu mẫu nhất quán và thực tế.</li></ol>
 </section>
 <section class="panel" id="s12">
 <h2><span class="en">Final product vision</span><span class="vi">Tầm nhìn cuối cùng của sản phẩm</span></h2>

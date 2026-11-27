@@ -189,7 +189,7 @@ const EPICS = [
  ['E13','Báo cáo và cảnh báo','Báo cáo ngày, tuần, tháng và 13 loại cảnh báo đột xuất do Admin cấu hình.'],
  ['E14','Trợ lý AI','Hỏi đáp trên dữ liệu, chỉ Admin dùng.'],
  ['E15','Cài đặt và Tích hợp','Thông tin Business, ngưỡng, thành viên và kênh thông báo.'],
- ['E16','System Console','Màn riêng cho System Admin: duyệt đăng ký, tạo Business, theo dõi vận hành.'],
+ ['E16','System Console','Màn riêng cho System Admin: tạo Business, mời Admin, theo dõi vận hành.'],
  ['E17','Chất lượng và phát hành','Đa ngôn ngữ, sáng tối, responsive, bảo mật, dữ liệu mẫu.']
 ];
 // [key, epic, title, acceptance (| separated), role, priority, size, deps (keys), open question]
@@ -200,16 +200,16 @@ const T = [
 ['source','E01','Lưu và hiện nguồn của mỗi bản ghi','Mỗi bản ghi có nguồn: API sàn, file nhập hoặc nhập tay|Hiện nhãn nguồn ở bảng và trang chi tiết','Hệ thống','P0','S','model',''],
 ['empty','E01','Quy ước “chưa có” thay cho số 0','Component dùng chung hiện “chưa có” khi dữ liệu chưa được nhập hoặc đồng bộ|Số 0 thật vẫn hiện là 0|Áp dụng cho thẻ, bảng và biểu đồ','Hệ thống','P0','S','',''],
 ['fmt','E01','Định dạng tiền, số, ngày','VND có dấu phân cách, ngày theo giờ Việt Nam|Một hàm dùng chung, đổi theo ngôn ngữ','Hệ thống','P0','S','',''],
-['shell','E01','Khung ứng dụng và menu','Sidebar 8 module, Trợ lý AI, Cài đặt|Menu ẩn module User không có quyền|Header có tên trang và bộ lọc|Tablet và điện thoại: menu dạng ngăn kéo','All','P0','M','model',''],
+['shell','E01','Khung ứng dụng và menu','Sidebar 8 module, Trợ lý AI (chỉ Admin thấy), Cài đặt|Menu ẩn module User không có quyền|Header có tên trang và bộ lọc|Tablet và điện thoại: menu dạng ngăn kéo','All','P0','M','model',''],
 ['kpi','E01','Component thẻ chỉ số','Gồm nhãn, giá trị, dòng phụ, thay đổi so với kỳ trước, câu giải thích|Hỗ trợ trạng thái “chưa có”|Bấm vào thẻ mở module liên quan','Hệ thống','P0','S','empty,fmt',''],
 ['audit','E01','Nhật ký thao tác dữ liệu','Ghi ai sửa gì, lúc nào cho mọi thao tác nhập và sửa của Admin|Admin xem được nhật ký','Admin','P1','M','model',''],
 // E02
-['login','E02','Đăng nhập bằng Google','Đăng nhập, đăng xuất, giữ phiên|Tài khoản mới được tạo với trạng thái Chờ duyệt','All','P0','M','model',''],
-['pending','E02','Màn hình chờ duyệt','Tài khoản Chờ duyệt chỉ thấy màn thông báo chờ System Admin|Chặn mọi API khác','All','P0','S','login',''],
-['invite','E02','Admin mời User qua email','Nhập email, chọn module được xem|Gửi lời mời, trạng thái Đã mời, thu hồi lời mời','Admin','P0','M','login',''],
+['login','E02','Đăng nhập bằng Google','Đăng nhập, đăng xuất, giữ phiên|Chỉ email được mời mới vào được; tài khoản Google không có lời mời bị chặn','All','P0','M','model',''],
+['pending','E02','Thông báo cho người chưa có quyền','Người chưa có lời mời (hoặc tài khoản bị khóa) bị chặn, không truy cập được dữ liệu|Hiện thông báo chưa có quyền truy cập, vui lòng liên hệ Admin|Chặn mọi API khác','All','P0','S','login',''],
+['invite','E02','Admin mời User qua email','Nhập email; người được mời thành User chưa có module nào|Tạo link mời để Admin sao chép và gửi (app không gửi email); trạng thái Đã mời; thu hồi lời mời|Link dùng một lần và hết hạn sau 7 ngày|Tài khoản Google nhận lời mời phải đúng email được mời','Admin','P0','M','login',''],
 ['accept','E02','User nhận lời mời và vào Business','Mở link, đăng nhập Google, vào đúng Business với quyền đã cấp','User','P0','S','invite',''],
-['perm','E02','Cấp quyền theo module','Mỗi User mỗi module một mức: Xem hoặc Không có quyền|Mặc định không có module nào|Đổi quyền có hiệu lực ngay','Admin','P0','M','invite',''],
-['enforce','E02','Chặn quyền ở cả giao diện và API','Route guard ở giao diện, kiểm tra quyền ở mọi API|Thẻ, biểu đồ, báo cáo, xuất file và AI chỉ dùng dữ liệu module được cấp','Hệ thống','P0','M','perm',''],
+['perm','E02','Cấp quyền theo module','Mỗi User mỗi module một mức: Xem hoặc Không có quyền|User mới chưa có module nào cho đến khi Admin gán; Admin được mời có tất cả module|Đổi quyền có hiệu lực ngay','Admin','P0','M','invite',''],
+['enforce','E02','Chặn quyền ở cả giao diện và API','Route guard ở giao diện, kiểm tra quyền ở mọi API|Thẻ, biểu đồ, báo cáo và xuất file chỉ dùng dữ liệu module được cấp|Ask AI chỉ Admin dùng: User không có Ask AI, API từ chối','Hệ thống','P0','M','perm',''],
 ['viewonly','E02','User chỉ xem, khóa mọi thao tác sửa','Ẩn hoặc khóa nút thêm, sửa, xóa, nhập file với User|API từ chối ghi dữ liệu từ User','User','P0','S','enforce',''],
 ['taxhide','E02','Tab Thuế luôn ẩn với User','Không hiện trong menu, không truy cập được bằng URL hay API|Không có tùy chọn cấp quyền Thuế','User','P0','S','enforce',''],
 ['sysnofin','E02','System Admin không tự xem tài chính và thuế','System Admin không có quyền đọc dữ liệu Tài chính, Thuế của Business|Có test tự động','System Admin','P0','S','enforce',''],
@@ -217,16 +217,16 @@ const T = [
 ['profile','E02','Hồ sơ cá nhân và đăng xuất','Xem tên, email, vai trò, Business|Đổi ngôn ngữ và giao diện sáng tối','All','P1','S','shell',''],
 ['bizswitch','E02','Chuyển Business (chuẩn bị cho nhiều Business)','Bộ chọn Business ở sidebar|Hiện nhiều Business khi tài khoản thuộc từ hai nơi trở lên','All','P2','S','model',''],
 // E03
-['period','E03','Bộ lọc kỳ Ngày, Tuần, Tháng','Ba nút nhanh dùng chung mọi module|Mỗi kỳ so với kỳ liền trước|Tên kỳ so sánh hiện một lần dưới lời chào','All','P0','M','shell',''],
+['period','E03','Bộ lọc kỳ Ngày, Tuần, Tháng','Ba nút nhanh dùng chung mọi module|Mỗi kỳ so với kỳ liền trước cùng độ dài: Ngày là hôm nay, Tuần là 7 ngày gần nhất, Tháng là từ đầu tháng đến hôm nay|Tên kỳ so sánh hiện một lần dưới lời chào','All','P0','M','shell',''],
 ['custom','E03','Tùy chọn khoảng ngày bằng popup lịch','Chọn từ ngày, đến ngày trong popup lịch|Khi đang dùng Tùy chọn, ba nút nhanh mất hiệu lực|Bấm lại một trong ba nút để quay về','All','P0','M','period',''],
 ['platshop','E03','Bộ lọc sàn và shop','Lọc theo TikTok Shop, Shopee và từng shop|Ẩn bộ lọc shop khi Business chỉ có một shop','All','P0','S','shell,shopmanage',''],
 ['persist','E03','Giữ bộ lọc khi chuyển module','Bộ lọc nằm trong URL, chia sẻ được|Chuyển module không mất bộ lọc','All','P1','S','period',''],
 // E04
-['engine','E04','Công cụ tính chỉ số dùng chung','Một nơi tính doanh thu gộp, doanh thu thuần, giá vốn, chi phí, lợi nhuận|Mọi module đọc từ đây, không tự tính lại|Có test với bộ dữ liệu mẫu','Hệ thống','P0','L','model',''],
+['engine','E04','Công cụ tính chỉ số dùng chung','Một nơi tính doanh thu thuần và số đơn hàng: số đơn gồm cả đơn huỷ và hoàn, doanh thu thuần chỉ tính đơn không huỷ và không hoàn (chi phí và lợi nhuận làm ở M4)|Mọi module đọc từ đây, không tự tính lại|Có test với bộ dữ liệu mẫu','Hệ thống','P0','L','model',''],
 ['costs','E04','Tính phí sàn, phí giao dịch, vận chuyển, đóng gói theo đơn','Dùng số thực từ API khi có|Khi không có, dùng tỷ lệ Admin cấu hình|Ghi rõ số nào là thực tế, số nào là ước tính','Hệ thống','P0','L','engine',''],
 ['cogs','E04','Giá vốn theo sản phẩm','Lấy giá vốn từ sản phẩm|Sản phẩm chưa có giá vốn thì báo “chưa có” và không tính lợi nhuận sai','Hệ thống','P0','M','engine,product',''],
 ['alloc','E04','Phân bổ chi phí cố định theo kỳ và theo bộ lọc','Chi phí tháng chia theo số ngày của kỳ|Khi lọc theo shop hoặc sàn, phân bổ theo tỷ trọng doanh thu','Hệ thống','P0','M','engine,expense',''],
-['delta','E04','Quy tắc thay đổi của lợi nhuận là số tiền','Thay đổi lợi nhuận luôn hiện bằng số tiền, không bao giờ bằng phần trăm|Các chỉ số khác hiện phần trăm hoặc số tiền theo từng thẻ','Hệ thống','P0','S','engine',''],
+['delta','E04','Quy tắc thay đổi của lợi nhuận là số tiền','Thay đổi lợi nhuận luôn hiện bằng số tiền, không bao giờ bằng phần trăm|Các chỉ số khác hiện phần trăm hoặc số tiền theo từng thẻ|Ở M1 chỉ có quy tắc và test; M4 áp dụng cho lợi nhuận','Hệ thống','P0','S','engine',''],
 // E05
 ['shopmanage','E05','Quản lý shop trong Business','Thêm, sửa tên, ngừng một shop|Mỗi shop thuộc một sàn|Bản ghi kết nối tách khỏi bản ghi shop','Admin','P0','M','model',''],
 ['tiktok','E05','Kết nối TikTok Shop','Luồng cấp quyền OAuth, lưu token an toàn, làm mới token khi hết hạn|Ngắt kết nối, kết nối lại|Kiểm thử được bằng dữ liệu giả hoặc môi trường thử của sàn; không cần user thật','Admin','P0','L','shopmanage',''],
@@ -331,20 +331,19 @@ const T = [
 ['tgsend','E15','Gửi tin qua Telegram','Gửi báo cáo theo lịch và cảnh báo|Thử lại khi lỗi, ghi lịch sử gửi','Hệ thống','P0','M','tgconn',''],
 ['tgrecip','E15','Chọn người nhận trên Telegram','Admin chọn người hoặc nhóm nhận mỗi loại báo cáo, cảnh báo','Admin','P1','S','tgconn,alertcfg',''],
 // E16
-['sysguard','E16','Chỉ một System Admin do cấu hình máy chủ','Email System Admin đặt trong cấu hình|Không có màn hình tạo thêm','System Admin','P0','S','login',''],
-['sysreview','E16','Duyệt đăng ký','Danh sách tài khoản Chờ duyệt, duyệt hoặc từ chối','System Admin','P0','M','pending',''],
-['sysbiz','E16','Tạo Business và gán Admin','Tạo Business mới, gán người đã duyệt làm Admin','System Admin','P0','M','sysreview',''],
+['sysguard','E16','Chỉ một System Admin do cấu hình máy chủ','Email System Admin đặt trong cấu hình (SYSTEM_ADMIN_EMAIL)|Tài khoản đó đăng nhập được không cần lời mời|Đổi email thì System Admin cũ mất quyền ngay|Không có màn hình tạo thêm','System Admin','P0','S','login',''],
+['sysbiz','E16','Tạo Business và gán Admin','Tạo Business mới, mời một người làm Admin; Admin được mời có tất cả module|Mỗi Business có đúng một Admin','System Admin','P0','M','login,sysguard',''],
 ['sysstatus','E16','Quản lý trạng thái tài khoản và Business','Khóa, mở, vô hiệu hóa, có ghi nhật ký','System Admin','P0','S','sysbiz',''],
 ['sysmon','E16','Theo dõi lỗi API, tích hợp, đồng bộ','Danh sách lỗi theo thời gian và nơi xảy ra|Không hiện dữ liệu kinh doanh của Business','System Admin','P1','M','syncstatus',''],
-['syslog','E16','Nhật ký hệ thống','Ghi duyệt, tạo Business, đổi trạng thái','System Admin','P1','S','sysreview',''],
-['sysov','E16','Tổng quan System Console','Số tài khoản chờ duyệt, Business hoạt động, lỗi gần đây','System Admin','P1','S','sysmon',''],
+['syslog','E16','Nhật ký hệ thống','Ghi mời, tạo Business, đổi trạng thái','System Admin','P1','S','sysguard',''],
+['sysov','E16','Tổng quan System Console','Số lời mời chưa nhận, Business hoạt động, lỗi gần đây','System Admin','P1','S','sysmon',''],
 // E17
-['i18n','E17','Đa ngôn ngữ (i18n): Việt (VI) và Anh (EN)','Toàn bộ chữ, ngày, số, tiền đổi theo ngôn ngữ|Không còn chữ cứng trong code','All','P1','M','shell',''],
+['i18n','E17','Đa ngôn ngữ (i18n): Việt (VI) và Anh (EN)','Toàn bộ chữ, ngày, số, tiền đổi theo ngôn ngữ|Mặc định tiếng Anh; tiếng Việt qua nút chuyển ngôn ngữ|Không còn chữ cứng trong code','All','P1','M','shell',''],
 ['theme','E17','Giao diện sáng và tối','Theo hệ thống, có nút chọn tay|Mọi biểu đồ đọc rõ ở cả hai','All','P1','S','shell',''],
 ['resp','E17','Responsive desktop, tablet, điện thoại','Kiểm tra từng màn ở ba kích thước|Bảng cuộn ngang trong khung riêng, không cuộn cả trang','All','P0','M','shell',''],
 ['perf','E17','Hiệu năng với dữ liệu lớn','Phân trang, chỉ mục cho đơn hàng|Tải trang chính dưới 2 giây với 100 nghìn đơn','Hệ thống','P1','M','orderlist',''],
 ['sec','E17','Bảo mật token và dữ liệu nhạy cảm','Mã hóa token sàn, không ghi log dữ liệu nhạy cảm|Rà soát quyền truy cập','Hệ thống','P0','M','tiktok,shopee',''],
-['seed','E17','Dữ liệu mẫu và tài khoản thử','Bộ dữ liệu mẫu khớp prototype: 4 vai trò mẫu và System Admin|Dùng cho demo và test','Hệ thống','P1','S','model',''],
+['seed','E17','Dữ liệu mẫu và tài khoản thử','Bộ dữ liệu mẫu khớp prototype: tài khoản mẫu System Admin, Admin và User|Màn chọn tài khoản chỉ dùng khi dev và test, tắt trên production|Dùng cho demo và test','Hệ thống','P1','S','model',''],
 ['a11y','E17','Truy cập được bằng bàn phím và đọc màn hình','Tiêu điểm thấy được, nhãn cho nút và biểu đồ, tương phản đạt','All','P2','M','shell',''],
 ['e2e','E17','Kiểm thử đầu cuối và ma trận quyền','Playwright chạy 4 luồng: nhận lời mời và đăng nhập, User không thấy Thuế và Ask AI, nhập CSV, Admin Business A không thấy Business B|Test ma trận quyền ở tầng API (Vitest) cho 5 kịch bản: Admin, User kho, User bán hàng có Tài chính, User chỉ bán hàng và báo cáo, System Admin|Mỗi vai trò thấy đúng, không thấy sai','Hệ thống','P0','M','enforce',''],
 ];
@@ -365,7 +364,7 @@ E12:['Tax','Taxpayer profile, tax-tracking revenue, platform-withheld tax, payme
 E13:['Reports and alerts','Daily, weekly and monthly reports plus 13 triggered alerts the Admin configures.'],
 E14:['AI Assistant','Answers questions on the data; Admin only.'],
 E15:['Settings and Integrations','Business info, thresholds, members and the notification channel.'],
-E16:['System Console','Separate area for the System Admin: review registrations, create Businesses, monitor operations.'],
+E16:['System Console','Separate area for the System Admin: create Businesses, invite Admins, monitor operations.'],
 E17:['Quality and release','Languages, light and dark themes, responsive layout, security, sample data.']
 };
 const OPEN_EN = {
@@ -391,30 +390,30 @@ tenant:['Isolate data per Business','Every query must filter by Business|Test: A
 source:['Store and show the source of every record','Each record has a source: platform API, import file or manual entry|Show a source label in tables and detail views'],
 empty:['“Not available yet” convention instead of 0','Shared component shows “not available yet” when data has not been entered or synced|A real 0 still shows as 0|Applies to cards, tables and charts'],
 fmt:['Format money, numbers and dates','VND with separators, dates in Vietnam time|One shared helper that follows the language'],
-shell:['App shell and menu','Sidebar with 8 modules, AI Assistant, Settings|Menu hides modules the User cannot access|Header with page title and filters|Tablet and phone: drawer menu'],
+shell:['App shell and menu','Sidebar with 8 modules, AI Assistant (Admin only), Settings|Menu hides modules the User cannot access|Header with page title and filters|Tablet and phone: drawer menu'],
 kpi:['Metric card component','Label, value, sub line, change versus previous period, one-line explanation|Supports the “not available yet” state|Clicking a card opens its module'],
 audit:['Data change log','Record who changed what and when for every Admin entry and edit|Admin can view the log'],
-login:['Sign in with Google','Sign in, sign out, keep the session|A new account is created with status Pending'],
-pending:['Pending approval screen','A Pending account only sees a notice that it awaits the System Admin|Block every other API'],
-invite:['Admin invites a User by email','Enter email, choose the modules to view|Send the invitation; statuses Invited; revoke an invitation'],
+login:['Sign in with Google','Sign in, sign out, keep the session|Only an invited email can get in; a Google account with no invitation is blocked'],
+pending:['Notice for people without access','A person with no invitation (or a locked account) is blocked and cannot reach any data|Show a notice that they have no access yet and should contact an Admin|Block every other API'],
+invite:['Admin invites a User by email','Enter email; the invited person becomes a User with no modules|Create the invitation link for the Admin to copy and send (the app does not email it); status Invited; revoke an invitation|The link is single-use and expires after 7 days|The Google account that accepts must have the invited email'],
 accept:['User accepts the invitation and joins the Business','Open the link, sign in with Google, land in the right Business with the granted access'],
-perm:['Grant access per module','One level per User per module: View or No Access|No modules by default|Changes take effect immediately'],
-enforce:['Enforce permissions in the UI and the API','Route guards in the UI, permission checks on every API|Cards, charts, reports, exports and AI use only the data of granted modules'],
+perm:['Grant access per module','One level per User per module: View or No Access|A new User has no modules until an Admin assigns them; an invited Admin has all modules|Changes take effect immediately'],
+enforce:['Enforce permissions in the UI and the API','Route guards in the UI, permission checks on every API|Cards, charts, reports and exports use only the data of granted modules|Ask AI is Admin only: Users have no Ask AI and the API rejects them'],
 viewonly:['Users are view-only, lock every edit action','Hide or disable add, edit, delete and import buttons for Users|The API rejects writes from Users'],
 taxhide:['The Tax tab is always hidden from Users','Not in the menu, not reachable by URL or API|No option to grant Tax access'],
 sysnofin:['System Admin has no automatic access to finance and tax','System Admin cannot read a Business’s Finance or Tax data|Automated test'],
 members:['Manage members','Member list with role and access|Edit access, revoke, remove a User'],
 profile:['Personal profile and sign out','See name, email, role, Business|Change language and theme'],
 bizswitch:['Switch Business (prepares for multiple Businesses)','Business selector in the sidebar|Shows several Businesses when the account belongs to two or more'],
-period:['Period filter: Daily, Weekly, Monthly','Three quick buttons shared by every module|Each period compares with the one right before|The compared period is named once under the greeting'],
+period:['Period filter: Daily, Weekly, Monthly','Three quick buttons shared by every module|Each period compares with the one right before, of the same length: Daily is today, Weekly is the last 7 days, Monthly is the 1st of the month to today|The compared period is named once under the greeting'],
 custom:['Custom date range with a calendar popup','Pick start and end dates in a calendar popup|While Custom is active, the three quick buttons stop applying|Pressing one of them returns to quick mode'],
 platshop:['Platform and shop filters','Filter by TikTok Shop, Shopee and each shop|Hide the shop filter when the Business has only one shop'],
 persist:['Keep filters across modules','Filters live in the URL and can be shared|Switching modules keeps them'],
-engine:['Shared metrics engine','One place computes gross sales, net revenue, cost of goods, costs and profit|Every module reads from it and does not recalculate|Tested against a sample dataset'],
+engine:['Shared metrics engine','One place computes net revenue and order count: order count includes cancelled and returned orders, net revenue counts only orders that are neither cancelled nor returned (costs and profit are built in M4)|Every module reads from it and does not recalculate|Tested against a sample dataset'],
 costs:['Calculate platform fees, transaction fees, shipping and packaging per order','Use real numbers from the API when available|Otherwise use rates the Admin configures|Make clear which numbers are actual and which are estimates'],
 cogs:['Cost of goods per product','Take cost from the product|A product without cost shows “not available yet” and never produces a wrong profit'],
 alloc:['Allocate fixed expenses by period and filter','Monthly expenses are spread by the days of the period|When filtering by shop or platform, allocate by revenue share'],
-delta:['Rule: profit change is an amount of money','Profit change is always an amount, never a percentage|Other metrics show a percentage or an amount per card'],
+delta:['Rule: profit change is an amount of money','Profit change is always an amount, never a percentage|Other metrics show a percentage or an amount per card|In M1 this is a rule with tests; M4 applies it to profit'],
 shopmanage:['Manage shops in a Business','Add, rename, deactivate a shop|Each shop belongs to one platform|The connection record is separate from the shop record'],
 tiktok:['Connect TikTok Shop','OAuth authorization flow, token stored securely, token refreshed on expiry|Disconnect, reconnect|Testable with mock data or the platform test environment; no real user needed'],
 shopee:['Connect Shopee','Authorization flow, token stored securely, token refreshed on expiry|Disconnect, reconnect|Testable with mock data or the platform test environment; no real user needed'],
@@ -507,19 +506,18 @@ setdata:['Data sources page','One place for platform connection status, file imp
 tgconn:['Connect Telegram','Guide to create a bot, enter a group or channel, send a test message|Disconnect'],
 tgsend:['Send messages via Telegram','Send scheduled reports and alerts|Retry on failure, keep a delivery history'],
 tgrecip:['Choose Telegram recipients','Admin picks who or which group receives each report and alert'],
-sysguard:['A single System Admin set by server configuration','System Admin email set in configuration|No screen to create more'],
-sysreview:['Review registrations','List of Pending accounts, approve or reject'],
-sysbiz:['Create a Business and assign an Admin','Create a new Business, assign an approved person as its Admin'],
+sysguard:['A single System Admin set by server configuration','System Admin email set in configuration (SYSTEM_ADMIN_EMAIL)|That account can sign in without an invitation|If the email changes, the previous System Admin loses access immediately|No screen to create more'],
+sysbiz:['Create a Business and assign an Admin','Create a new Business, invite a person as its Admin; the invited Admin gets all modules|Each Business has exactly one Admin'],
 sysstatus:['Manage account and Business status','Lock, unlock, deactivate, with a log'],
 sysmon:['Monitor API, integration and sync errors','Errors by time and place|Never shows a Business’s commercial data'],
-syslog:['System log','Records approvals, Business creation, status changes'],
-sysov:['System Console overview','Accounts pending, active Businesses, recent errors'],
-i18n:['Multi-language (i18n): Vietnamese (VI) and English (EN)','All text, dates, numbers and money follow the language|No hard-coded text in code'],
+syslog:['System log','Records invitations, Business creation, status changes'],
+sysov:['System Console overview','Pending invitations, active Businesses, recent errors'],
+i18n:['Multi-language (i18n): Vietnamese (VI) and English (EN)','All text, dates, numbers and money follow the language|English by default; Vietnamese through the language toggle|No hard-coded text in code'],
 theme:['Light and dark themes','Follows the system, with a manual toggle|Every chart readable in both'],
 resp:['Responsive desktop, tablet, phone','Check every screen at three sizes|Tables scroll horizontally in their own box, not the whole page'],
 perf:['Performance with large data','Pagination and indexes for orders|Main pages load under 2 seconds with 100,000 orders'],
 sec:['Secure tokens and sensitive data','Encrypt platform tokens, no sensitive data in logs|Access review'],
-seed:['Sample data and test accounts','Sample dataset matching the prototype: 4 sample roles and a System Admin|For demos and tests'],
+seed:['Sample data and test accounts','Sample dataset matching the prototype: sample accounts for System Admin, Admin and User|A dev-only account picker for tests and demos, off in production|For demos and tests'],
 a11y:['Keyboard and screen-reader access','Visible focus, labels on buttons and charts, sufficient contrast'],
 e2e:['End-to-end tests and permission matrix','Playwright runs 4 flows: accepting an invite and signing in, User cannot see Tax or Ask AI, CSV import, Business A Admin cannot see Business B|API-level permission-matrix tests (Vitest) for 5 scenarios: Admin, warehouse User, sales and marketing User with Finance, sales and reports User, System Admin|Each role sees exactly what it should and nothing more']
 };
@@ -530,7 +528,7 @@ const FEATS = [
 ['E01','Quy ước hiển thị dùng chung','Shared display conventions',['empty','fmt','kpi']],
 ['E01','Khung ứng dụng và menu','App shell and menu',['shell']],
 ['E01','Nhật ký thao tác dữ liệu','Data change log',['audit']],
-['E02','Đăng nhập và duyệt tài khoản','Sign-in and account approval',['login','pending']],
+['E02','Đăng nhập theo lời mời','Invite-only sign-in',['login','pending']],
 ['E02','Mời và quản lý thành viên','Invite and manage members',['invite','accept','members']],
 ['E02','Phân quyền theo module','Per-module permissions',['perm','enforce','viewonly','taxhide','sysnofin']],
 ['E02','Hồ sơ cá nhân và chuyển Business','Profile and Business switching',['profile','bizswitch']],
@@ -571,7 +569,7 @@ const FEATS = [
 ['E14','Trả lời trên dữ liệu và giới hạn','Data answers and limits',['aictx','aiqa','aiguard']],
 ['E15','Cài đặt Business','Business settings',['setbiz','setthr','setdata']],
 ['E15','Kênh thông báo ngoài app (Telegram)','External notification channel (Telegram)',['tgconn','tgsend','tgrecip']],
-['E16','Duyệt đăng ký và quản lý Business','Registrations and Businesses',['sysguard','sysreview','sysbiz','sysstatus']],
+['E16','Quản lý Business và trạng thái','Businesses and status',['sysguard','sysbiz','sysstatus']],
 ['E16','Giám sát vận hành','Operations monitoring',['sysmon','syslog','sysov']],
 ['E17','Trải nghiệm: ngôn ngữ, giao diện, responsive','Experience: language, theme, responsive',['i18n','theme','resp','a11y']],
 ['E17','Chất lượng, bảo mật, dữ liệu mẫu','Quality, security, sample data',['perf','sec','seed','e2e']]
@@ -579,21 +577,23 @@ const FEATS = [
 const FID = {}, FOF = {};
 FEATS.forEach((f,i)=>{ f.id = 'F-' + String(i+1).padStart(2,'0'); f[3].forEach(k=>{ FOF[k] = f; }); });
 
-const idOf = {}; T.forEach((t,i)=>{ idOf[t[0]] = 'T-' + String(i+1).padStart(2,'0'); });
+// Ticket numbers stay fixed after a removal: numbers in GAPS are skipped (T-123 was removed on 2026-11-26).
+const GAPS = [123];
+const idOf = {}; (() => { let n = 0; T.forEach(t => { n++; while (GAPS.includes(n)) n++; idOf[t[0]] = 'T-' + String(n).padStart(2,'0'); }); })();
 // Milestones: [id, nameVI, nameEN, goalVI, goalEN, doneVI, doneEN]
 const MS = [
-['M1','Nền móng và truy cập','Foundation and access','Dựng khung app, mô hình dữ liệu, đăng nhập, phân quyền, bộ lọc kỳ và bộ máy tính chỉ số.','Set up the app shell, data model, sign-in, permissions, period filter and the metrics engine.','Admin đăng nhập và mời được User; User vào đúng module và chỉ xem; Tab Thuế ẩn với User; System Admin duyệt đăng ký và tạo Business; test chặn quyền chạy xanh.','An Admin can sign in and invite a User; the User sees only granted modules, view-only; the Tax tab is hidden from Users; a System Admin approves sign-ups and creates a Business; the permission tests pass.'],
+['M1','Nền móng và truy cập','Foundation and access','Dựng khung app, mô hình dữ liệu, đăng nhập, phân quyền, bộ lọc kỳ và bộ máy tính chỉ số.','Set up the app shell, data model, sign-in, permissions, period filter and the metrics engine.','Admin đăng nhập và mời được User; User vào đúng module và chỉ xem; Tab Thuế ẩn với User; System Admin tạo Business và mời Admin; người chưa được mời bị chặn; test chặn quyền chạy xanh.','An Admin can sign in and invite a User; the User sees only granted modules, view-only; the Tax tab is hidden from Users; a System Admin creates a Business and invites its Admin; a person without an invitation is blocked; the permission tests pass.'],
 ['M2','Kết nối sàn và nhập dữ liệu','Platform connection and data import','Kết nối tài khoản sàn (cấp quyền OAuth, lưu token) và đưa dữ liệu vào app bằng nhập CSV hoặc Excel, hoặc nhập tay. Chưa kéo dữ liệu tự động; phần đó nằm ở M9.','Connect platform accounts (OAuth, token storage) and bring data in through CSV or Excel import or manual entry. No automatic data pull yet; that is M9.','Admin thêm shop, kết nối TikTok Shop và Shopee (hoặc chỉ nhập file); đơn hàng, chi quảng cáo và quyết toán nhập vào app có nhãn nguồn; nhập lại file không bị nhân đôi; thấy trạng thái kết nối. Luồng kết nối coi là xong khi chạy đúng với dữ liệu giả hoặc môi trường thử của sàn; kiểm tra với shop thật nằm ở M9.','An Admin adds a shop and connects TikTok Shop and Shopee (or only imports files); orders, ad spend and settlements arrive with a source label; re-importing a file does not duplicate rows; connection status is visible. The connection flow counts as done when it works against mock data or the platform test environment; checking with a real shop belongs to M9.'],
 ['M3','Sản phẩm, tồn kho, nhà cung cấp','Products, inventory, suppliers','Danh mục sản phẩm và SKU, tồn kho tự tính, điểm đặt hàng lại, lô hạn dùng, nhập hàng và công nợ.','Product and SKU catalog, computed stock, reorder points, lots and expiry, purchasing and payables.','Admin tạo sản phẩm và SKU, ghép SKU sàn; tồn kho đổi theo đơn và phiếu nhập; có điểm đặt hàng lại và lô hạn dùng; công nợ nhà cung cấp đúng.','An Admin creates products and SKUs and maps platform SKUs; stock moves with orders and purchases; reorder points and lot expiry work; supplier payables are correct.'],
 ['M4','Xem số: Tổng quan, Bán hàng, Tài chính','Reading the numbers: Overview, Sales, Finance','Ba module người bán mở mỗi ngày, cùng dùng một bộ máy tính nên số khớp nhau.','The three modules sellers open every day, all on one metrics engine so the numbers agree.','Tổng quan, Bán hàng và Tài chính hiện số khớp nhau; chuỗi lãi lỗ đến lợi nhuận trước thuế đúng với bộ dữ liệu mẫu; User chỉ thấy module được cấp.','Overview, Sales and Finance show matching numbers; the profit-and-loss chain down to profit before tax is correct on the sample data; Users see only granted modules.'],
 ['M5','Marketing, dòng tiền và Thuế','Marketing, cash flow and Tax','Ads và Affiliate theo creator, POAS, dòng tiền, và hồ sơ cùng theo dõi thuế (app không tính thuế).','Ads and per-creator Affiliate, POAS, cash flow, and the tax profile and tracking (the app does not calculate tax).','Có số liệu Ads và Affiliate theo creator, POAS; dòng tiền theo đối soát sàn; Admin theo dõi doanh thu thuế, thuế sàn khấu trừ, lịch sử nộp và nhắc việc.','Ads and per-creator Affiliate numbers, POAS and cash flow from platform settlements are available; an Admin tracks tax revenue, platform-withheld tax, payment history and reminders.'],
 ['M6','Cảnh báo và Thông báo','Alerts & Notifications','Bộ máy cảnh báo, 13 loại cảnh báo, ngưỡng do Admin cấu hình và gửi thông báo.','The alert engine, the 13 alert types, Admin-configured thresholds and notification delivery.','Admin chỉnh ngưỡng cảnh báo và cách nhận thông báo; 13 loại cảnh báo bắn đúng điều kiện; Tổng quan hiện danh sách việc cần chú ý.','An Admin tunes alert thresholds and how notifications are received; all 13 alert types fire on the right conditions; Overview shows the needs-attention list.'],
-['M7','Báo cáo, Trợ lý AI và giám sát','Reports, AI Assistant and monitoring','Báo cáo ngày, tuần, tháng theo lịch, Trợ lý AI trên dữ liệu có quyền, và màn giám sát cho System Admin.','Scheduled daily, weekly and monthly reports, the AI Assistant on permitted data, and the System Admin monitoring screens.','Báo cáo gửi đúng lịch và đúng quyền; Trợ lý AI trả lời trong phạm vi quyền và có giới hạn; System Admin thấy sức khỏe vận hành.','Reports go out on schedule and respect permissions; the AI Assistant answers within the user’s permissions and limits; the System Admin sees operational health.'],
+['M7','Báo cáo, Trợ lý AI và giám sát','Reports, AI Assistant and monitoring','Báo cáo ngày, tuần, tháng theo lịch, Trợ lý AI trên dữ liệu có quyền, và màn giám sát cho System Admin.','Scheduled daily, weekly and monthly reports, the AI Assistant on permitted data, and the System Admin monitoring screens.','Báo cáo gửi đúng lịch và đúng quyền; Trợ lý AI (chỉ Admin dùng) trả lời trong giới hạn đã đặt; System Admin thấy sức khỏe vận hành.','Reports go out on schedule and respect permissions; the AI Assistant (Admin only) answers within its limits; the System Admin sees operational health.'],
 ['M8','Hoàn thiện và phát hành','Polish and release','Responsive, trợ năng, hiệu năng, bảo mật và kiểm thử đầu cuối theo vai trò. Responsive nên được làm dần từ M1, M8 là bước kiểm lại.','Responsive layout, accessibility, performance, security and end-to-end tests per role. Build responsive gradually from M1; M8 is the final check.','Dùng tốt trên điện thoại; qua kiểm thử bảo mật; bộ test đầu cuối theo vai trò Admin, User, System Admin chạy xanh.','Works well on phones; passes the security review; the end-to-end tests for Admin, User and System Admin pass.'],
 ['M9','Đồng bộ tự động từ sàn (cần user thật)','Automatic platform sync (needs a real user)','Chỉ làm khi có ít nhất một user thật đồng ý kết nối API của sàn; chưa có thì chờ, app vẫn dùng đủ bằng nhập file và nhập tay. Kéo đơn hàng, chi quảng cáo, quyết toán và phí về, ghi vào cùng các bảng với nhãn nguồn là API.','Only build this once at least one real user agrees to connect a platform API; until then wait, the app is fully usable with file import and manual entry. Pull orders, ad spend, settlements and fees into the same tables with the source label API.','Một shop thật kết nối và cấp quyền (đây là lần đầu kiểm tra luồng kết nối của M2 với shop thật); đơn hàng, chi quảng cáo và quyết toán về tự động theo lịch; chạy lại không nhân đôi; số khớp với dữ liệu nhập tay; lỗi hiện ở trạng thái kết nối.','One real shop connected and authorized (the first test of the M2 connection flow with a real shop); orders, ad spend and settlements arrive on a schedule; re-running does not duplicate; numbers match manually imported data; errors show in connection status.'],
 ];
 const MSK = {
-M1:'model tenant source empty fmt kpi shell seed i18n theme persist profile period custom engine delta login pending invite accept perm enforce viewonly taxhide sysnofin members sysguard sysreview sysbiz sysstatus',
+M1:'model tenant source empty fmt kpi shell seed i18n theme persist profile period custom engine delta login pending invite accept perm enforce viewonly taxhide sysnofin members sysguard sysbiz sysstatus',
 M2:'audit shopmanage platshop tiktok shopee syncstatus import importdedupe importtpl manual export',
 M3:'product attrs skumap stockmoves stockcalc reorderover reordermsg lottoggle lotfefo stockauto invov invanalytics supcrud purchase purchasepay purchasestock payables supanalytics',
 M4:'costs cogs expense alloc other pnl finperm ovcards ovperm ovtrend ovsplit ovfold salesov salestrend salesdim salestop salesslow salesprob orderlist orderdetail',
@@ -609,7 +609,7 @@ Object.keys(MSK).forEach(m => MSK[m].split(' ').forEach(k => { MOF[k] = m; }));
 const BRIEF='https://claude.ai/artifact/WegNRyW7ufz4FSgHXGaHNW', PROTO='https://claude.ai/artifact/LBCphaxGh1Mbxk8hh6byVd', FEATURES='https://claude.ai/artifact/CG2CgHFqsgZ2D226SqoJAq';
 const UI = {
  vi:{title:'TopTop Build Plan',sub:'Kế hoạch làm TopTop theo milestone. Mỗi milestone là một đợt giao hàng có điều kiện hoàn thành. Ticket nằm trong milestone, xếp theo thứ tự nên làm (ticket phụ thuộc luôn đứng sau ticket nó cần). Mã ticket T-01 và mã feature F-01 giống trang TopTop Features.',
-  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'bản lưu trong repo',snapNote:'Bản lưu trong repo chụp ngày 2026-11-26 từ Prototype (phiên bản 1795564554-39ac) và Product Brief (phiên bản 1795506559-5f2d), phòng khi bản online bị xóa.',
+  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'bản lưu trong repo',snapNote:'Bản lưu trong repo chụp ngày 2026-11-26 từ Prototype (phiên bản 1795689261-7f4e) và Product Brief (phiên bản 1795689289-2442), phòng khi bản online bị xóa.',
   ms:'Milestone',total:'Tổng ticket',pts:'Điểm công (S=1, M=3, L=5)',p0:'P0',
   doneWhen:'Hoàn thành khi: ',tickets:'ticket',points:'điểm',doneN:(a,b)=>a+'/'+b+' xong',
   search:'Tìm theo tên, mã ticket hoặc mã feature, ví dụ T-25, F-10 hoặc tồn kho',allRoles:'Mọi vai trò',allPrio:'Mọi ưu tiên',allMs:'Mọi milestone',copy:'Copy CSV',copied:n=>'Đã copy '+n+' ticket',copyFail:'Không copy được',
@@ -618,7 +618,7 @@ const UI = {
   openList:['Quyền API thật của TikTok Shop và Shopee (ảnh hưởng T-31 đến T-35: kết nối ở M2, đồng bộ dữ liệu ở M9). Đồng bộ tự động chỉ làm khi có user thật kết nối API; chưa có thì chờ.'],
   csv:['Milestone','ID','Feature','Epic','Tiêu đề','Tiêu chí nghiệm thu','Vai trò','Cỡ','Phụ thuộc','Trạng thái'],langBtn:'EN',themeAria:'Đổi giao diện sáng tối',langAria:'Đổi ngôn ngữ'},
  en:{title:'TopTop Build Plan',sub:'The TopTop build plan, organized by milestone. Each milestone is a delivery step with a done-when check. Tickets sit inside milestones, in a sensible build order (a ticket always comes after the tickets it needs). Ticket codes T-01 and feature codes F-01 match the TopTop Features page.',
-  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'local snapshot',snapNote:'Local snapshots taken on 2026-11-26 from the Prototype (version 1795564554-39ac) and the Product Brief (version 1795506559-5f2d), in case the online copies are deleted.',
+  links:[['Product Brief',BRIEF,'product-brief.html'],['Prototype',PROTO,'prototype.html'],['TopTop Features',FEATURES]],snap:'local snapshot',snapNote:'Local snapshots taken on 2026-11-26 from the Prototype (version 1795689261-7f4e) and the Product Brief (version 1795689289-2442), in case the online copies are deleted.',
   ms:'Milestones',total:'Total tickets',pts:'Effort points (S=1, M=3, L=5)',p0:'P0',
   doneWhen:'Done when: ',tickets:'tickets',points:'points',doneN:(a,b)=>a+'/'+b+' done',
   search:'Search by name, ticket or feature ID, for example T-25, F-10 or inventory',allRoles:'All roles',allPrio:'All priorities',allMs:'All milestones',copy:'Copy CSV',copied:n=>'Copied '+n+' tickets',copyFail:'Could not copy',
@@ -739,7 +739,18 @@ const SEC = {
    ['Kiểm thử','Vitest và Testing Library viết test trước; 4 luồng Playwright.','Bạn, 2026-11-25'],
    ['Ask AI','Chỉ Admin dùng; User không thấy nút và API từ chối User.','Bạn, 2026-11-26'],
    ['Organization','Mỗi Business là một organization trong Better Auth, chứa nhiều shop; quyền Admin và User theo Business.','Bạn, 2026-11-26'],
-   ['Kiểm thử','Playwright 4 luồng; 5 kịch bản theo vai trò kiểm bằng test ma trận quyền ở tầng API (Vitest), nhanh và rẻ hơn mà phủ đủ vai trò.','Claude đề xuất, bạn đồng ý 2026-11-26']
+   ['Kiểm thử','Playwright 4 luồng; 5 kịch bản theo vai trò kiểm bằng test ma trận quyền ở tầng API (Vitest), nhanh và rẻ hơn mà phủ đủ vai trò.','Claude đề xuất, bạn đồng ý 2026-11-26'],
+   ['Đăng nhập','Chỉ người được mời mới vào được. Người lạ đăng nhập Google mà chưa có lời mời thấy thông báo chưa có quyền, vui lòng liên hệ Admin. Không còn trạng thái Chờ duyệt.','Bạn, 2026-11-26'],
+   ['Ticket T-123','Bỏ T-123 (duyệt đăng ký) khỏi M1: đăng nhập theo lời mời nên không còn danh sách chờ duyệt. T-124 lo việc tạo Business và mời Admin. Mã ticket giữ nguyên, T-123 để trống.','Bạn, 2026-11-26'],
+   ['Lời mời','Admin được mời có tất cả module; User được mời chưa có module nào cho đến khi Admin gán.','Bạn, 2026-11-26'],
+   ['System Admin đầu tiên','Đặt bằng email trong cấu hình máy chủ (SYSTEM_ADMIN_EMAIL); tài khoản đó vào được không cần lời mời. Đổi email thì System Admin cũ mất quyền ngay.','Bạn, 2026-11-26'],
+   ['Chi phí và lợi nhuận','Không xử lý ở M1. T-26 đến T-28 vẫn ở M4 và M4 thêm bảng đơn hàng, chi phí. T-25 ở M1 chỉ tính doanh thu thuần và số đơn hàng; T-29 là quy tắc áp dụng khi M4 có lợi nhuận.','Bạn, 2026-11-26'],
+   ['Kỳ báo cáo','Theo prototype: Ngày là hôm nay, Tuần là 7 ngày gần nhất, Tháng là từ đầu tháng đến hôm nay; kỳ so sánh có cùng độ dài ngay trước.','Bạn, 2026-11-26'],
+   ['Tài khoản mẫu','Đăng nhập bằng màn chọn tài khoản chỉ dùng khi dev và test, tắt trên production.','Bạn, 2026-11-26'],
+   ['Số Admin mỗi Business','Mỗi Business có đúng một Admin.','Bạn, 2026-11-26'],
+   ['Lời mời','Link mời dùng một lần, hết hạn sau 7 ngày; tài khoản Google nhận lời mời phải đúng email được mời; app không gửi email, Admin tự gửi link.','Bạn, 2026-11-26'],
+   ['Đếm đơn hàng','Theo prototype: số đơn gồm mọi đơn, kể cả đơn huỷ và hoàn; doanh thu thuần chỉ cộng đơn không huỷ và không hoàn.','Bạn, 2026-11-26'],
+   ['Ngôn ngữ mặc định','Tiếng Anh; tiếng Việt qua nút chuyển ngôn ngữ như prototype. Code, commit và tài liệu chỉ viết bằng tiếng Anh.','Bạn, 2026-11-26']
   ],
   msNote:'Cỡ S=1, M=3, L=5 điểm công. Mã ticket T-xx và mã feature F-xx giống trang TopTop Features.',
   rulesH:'Quy tắc sản phẩm đã chốt',
@@ -751,7 +762,7 @@ const SEC = {
   roles:[
    ['Admin','Mọi module của Business mình (mọi shop), gồm Tài chính và Thuế; Cài đặt, thành viên, nhật ký thao tác.','Nhập, sửa, xóa dữ liệu; nhập file; mời User, cấp quyền theo module, gỡ User; cấu hình ngưỡng cảnh báo.','Dùng được Ask AI.'],
    ['User','Chỉ module được cấp (mặc định không có module nào). Không bao giờ thấy Tab Thuế.','Không sửa được gì; nút sửa bị khóa và API từ chối ghi.','Xuất CSV được với module được cấp. Mỗi module một mức: Xem hoặc Không có quyền. Không dùng được Ask AI.'],
-   ['System Admin','System Console: duyệt đăng ký, Business, trạng thái, giám sát vận hành. Không đọc Tài chính, Thuế của Business.','Duyệt hoặc từ chối đăng ký; tạo Business và gán Admin; khóa, mở, vô hiệu hóa tài khoản và Business.','Chỉ một người, email đặt trong cấu hình máy chủ. Tài khoản mới ở trạng thái Chờ duyệt.']
+   ['System Admin','System Console: Business, lời mời, trạng thái, giám sát vận hành. Không đọc Tài chính, Thuế của Business.','Tạo Business và mời Admin; khóa, mở, vô hiệu hóa tài khoản và Business.','Chỉ một người, email đặt trong cấu hình máy chủ (SYSTEM_ADMIN_EMAIL); tài khoản này vào được không cần lời mời. Người chưa được mời bị chặn và thấy thông báo chưa có quyền.']
   ],
   dataH:['Mô hình','Truy vấn và lưu trữ'],
   data:['Business có nhiều shop; tài khoản về sau thuộc nhiều Business.','Quyền lưu theo user, module, mức quyền.','Hồ sơ người nộp thuế và kết nối sàn là bản ghi riêng.','Loại người bán là danh sách (Cá nhân, Hộ kinh doanh), thêm Công ty sau được.','Mọi truy vấn bắt buộc lọc theo Business; test Admin Business A không đọc được Business B.','Mỗi bản ghi lưu nguồn: API sàn, file nhập hoặc nhập tay.','Database: Neon PostgreSQL (Singapore), truy vấn bằng Drizzle ORM, nối qua Hyperdrive.'],
@@ -798,7 +809,18 @@ const SEC = {
    ['Testing','Vitest and Testing Library, tests written first; 4 Playwright flows.','You, 2026-11-25'],
    ['Ask AI','Admin only; Users do not see the button and the API rejects them.','You, 2026-11-26'],
    ['Organization','Each Business is one Better Auth organization holding many shops; Admin and User roles are per Business.','You, 2026-11-26'],
-   ['Testing','Playwright for 4 flows; the 5 role scenarios are checked by API-level permission-matrix tests (Vitest), faster and cheaper while covering every role.','Proposed by Claude, approved by you 2026-11-26']
+   ['Testing','Playwright for 4 flows; the 5 role scenarios are checked by API-level permission-matrix tests (Vitest), faster and cheaper while covering every role.','Proposed by Claude, approved by you 2026-11-26'],
+   ['Sign-in','Only invited people can get in. A stranger who signs in with Google without an invitation sees a notice that they have no access yet and should contact an Admin. There is no Pending state.','You, 2026-11-26'],
+   ['Ticket T-123','T-123 (review registrations) is removed from M1 because invite-only sign-in leaves no pending list. T-124 covers creating a Business and inviting its Admin. Ticket numbers stay as they were; T-123 is left unused.','You, 2026-11-26'],
+   ['Invitations','An invited Admin gets all modules; an invited User gets no module until an Admin assigns them.','You, 2026-11-26'],
+   ['First System Admin','Set by an email in server configuration (SYSTEM_ADMIN_EMAIL); that account can sign in without an invitation. If the email changes, the previous System Admin loses access immediately.','You, 2026-11-26'],
+   ['Cost and profit','Not processed in M1. T-26 to T-28 stay in M4, and M4 adds the orders and cost tables. T-25 in M1 computes only net revenue and order count; T-29 is a rule applied when M4 produces profit.','You, 2026-11-26'],
+   ['Report periods','As in the prototype: Daily is today, Weekly is the last 7 days, Monthly is the 1st of the month to today; the compared period has the same length right before.','You, 2026-11-26'],
+   ['Sample accounts','Sign in through an account picker for dev and tests only, off in production.','You, 2026-11-26'],
+   ['Admins per Business','Each Business has exactly one Admin.','You, 2026-11-26'],
+   ['Invitation links','An invitation link is single-use and expires after 7 days; the Google account that accepts must have the invited email; the app does not send email, the Admin sends the link.','You, 2026-11-26'],
+   ['Order counting','As in the prototype: order count includes every order, cancelled and returned too; net revenue adds up only orders that are neither cancelled nor returned.','You, 2026-11-26'],
+   ['Default language','English; Vietnamese through the language toggle, as in the prototype. Code, commits and docs are English only.','You, 2026-11-26']
   ],
   msNote:'Size S=1, M=3, L=5 effort points. Ticket IDs T-xx and feature IDs F-xx match the TopTop Features page.',
   rulesH:'Fixed product rules',
@@ -810,7 +832,7 @@ const SEC = {
   roles:[
    ['Admin','Every module of their own Business (all its shops), including Finance and Tax; Settings, members, the activity log.','Enter, edit and delete data; import files; invite Users, grant permissions per module, remove Users; configure alert thresholds.','Can use Ask AI.'],
    ['User','Only granted modules (none by default). Never sees the Tax tab.','Nothing; edit buttons are locked and the API rejects writes.','Can export CSV for granted modules. One level per module: View or No access. Cannot use Ask AI.'],
-   ['System Admin','The System Console: sign-up approval, Businesses, status, operations monitoring. Cannot read a Business’s Finance or Tax data.','Approve or reject sign-ups; create a Business and assign its Admin; lock, unlock or disable accounts and Businesses.','One person only, with the email set in server configuration. New accounts start as Pending approval.']
+   ['System Admin','The System Console: Businesses, invitations, status, operations monitoring. Cannot read a Business’s Finance or Tax data.','Create a Business and invite its Admin; lock, unlock or disable accounts and Businesses.','One person only, with the email set in server configuration (SYSTEM_ADMIN_EMAIL); that account can sign in without an invitation. A person who was not invited is blocked and sees a notice that they have no access yet.']
   ],
   dataH:['Model','Queries and storage'],
   data:['A Business has many shops; an account may later belong to several Businesses.','Permissions are stored per user, module and level.','The taxpayer profile and platform connections are separate records.','Seller type is a list (Individual, Household business); adding Company later must be possible.','Every query must filter by Business; test: an Admin of Business A cannot read Business B.','Every record stores its source: platform API, imported file or manual entry.','Database: Neon PostgreSQL (Singapore), queried with Drizzle ORM, connected through Hyperdrive.'],
