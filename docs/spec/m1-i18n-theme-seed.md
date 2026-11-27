@@ -3,11 +3,7 @@
 **Tickets:** T-129, T-130, T-134
 **Milestone:** M1
 
-## Open questions
-
-None. Every question is resolved; see the next section.
-
-## Resolved questions
+## Decisions
 
 | ID | Answer | Date |
 | --- | --- | --- |
@@ -75,4 +71,4 @@ None. Every question is resolved; see the next section.
 ## Out of scope for M1
 
 - Responsive layout verification and accessibility audit (M8; build responsively from M1, per the Plan).
-- Seeding the module data (orders, products, costs) before the tables exist (Q-SEED-2, resolved).
+- Seeding the module data (orders, products, costs) before the tables exist (Q-SEED-2).

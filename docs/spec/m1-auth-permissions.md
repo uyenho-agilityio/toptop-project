@@ -3,15 +3,11 @@
 **Tickets:** T-09, T-10, T-11, T-12, T-13, T-14, T-15, T-16, T-17, T-18, T-19
 **Milestone:** M1
 
-## Open questions
-
-None. Every question is resolved; see the next section.
-
-## Resolved questions
+## Decisions
 
 | ID | Answer | Date |
 | --- | --- | --- |
-| Q-AUTH-1 | **Sign-in is invite-only.** Only an invited person can get in. A new user with no invitation is blocked. There is no Pending state and no self-registration. This is a change from the Build Plan tickets T-09 and T-10, which assumed Pending accounts (T-123 is removed); it follows the Plan's Architecture section ("Anyone not invited cannot get in"). What a blocked person sees is set in the next row (Q-SYS-2). The first System Admin is the `SYSTEM_ADMIN_EMAIL` account, the one exception to invite-only (Q-SYS-1, resolved in `m1-system-admin.md`). If that email changes, the previous System Admin loses access immediately (Q-SYS-1b, resolved). | 2026-11-26, product owner |
+| Q-AUTH-1 | **Sign-in is invite-only.** Only an invited person can get in. A new user with no invitation is blocked. There is no Pending state and no self-registration. This is a change from the Build Plan tickets T-09 and T-10, which assumed Pending accounts (T-123 is removed); it follows the Plan's Architecture section ("Anyone not invited cannot get in"). What a blocked person sees is set in the next row (Q-SYS-2). The first System Admin is the `SYSTEM_ADMIN_EMAIL` account, the one exception to invite-only (Q-SYS-1, in `m1-system-admin.md`). If that email changes, the previous System Admin loses access immediately (Q-SYS-1b, resolved). | 2026-11-26, product owner |
 | Q-SYS-2 | **A person with no invitation sees a notice** saying they have no access yet and should contact an Admin. | 2026-11-26, product owner |
 | Q-AUTH-3 | **Invitations are manual links.** The app creates an invitation link and the Admin copies and sends it; the app does not send email. Decided earlier in the Build Plan: Decisions row "Sign-in: Better Auth, Google, Organization plugin, invites by manual link" (Uyn, 2026-11-25), and Architecture "Inviting Business owners": the System Admin "sends the owner an invite link". T-11 "Send the invitation" means "create the link". | 2026-11-25 and 2026-11-26 |
 | Q-AUTH-2 | **An invited Admin gets all modules. An invited User gets no modules until an Admin assigns them.** The invite form does not choose modules for a User. | 2026-11-26, product owner |
@@ -37,18 +33,18 @@ None. Every question is resolved; see the next section.
 
 - Google is the only sign-in method (Plan, Decisions). Better Auth handles it.
 - Sign in, sign out and keep the session.
-- Sign-in is **invite-only** (Q-AUTH-1, resolved). A Google account with no invitation is blocked: no account record gives it access, and every API rejects it. There is no Pending state and no self-registration form (Prototype `registerModal()` is not built).
+- Sign-in is **invite-only** (Q-AUTH-1). A Google account with no invitation is blocked: no account record gives it access, and every API rejects it. There is no Pending state and no self-registration form (Prototype `registerModal()` is not built).
 - After sign-in the landing page is: the System Console for the System Admin; otherwise the first module the user may open, in menu order; a user with no module sees an empty "no access yet" state (Prototype `firstRoute()`).
 
 ### Blocked screen for people without access (T-10, replaces "Pending approval screen")
 
 - A signed-in Google account with no invitation, a removed member, a locked account or a member of a locked Business is blocked. Every API rejects it.
-- A person with no invitation sees a notice: they have no access yet, and should contact an Admin (Q-SYS-2, resolved). The only action is to sign out. Exact wording is a copy task for the i18n catalog.
+- A person with no invitation sees a notice: they have no access yet, and should contact an Admin (Q-SYS-2). The only action is to sign out. Exact wording is a copy task for the i18n catalog.
 - The locked-account wording follows the Prototype `pendingView()` (ticket T-125).
 
 ### Admin invites a User (T-11)
 
-- The Admin enters an email and the app creates an invitation link for the Admin to copy and send (no email is sent by the app; Q-AUTH-3, resolved). The invited person becomes a User with **no modules** (Q-AUTH-2, resolved). The invitation has the status Invited and can be revoked. It is single-use and expires after 7 days; statuses are Invited, Accepted, Revoked and Expired (Q-AUTH-4, resolved).
+- The Admin enters an email and the app creates an invitation link for the Admin to copy and send (no email is sent by the app; Q-AUTH-3). The invited person becomes a User with **no modules** (Q-AUTH-2). The invitation has the status Invited and can be revoked. It is single-use and expires after 7 days; statuses are Invited, Accepted, Revoked and Expired (Q-AUTH-4).
 - A User is the only role an Admin can invite. Admin and System Admin accounts come only from the System Admin (Brief 2.1, 2.4). Each Business has one Admin (Q-AUTH-10). An Admin invited by the System Admin gets all modules (see `m1-system-admin.md`).
 
 ### User accepts the invitation (T-12)
@@ -58,7 +54,7 @@ None. Every question is resolved; see the next section.
 ### Grant access per module (T-13)
 
 - One level per User per module: View or No Access. Modules: Overview, Sales, Marketing, Inventory, Supplier, Finance, Tax, Reports (Brief 3).
-- A new User has no modules until an Admin assigns them (Q-AUTH-2, resolved). An invited Admin has all modules and it cannot be reduced.
+- A new User has no modules until an Admin assigns them (Q-AUTH-2). An invited Admin has all modules and it cannot be reduced.
 - Changes take effect immediately: the next request is checked against the new grant (Prototype applies a checkbox change at once and shows a toast).
 - Tax cannot be granted (see T-16).
 
@@ -66,7 +62,7 @@ None. Every question is resolved; see the next section.
 
 - UI: route guards hide and block routes the user may not open.
 - API: every endpoint checks the caller's role, Business and module grant. The UI check is only a convenience.
-- Ask AI is Admin only (Q-AUTH-8, resolved): Users have no Ask AI button, and the AI API rejects them.
+- Ask AI is Admin only (Q-AUTH-8): Users have no Ask AI button, and the AI API rejects them.
 - Data lookups for a granted module return only that module's data. Overview shows only the modules the user may open (Brief, Module 01).
 - Check order for a request: authenticated, status active, Business active, role, module grant.
 - The same check functions are the ones reports, exports and Ask AI must call in later milestones (see Q-AUTH-9).

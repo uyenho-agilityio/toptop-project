@@ -30,6 +30,6 @@ These follow decisions of 2026-11-26. The Build Plan HTML is updated to match in
 
 ## Where the details are
 
-- Capability specs: `docs/spec/` (one file per capability group, each starting with its open questions).
+- Capability specs: `docs/spec/` (one file per capability group, each starting with its decisions).
 - Tickets: `docs/tickets/T-xx.md`.
-- Unresolved questions are collected at the top of each spec. Nothing in M1 should be built on an open question without an answer from the product owner.
+- The decisions behind M1 (2026-11-26) are listed at the top of each spec.

@@ -5,11 +5,7 @@
 > **T-123 (Review registrations) is removed from M1** (decision of 2026-11-26). Sign-in is invite-only, so there are no Pending accounts to review. Creating a Business and inviting its Admin is covered by T-124.
 **Milestone:** M1
 
-## Open questions
-
-None. Every question is resolved; see the next section.
-
-## Resolved questions
+## Decisions
 
 | ID | Answer | Date |
 | --- | --- | --- |
@@ -31,13 +27,13 @@ None. Every question is resolved; see the next section.
 
 ### A single System Admin (T-122)
 
-- There is exactly one System Admin (Brief 2.1; Plan, Roles). Their email is set in server configuration under `SYSTEM_ADMIN_EMAIL` (Q-SYS-1, resolved). The `SYSTEM_ADMIN_EMAIL` account is the only one that can sign in without an invitation.
+- There is exactly one System Admin (Brief 2.1; Plan, Roles). Their email is set in server configuration under `SYSTEM_ADMIN_EMAIL` (Q-SYS-1). The `SYSTEM_ADMIN_EMAIL` account is the only one that can sign in without an invitation.
 - There is no screen to create another. The role cannot be granted through any API.
 - The System Admin lands in the System Console, a separate interface from the Business workspace (Brief 8, Brief 9).
 
 ### Create a Business and assign an Admin (T-124)
 
-- The System Admin creates a new Business and invites a person as its Admin (Plan Architecture: the System Admin sends the owner an invite link). The invited Admin gets **all modules** (Q-AUTH-2, resolved).
+- The System Admin creates a new Business and invites a person as its Admin (Plan Architecture: the System Admin sends the owner an invite link). The invited Admin gets **all modules** (Q-AUTH-2).
 - Each Business has exactly one Admin (Q-SYS-4). The Prototype's option to assign a person to an existing Business is not part of M1. The Business name is required, and the person is chosen by email, not from a list of registered users.
 - A Business is one Better Auth organization (Plan, Decisions). It starts active and with no data.
 - The System Admin can view a Business's member list (name, role, modules). That is account information, not business data (Prototype `ACT['b-mem']`, Brief 8).

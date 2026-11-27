@@ -3,11 +3,7 @@
 **Tickets:** T-21, T-22, T-24
 **Milestone:** M1
 
-## Open questions
-
-None. Every question is resolved; see the next section.
-
-## Resolved questions
+## Decisions
 
 | ID | Answer | Date |
 | --- | --- | --- |

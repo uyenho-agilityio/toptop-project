@@ -3,11 +3,7 @@
 **Tickets:** T-01, T-02, T-03, T-04, T-05, T-06, T-07
 **Milestone:** M1
 
-## Open questions
-
-None. Every question is resolved; see the next section.
-
-## Resolved questions
+## Decisions
 
 | ID | Answer | Date |
 | --- | --- | --- |
