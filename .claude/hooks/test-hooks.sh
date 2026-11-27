@@ -123,6 +123,19 @@ check "Edit docs/intent/m1-foundation.md"      ask   $H "$(file_json Edit docs/i
 check "Edit a ticket file"                     allow $H "$(file_json Edit docs/tickets/T-01.md)" "$PLAIN"
 check "Edit README.md"                         allow $H "$(file_json Edit README.md)" "$PLAIN"
 
+# --- require-test-first.sh ------------------------------------------------------------------
+H=require-test-first.sh
+check "lib file before its test"               block $H "$(file_json Write "$TMP/src/lib/money.ts")" "$PLAIN"
+check "component before its test"              block $H "$(file_json Write "$TMP/src/components/MetricCard/index.tsx")" "$PLAIN"
+mkdir -p "$TMP/src/lib/__tests__" "$TMP/src/components/MetricCard"
+touch "$TMP/src/lib/__tests__/money.test.ts" "$TMP/src/components/MetricCard/index.test.tsx"
+check "lib file after its test"                allow $H "$(file_json Write "$TMP/src/lib/money.ts")" "$PLAIN"
+check "component after its test"               allow $H "$(file_json Write "$TMP/src/components/MetricCard/index.tsx")" "$PLAIN"
+check "shadcn component (not checked)"         allow $H "$(file_json Write "$TMP/src/components/ui/index.tsx")" "$PLAIN"
+check "lib/index.ts (not checked)"             allow $H "$(file_json Write "$TMP/src/lib/index.ts")" "$PLAIN"
+check "db schema (not checked)"                allow $H "$(file_json Write "$TMP/src/db/schema.ts")" "$PLAIN"
+check "route file (not checked)"               allow $H "$(file_json Write "$TMP/src/app/api/x/route.ts")" "$PLAIN"
+
 # --- check-branch-base.sh -------------------------------------------------------------------
 H=check-branch-base.sh
 check "new branch from origin/main"            allow $H "$(bash_json 'git switch -c feat/t-04-source-label origin/main')" "$TMP/feature"
