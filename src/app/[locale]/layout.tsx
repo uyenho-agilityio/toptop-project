@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import { routing } from '@/i18n/routing';
+import { routing } from '@/i18n';
 import '@/themes/globals.css';
 
 export const metadata: Metadata = {
