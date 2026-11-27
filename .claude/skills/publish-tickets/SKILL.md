@@ -7,7 +7,7 @@ description: Publish the ticket files of one TopTop milestone as GitHub Issues, 
 
 Turns `docs/tickets/T-xx.md` files of **one milestone** into GitHub Issues and records the issue number in each ticket's frontmatter. It runs **once per milestone**. It never re-publishes a ticket that already has an issue.
 
-This skill only publishes. It does not implement tickets (that is `do-task`, one ticket per branch and PR) and it never edits intent, spec or ticket content other than the `issue` field.
+This skill only publishes. It never edits intent, spec or ticket content other than the `issue` field.
 
 ## Input
 
