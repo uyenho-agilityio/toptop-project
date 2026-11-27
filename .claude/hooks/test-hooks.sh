@@ -65,11 +65,6 @@ check "git push HEAD while on main"             block $H "$(bash_json 'git push 
 check "bare git push while on main"             block $H "$(bash_json 'git push')" "$TMP/on-base"
 check "chained force push to main"              block $H "$(bash_json 'cd x && git push --force origin main')" "$PLAIN"
 check "git push --all"                          block $H "$(bash_json 'git push origin --all')" "$PLAIN"
-check "git add -f .env.local"                   block $H "$(bash_json 'git add -f .env.local')" "$PLAIN"
-check "git add .dev.vars"                       block $H "$(bash_json 'git add .dev.vars')" "$PLAIN"
-check "git add playwright/.auth/user.json"      block $H "$(bash_json 'git add playwright/.auth/user.json')" "$PLAIN"
-check "git add .env.example"                    allow $H "$(bash_json 'git add .env.example')" "$PLAIN"
-check "git add .dev.vars.example"               allow $H "$(bash_json 'git add .dev.vars.example')" "$PLAIN"
 check "git push to a feature branch"            allow $H "$(bash_json 'git push -u origin feat/t-01-data-model')" "$TMP/feature"
 
 # --- block-destructive-db.sh ----------------------------------------------------------------
@@ -96,6 +91,15 @@ check "Read .env.example"                       allow $H "$(file_json Read .env.
 check "Edit .env.example"                       allow $H "$(file_json Edit .env.example)" "$PLAIN"
 check "Edit .dev.vars.example"                  allow $H "$(file_json Edit .dev.vars.example)" "$PLAIN"
 check "Bash cat .dev.vars.example"              allow $H "$(bash_json 'cat .dev.vars.example')" "$PLAIN"
+check "Read .env"                               block $H "$(file_json Read .env)" "$PLAIN"
+check "Bash cat \".env\" (quoted)"              block $H "$(bash_json 'cat ".env"')" "$PLAIN"
+check "Bash redirect into .env.local"           block $H "$(bash_json 'echo X=1 >.env.local')" "$PLAIN"
+check "git add -f .env.local"                   block $H "$(bash_json 'git add -f .env.local')" "$PLAIN"
+check "git add .dev.vars"                       block $H "$(bash_json 'git add .dev.vars')" "$PLAIN"
+check "git add playwright/.auth/user.json"      block $H "$(bash_json 'git add playwright/.auth/user.json')" "$PLAIN"
+check "git add .env.example"                    allow $H "$(bash_json 'git add .env.example')" "$PLAIN"
+check "git add .dev.vars.example"               allow $H "$(bash_json 'git add .dev.vars.example')" "$PLAIN"
+check "Bash pnpm test (no secret)"              allow $H "$(bash_json 'pnpm test')" "$PLAIN"
 
 # --- protect-migrations.sh ------------------------------------------------------------------
 H=protect-migrations.sh
@@ -106,6 +110,11 @@ check "Edit src schema file"                   allow $H "$(file_json Edit "$TMP/
 # --- approve-merge.sh -----------------------------------------------------------------------
 H=approve-merge.sh
 check "merge_pull_request asks"                ask   $H "$(merge_json)" "$PLAIN"
+check "gh pr merge 35 asks"                    ask   $H "$(bash_json 'gh pr merge 35 --squash')" "$PLAIN"
+check "gh pr merge (current branch) asks"      ask   $H "$(bash_json 'gh pr merge --squash')" "$PLAIN"
+check "chained gh pr merge asks"               ask   $H "$(bash_json 'gh pr checks 35 && gh pr merge 35')" "$PLAIN"
+check "gh pr view (not a merge)"               allow $H "$(bash_json 'gh pr view 35')" "$PLAIN"
+check "git merge (not a PR merge)"             allow $H "$(bash_json 'git merge --no-edit FETCH_HEAD')" "$PLAIN"
 
 # --- check-commit-message.sh ----------------------------------------------------------------
 H=check-commit-message.sh
@@ -141,6 +150,8 @@ check "commons component after its test"       allow $H "$(file_json Write "$TMP
 check "shadcn component (not checked)"         allow $H "$(file_json Write "$TMP/src/components/ui/button.tsx")" "$PLAIN"
 check "components/ui/index.tsx (not checked)"  allow $H "$(file_json Write "$TMP/src/components/ui/index.tsx")" "$PLAIN"
 check "utils/index.ts (not checked)"           allow $H "$(file_json Write "$TMP/src/utils/index.ts")" "$PLAIN"
+check "server file (not checked)"              allow $H "$(file_json Write "$TMP/src/server/auth.ts")" "$PLAIN"
+check "i18n index (not checked)"               allow $H "$(file_json Write "$TMP/src/i18n/index.ts")" "$PLAIN"
 check "types file (not checked)"               allow $H "$(file_json Write "$TMP/src/types/env.ts")" "$PLAIN"
 check "themes file (not checked)"              allow $H "$(file_json Write "$TMP/src/themes/globals.css")" "$PLAIN"
 check "db schema (not checked)"                allow $H "$(file_json Write "$TMP/src/db/schema.ts")" "$PLAIN"

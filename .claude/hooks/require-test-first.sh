@@ -3,8 +3,8 @@
 #   src/<constants|schemas|stores|hooks|services|utils>/<name>.ts   needs  __tests__/<name>.test.ts
 #   src/components/<Name>/index.tsx                                 needs  index.test.tsx
 #   src/components/commons/<Name>/index.tsx                         needs  index.test.tsx
-# Not checked: index files, src/types, src/themes, src/components/ui (shadcn, generated),
-# and config, db, auth, i18n and route files.
+# Not checked: index.ts barrels, src/types, src/themes, src/components/ui (shadcn, generated),
+# src/server (db, auth), src/i18n and route files.
 set -uo pipefail
 
 path=$(jq -r '.tool_input.file_path // empty')

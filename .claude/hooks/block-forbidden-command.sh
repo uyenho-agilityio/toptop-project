@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# PreToolUse (Bash). Blocks pushes to the protected branches and staging of secrets.
+# PreToolUse (Bash). Blocks pushes to the protected branches.
+# Secret files (reading, changing, git add) are guarded by protect-secrets.sh.
 # Exit 2 blocks the call; exit 0 allows it.
 set -uo pipefail
 
@@ -9,17 +10,6 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
 
 protected_re='^main$'
 deny() { echo "BLOCKED (block-forbidden-command): $1" >&2; exit 2; }
-
-is_secret_path() {
-  local p=$1 base
-  base=${p##*/}
-  [ "$base" = ".env.example" ] && return 1
-  [[ $base =~ ^\.env(\..*)?$ ]] && return 0
-  [ "$base" = ".dev.vars.example" ] && return 1
-  [[ $base =~ ^\.dev\.vars(\..*)?$ ]] && return 0
-  [[ $p == *playwright/.auth/* ]] && return 0
-  return 1
-}
 
 # Each command in a chain (&&, ||, ;, |) is checked on its own.
 segments=$(printf '%s' "$cmd" | sed -E 's/&&|\|\||;|\|/\n/g')
@@ -54,13 +44,6 @@ while IFS= read -r seg; do
       if [ "$pushed_any" -eq 0 ] && [[ $current =~ $protected_re ]]; then
         deny "bare git push while on protected branch '$current'"
       fi
-    fi
-
-    if [ "$sub" = add ]; then
-      for tok in "${t[@]:i+2}"; do
-        case "$tok" in -*) continue ;; esac
-        is_secret_path "$tok" && deny "staging secret file '$tok' is not allowed"
-      done
     fi
   done
 done <<< "$segments"
