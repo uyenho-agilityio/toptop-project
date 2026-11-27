@@ -24,3 +24,28 @@ An online shop management platform for TikTok Shop and Shopee sellers in Vietnam
 - One adapter shape for TikTok Shop, Shopee and CSV; webhooks through Cloudflare Queues
 - Ask AI uses the Claude API (Admin only, read-only tools, cannot read Tax data)
 - Tests: Vitest and Testing Library (tests first), Playwright for 4 flows, and API-level permission-matrix tests for role scenarios
+
+## Getting started
+
+Requires Node 22 and pnpm 10.
+
+```bash
+pnpm install
+cp .env.example .env.local   # fill in real values; never commit this file
+pnpm dev
+```
+
+| Command                                    | What it does                                             |
+| ------------------------------------------ | -------------------------------------------------------- |
+| `pnpm dev`, `pnpm build`                   | Next.js dev server and production build                  |
+| `pnpm lint`, `pnpm typecheck`, `pnpm test` | ESLint, TypeScript (strict), Vitest                      |
+| `pnpm format`, `pnpm format:check`         | Prettier                                                 |
+| `pnpm db:generate`, `pnpm db:migrate`      | Drizzle Kit migrations (`drizzle/`)                      |
+| `pnpm cf:build`, `pnpm cf:preview`         | OpenNext build for Cloudflare Workers, local Workers run |
+| `pnpm cf:deploy`                           | Build and deploy to Cloudflare Workers                   |
+
+Layout: `src/app/[locale]` (pages, English and Vietnamese through next-intl, default `en`), `src/messages` (translations), `src/db` (Drizzle), `src/auth` (Better Auth), `src/components/ui` (shadcn/ui), `src/test` (test helpers, PGlite in-memory Postgres).
+
+## Working with Claude Code
+
+`.claude/` holds the project hooks, sub-agents and skills. See `CLAUDE.md` for the rules. Run `.claude/hooks/test-hooks.sh` to check the hooks.
