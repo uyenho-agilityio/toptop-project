@@ -1,6 +1,6 @@
 import { PGlite } from '@electric-sql/pglite';
 import { drizzle } from 'drizzle-orm/pglite';
-import * as schema from '@/db/schema';
+import { schema } from '@/server/db';
 
 // In-memory Postgres for tests (PGlite). Apply migrations from ./drizzle here once they exist.
 export const createTestDb = async () => {

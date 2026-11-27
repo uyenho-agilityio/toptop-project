@@ -1,7 +1,5 @@
 import { toNextJsHandler } from 'better-auth/next-js';
-import { createAuth } from '@/auth';
-import { createDb } from '@/db';
-import { getServerEnv } from '@/utils/env';
+import { createAuth, createDb, getServerEnv } from '@/server';
 
 const handlers = () => {
   const env = getServerEnv();

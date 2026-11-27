@@ -1,5 +1,7 @@
-import { serverEnvSchema } from '@/schemas/env';
-import type { ServerEnv } from '@/types/env';
+import 'server-only';
+
+import { serverEnvSchema } from '@/schemas';
+import type { ServerEnv } from '@/types';
 
 // The app fails when a required variable is missing; nothing here reaches the browser.
 export const parseServerEnv = (
