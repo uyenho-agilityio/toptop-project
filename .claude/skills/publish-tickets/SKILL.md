@@ -52,7 +52,7 @@ issue: 31          # added by this skill
    - **Labels:** `ticket`, `<milestone>` (e.g. `M1`), `<priority>` (e.g. `P0`), `size: <size>`, `epic: <epic>` (e.g. `epic: E02 Accounts and permissions`). Labels that do not exist yet are created by GitHub when the issue is created. A label name may not contain a comma and must be at most 50 characters: drop commas and shorten if needed (e.g. `epic: E03 Period platform and shop filters`).
    - **No assignee, no GitHub Milestone object, no project board.** Labels carry the milestone.
 5. **Write back.** For each created issue, add `issue: <number>` as the last line of that ticket's frontmatter. Change nothing else in the file.
-6. **Commit and PR.** Branch `chore/publish-<milestone>-issues` from the default branch. One commit, one line, Conventional Commits, English, no body and no trailers, e.g. `chore: link M1 tickets to their GitHub issues`. Open one PR.
+6. **Commit and PR.** Branch `chore/publish-tickets-<milestone>` from the default branch. One commit, one line, Conventional Commits, English, no body and no trailers, e.g. `chore: link M1 tickets to their GitHub issues`. Open one PR.
    - PR body has two sections only: `## Summary` (milestone, issue count, first and last issue number) and `## Notes for review` (anything unusual, such as a reused issue).
 7. **Report.** Issue numbers (first and last, or a table `T-xx -> #n`), the PR link.
 
