@@ -48,3 +48,6 @@ pnpm-debug.log*
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Personal Claude Code settings
+.claude/settings.local.json
