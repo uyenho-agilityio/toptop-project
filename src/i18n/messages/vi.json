@@ -2,5 +2,10 @@
   "Home": {
     "title": "TopTop",
     "description": "Quản lý cửa hàng online cho người bán TikTok Shop và Shopee tại Việt Nam."
+  },
+  "DataValue": {
+    "notAvailable": "Chưa có dữ liệu",
+    "notEntered": "Chưa nhập",
+    "notSynced": "Chưa đồng bộ"
   }
 }
