@@ -2,5 +2,10 @@
   "Home": {
     "title": "TopTop",
     "description": "Online shop management for TikTok Shop and Shopee sellers in Vietnam."
+  },
+  "DataValue": {
+    "notAvailable": "Not available yet",
+    "notEntered": "Not entered yet",
+    "notSynced": "Not synced yet"
   }
 }
