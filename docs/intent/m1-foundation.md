@@ -19,6 +19,8 @@ These follow decisions of 2026-11-26. The Build Plan HTML is updated to match in
 - **Invites:** an invited Admin gets all modules; an invited User gets none until an Admin assigns them (T-11, T-13, T-124).
 - **Ask AI is Admin only** (already a Plan decision).
 - **Cost and profit stay out of M1** (T-26 to T-28 remain in M4, and M4 adds the orders and cost tables). T-25 is narrowed to net revenue and order count; T-29 stays as a rule for M4.
+- **Language library:** `next-intl`, English and Vietnamese only, English by default (T-129).
+- **Security baseline is required in M1:** server-side authorization on every API, tenant isolation with the query helper plus row-level security, input validation, secrets from environment variables only, rate limits on sign-in and invitations, secure cookies and basic security headers (T-02, T-09, T-11, T-12, T-14).
 
 ## Out of scope for M1
 

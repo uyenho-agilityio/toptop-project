@@ -12,7 +12,7 @@
 | Q-SEED-1 | **Keep the Prototype's sample roles as test data**: a System Admin, Admins and Users with different module grants. No new role is added. | 2026-11-26, product owner |
 | Q-I18N-1 | **The default app language is English.** Vietnamese stays available through the language toggle, as in the Prototype. Code, commits and docs are English only. | 2026-11-26, product owner |
 | Q-I18N-2 | Language and theme are stored in the browser in M1 (Prototype `localStorage` keys `tt-lang`, `tt-theme`). | 2026-11-26, product owner accepted the proposed default |
-| Q-I18N-3 | One standard Next.js i18n library, chosen when T-129 starts, with English and Vietnamese message catalogs. | 2026-11-26, product owner accepted the proposed default |
+| Q-I18N-3 | **Use `next-intl` (Next.js App Router) with exactly two languages: English (`en`) and Vietnamese (`vi`).** English is the default. No other language and no other i18n library. Messages live in one catalog per language. The product serves customers in Vietnam, so two languages are enough; code, commits and docs stay English only. | 2026-11-27, product owner |
 | Q-I18N-4 | Language is a stored setting, not part of the URL. | 2026-11-26, product owner accepted the proposed default |
 | Q-THEME-1 | The theme follows the system until the user toggles; after that the toggle keeps the choice (as in the Prototype). | 2026-11-26, product owner accepted the proposed default |
 
