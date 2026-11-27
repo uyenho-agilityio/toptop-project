@@ -53,10 +53,10 @@
 
 - Custom range where start is after end: swap them, never error. (Prototype)
 - Custom period selected but dates missing in the URL: fall back to the Prototype default (today - 13 days to today). (Prototype `curRange()`)
-- Invalid or tampered URL values: fall back to the default period, no error page. (Proposed)
+- Invalid or tampered URL values: fall back to the default period, no error page.
 - First day of the month: Monthly has one day, and its comparison range is one day. (Follows from the Q-PER-1 rule)
-- Language switch: labels and date text change, the selected range does not. (Proposed)
-- The previous range reaches before the oldest data: the engine reports "not available yet" for the change, not a change from 0. (Proposed, from the "not available yet" convention in `m1-foundation.md`)
+- Language switch: labels and date text change, the selected range does not.
+- The previous range reaches before the oldest data: the engine reports "not available yet" for the change, not a change from 0.
 
 ## Acceptance criteria
 

@@ -95,10 +95,10 @@ These measures are required in M1 (Q-FND-2, Q-SEC-1 to Q-SEC-7). They are not op
 
 ## Edge cases
 
-- A request carries a Business id the account does not belong to: reject, do not return an empty list. (Proposed)
-- A record with no known source: the label shows "unknown source" rather than being blank. (Proposed)
-- A card receives a null value and a non-null change: show "not available yet" and no change. (Proposed)
-- Very large amounts: the helper must not overflow or lose digits; VND has no decimals. (Proposed; see Q-FND-4)
+- A request carries a Business id the account does not belong to: reject, do not return an empty list.
+- A record with no known source: the label shows "unknown source" rather than being blank.
+- A card receives a null value and a non-null change: show "not available yet" and no change.
+- Very large amounts: the helper must not overflow or lose digits; VND has no decimals.
 - A User with access to zero modules still sees the shell, with an empty state (Prototype: route `none`).
 
 ## Acceptance criteria

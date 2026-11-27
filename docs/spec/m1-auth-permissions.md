@@ -99,7 +99,7 @@
 - A User's grant changes while they are signed in: the next request uses the new grant. (Plan T-13 "take effect immediately")
 - A User is removed, suspended or their Business is suspended while signed in: the next request is rejected and the blocked screen appears. (Prototype `pendingView()`)
 - A person with no invitation signs in with Google: blocked, no record that grants access is created. (Q-AUTH-1)
-- A User opens a module URL they cannot access: redirect to their first allowed module, not an error page showing that the module exists. (Proposed)
+- A User opens a module URL they cannot access: redirect to their first allowed module, not an error page showing that the module exists.
 - A User calls a Tax API directly: rejected, with no data in the response and no hint whether Tax data exists. (T-16 "not reachable by ... API")
 - An invitation is accepted twice, used after 7 days, or used after revocation: rejected. (Q-AUTH-4)
 - The first sign-in of the account in `SYSTEM_ADMIN_EMAIL`: allowed without an invitation and becomes System Admin (`m1-system-admin.md`, Q-SYS-1).

@@ -16,5 +16,4 @@ One spec per capability group. Each spec lists its decisions first, then the sou
 - **Brief** means `.artifacts/product-brief.html`. Citations use its section numbers, for example "Brief 2.3".
 - **Prototype** means `.artifacts/prototype.html`. It has no section numbers, so citations name the screen or function, for example "Prototype `curRange()`".
 - **Plan** means `.artifacts/toptop-build-plan.html`. Citations use its section titles and ticket ids.
-- "Proposed" marks an edge-case rule that no source states. It is the default the ticket uses and can be changed in review.
 - Decision ids such as `Q-FND-1` are listed in each spec under "Decisions".

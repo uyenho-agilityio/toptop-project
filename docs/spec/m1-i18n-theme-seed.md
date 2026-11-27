@@ -53,10 +53,10 @@
 
 ## Edge cases
 
-- A translation key is missing for the active language: show the English text, and report the missing key in development and in tests. (Proposed)
-- Text length differs between languages: no clipped or overflowing labels in the shell. (Proposed)
+- A translation key is missing for the active language: show the English text, and report the missing key in development and in tests.
+- Text length differs between languages: no clipped or overflowing labels in the shell.
 - A browser blocks local storage: the app still works, with the system theme and the default language. (The Prototype wraps storage access in try/catch.)
-- A user changes language or theme on the login screen, then signs in: the choice is kept. (Proposed)
+- A user changes language or theme on the login screen, then signs in: the choice is kept.
 - Seed or account picker reached in production: both refuse to run. (Q-SEED-3)
 
 ## Acceptance criteria

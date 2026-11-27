@@ -46,11 +46,11 @@
 
 ## Edge cases
 
-- `SYSTEM_ADMIN_EMAIL` is missing or invalid at startup: no System Admin exists; the app must still start and show no console to anyone, and log a clear configuration error. (Proposed)
-- Inviting the same email twice: the second request fails with a clear message, not a duplicate. (Proposed)
-- Creating a Business with an empty or duplicate name: validation error. (Prototype requires a name; duplicate rule is Proposed)
+- `SYSTEM_ADMIN_EMAIL` is missing or invalid at startup: no System Admin exists; the app must still start and show no console to anyone, and log a clear configuration error.
+- Inviting the same email twice: the second request fails with a clear message, not a duplicate.
+- Creating a Business with an empty or duplicate name: validation error. (Prototype requires a name)
 - Suspending the account of a Business's Admin: allowed; its Users keep their access, because suspending an account does not suspend its Business. (Prototype `pendingView()`)
-- The System Admin cannot suspend their own account. (Proposed)
+- The System Admin cannot suspend their own account.
 - A suspended Business is re-activated: members regain access with the same grants. (Follows Prototype behavior of `b-sus` toggle)
 
 ## Acceptance criteria
