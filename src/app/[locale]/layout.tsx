@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
-import "@/themes/globals.css";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
+import '@/themes/globals.css';
 
 export const metadata: Metadata = {
-  title: "TopTop",
+  title: 'TopTop',
 };
 
-export const generateStaticParams = () => routing.locales.map((locale) => ({ locale }));
+export const generateStaticParams = () =>
+  routing.locales.map(locale => ({ locale }));
 
 type LocaleLayoutProps = {
   children: React.ReactNode;

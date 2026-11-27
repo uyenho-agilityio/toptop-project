@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Secrets are read only from environment variables (spec Q-SEC-3).
 export const serverEnvSchema = z.object({
