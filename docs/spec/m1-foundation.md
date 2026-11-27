@@ -13,14 +13,14 @@
 | Q-FND-4 | Compact amounts on cards and full amounts in tables, as in the Prototype. | 2026-11-26, product owner accepted the proposed default |
 | Q-FND-5 | Fixed Vietnam time for the whole app in M1. | 2026-11-26, product owner accepted the proposed default |
 | Q-FND-6 | The AI entry is a header button shown to Admins only (Brief 9, Prototype); its behavior arrives in M7. | 2026-11-26, product owner accepted the proposed default |
-| Q-FND-7 | Menu items open a "coming soon" placeholder page until their module ships. | 2026-11-26, product owner accepted the proposed defau| Q-SEC-1 | **Authorization is checked on the server for every API route and server action.** Deny by default: a route with no explicit permission check is rejected. The UI guard is only a convenience. | 2026-11-27, product owner |
+| Q-FND-7 | Menu items open a "coming soon" placeholder page until their module ships. | 2026-11-26, product owner accepted the proposed default |
+| Q-SEC-1 | **Authorization is checked on the server for every API route and server action.** Deny by default: a route with no explicit permission check is rejected. The UI guard is only a convenience. | 2026-11-27, product owner |
 | Q-SEC-2 | **Input is validated on the server** with a schema (Zod) for every API route and server action: unknown fields are dropped, wrong types are rejected with a clear error. Database access goes through Drizzle with bound parameters; no SQL is built by joining strings. | 2026-11-27, product owner |
 | Q-SEC-3 | **Secrets are read only from environment variables** (Cloudflare secrets in production). No secret is committed, logged or sent to the browser; only variables deliberately prefixed `NEXT_PUBLIC_` reach the client. The app fails at startup when a required secret is missing. | 2026-11-27, product owner |
 | Q-SEC-4 | **Rate limits** on sign-in and on invitations: sign-in attempts 10 per minute per IP; creating invitations 20 per hour per Admin; accepting an invitation 10 per minute per IP. Over the limit: HTTP 429 with a clear message. These are the M1 defaults and can be tuned in configuration. | 2026-11-27, product owner |
 | Q-SEC-5 | **Secure cookies and CSRF.** The session cookie is `HttpOnly`, `Secure` and `SameSite=Lax`. State-changing requests use POST (never GET) and Better Auth's origin check. | 2026-11-27, product owner |
 | Q-SEC-6 | **Invitation tokens** are random (at least 32 bytes), stored only as a hash, single-use and expire after 7 days (see `m1-auth-permissions.md`). | 2026-11-27, product owner |
 | Q-SEC-7 | **Basic security headers** on every response: `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `frame-ancestors 'none'` (clickjacking). A full Content-Security-Policy is added in M8 (hardening). | 2026-11-27, product owner |
-lt |
 
 ## Sources
 
