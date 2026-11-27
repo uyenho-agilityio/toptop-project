@@ -1,4 +1,4 @@
-# TopTop
+# TopTop Project
 
 An online shop management platform for TikTok Shop and Shopee sellers in Vietnam: sales, marketing, inventory, suppliers, finance, tax, reports and an AI assistant in one app.
 
@@ -24,3 +24,28 @@ An online shop management platform for TikTok Shop and Shopee sellers in Vietnam
 - One adapter shape for TikTok Shop, Shopee and CSV; webhooks through Cloudflare Queues
 - Ask AI uses the Claude API (Admin only, read-only tools, cannot read Tax data)
 - Tests: Vitest and Testing Library (tests first), Playwright for 4 flows, and API-level permission-matrix tests for role scenarios
+
+## Getting started
+
+Requires Node 22 and pnpm 10.
+
+```bash
+pnpm install
+cp .env.example .env.local   # fill in real values; never commit this file
+pnpm dev
+```
+
+| Command                                    | What it does                                             |
+| ------------------------------------------ | -------------------------------------------------------- |
+| `pnpm dev`, `pnpm build`                   | Next.js dev server and production build                  |
+| `pnpm lint`, `pnpm typecheck`, `pnpm test` | ESLint, TypeScript (strict), Vitest                      |
+| `pnpm format`, `pnpm format:check`         | Prettier                                                 |
+| `pnpm db:generate`, `pnpm db:migrate`      | Drizzle Kit migrations (`drizzle/`)                      |
+| `pnpm cf:build`, `pnpm cf:preview`         | OpenNext build for Cloudflare Workers, local Workers run |
+| `pnpm cf:deploy`                           | Build and deploy to Cloudflare Workers                   |
+
+Layout under `src/`: `app/[locale]` (pages), `constants`, `schemas` (Zod), `types`, `stores`, `hooks`, `services` (client-side API calls on `httpClient`), `utils`, `server` (server-only: Drizzle `db`, Better Auth, env), `i18n` (next-intl routing and `messages/` for en and vi, default `en`), `themes` (Tailwind and global CSS), `components`, `components/commons` (shared app components), `components/ui` (shadcn/ui primitives). Each folder has an `index.ts`; import with the alias (`@/utils`). Test helpers (PGlite in-memory Postgres) are in `tests/helpers`.
+
+## Working with Claude Code
+
+`.claude/` holds the project hooks, sub-agents and skills. See `CLAUDE.md` for the rules. Run `.claude/hooks/test-hooks.sh` to check the hooks.
