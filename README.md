@@ -1,4 +1,4 @@
-# TopTop
+# TopTop Project
 
 An online shop management platform for TikTok Shop and Shopee sellers in Vietnam: sales, marketing, inventory, suppliers, finance, tax, reports and an AI assistant in one app.
 
@@ -44,7 +44,7 @@ pnpm dev
 | `pnpm cf:build`, `pnpm cf:preview`         | OpenNext build for Cloudflare Workers, local Workers run |
 | `pnpm cf:deploy`                           | Build and deploy to Cloudflare Workers                   |
 
-Layout under `src/`: `app/[locale]` (pages; English and Vietnamese through next-intl, default `en`), `constants`, `schemas` (Zod), `types`, `stores`, `hooks`, `services` (`httpClient`), `utils`, `themes` (Tailwind and global CSS), `components`, `components/commons` (shared app components), `components/ui` (shadcn/ui primitives), plus `db` (Drizzle), `auth` (Better Auth), `i18n` and `messages`. Test helpers (PGlite in-memory Postgres) are in `tests/helpers`.
+Layout under `src/`: `app/[locale]` (pages), `constants`, `schemas` (Zod), `types`, `stores`, `hooks`, `services` (client-side API calls on `httpClient`), `utils`, `server` (server-only: Drizzle `db`, Better Auth, env), `i18n` (next-intl routing and `messages/` for en and vi, default `en`), `themes` (Tailwind and global CSS), `components`, `components/commons` (shared app components), `components/ui` (shadcn/ui primitives). Each folder has an `index.ts`; import with the alias (`@/utils`). Test helpers (PGlite in-memory Postgres) are in `tests/helpers`.
 
 ## Working with Claude Code
 
