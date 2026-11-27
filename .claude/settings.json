@@ -82,5 +82,8 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "workflow@base-workflow": true
   }
 }
