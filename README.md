@@ -11,10 +11,9 @@ An online shop management platform for TikTok Shop and Shopee sellers in Vietnam
 
 ## Build Plan
 
-136 tickets across 9 milestones (M1–M9), with a Vietnamese/English toggle (English by default), light and dark themes, and an architecture and tech stack section.
+135 tickets across 9 milestones (M1–M9), with a Vietnamese/English toggle (English by default), light and dark themes, and an architecture and tech stack section.
 
 - In this repo: [`.artifacts/toptop-build-plan.html`](.artifacts/toptop-build-plan.html) (open it in a browser)
-- Online version: https://claude.ai/artifact/YRix9AvmjDcds8r2FmyyuY
 
 ## Tech stack
 
