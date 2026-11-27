@@ -44,7 +44,7 @@ pnpm dev
 | `pnpm cf:build`, `pnpm cf:preview`         | OpenNext build for Cloudflare Workers, local Workers run |
 | `pnpm cf:deploy`                           | Build and deploy to Cloudflare Workers                   |
 
-Layout: `src/app/[locale]` (pages, English and Vietnamese through next-intl, default `en`), `src/messages` (translations), `src/db` (Drizzle), `src/auth` (Better Auth), `src/components/ui` (shadcn/ui), `src/test` (test helpers, PGlite in-memory Postgres).
+Layout under `src/`: `app/[locale]` (pages; English and Vietnamese through next-intl, default `en`), `constants`, `schemas` (Zod), `types`, `stores`, `hooks`, `services` (`httpClient`), `utils`, `themes` (Tailwind and global CSS), `components`, `components/commons` (shared app components), `components/ui` (shadcn/ui primitives), plus `db` (Drizzle), `auth` (Better Auth), `i18n` and `messages`. Test helpers (PGlite in-memory Postgres) are in `tests/helpers`.
 
 ## Working with Claude Code
 

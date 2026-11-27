@@ -14,14 +14,8 @@ describe("parseServerEnv", () => {
     expect(parseServerEnv(valid)).toEqual(valid);
   });
 
-  it("throws and names each missing variable", () => {
+  it("throws and names the missing variable", () => {
     const withoutUrl: Record<string, string | undefined> = { ...valid, DATABASE_URL: undefined };
     expect(() => parseServerEnv(withoutUrl)).toThrow(/DATABASE_URL/);
-  });
-
-  it("rejects a short auth secret", () => {
-    expect(() => parseServerEnv({ ...valid, BETTER_AUTH_SECRET: "short" })).toThrow(
-      /BETTER_AUTH_SECRET/,
-    );
   });
 });

@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { use } from "react";
 
-export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+const HomePage = ({ params }: { params: Promise<{ locale: string }> }) => {
   const { locale } = use(params);
   setRequestLocale(locale);
   const t = useTranslations("Home");
@@ -13,4 +13,6 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       <p className="opacity-70">{t("description")}</p>
     </main>
   );
-}
+};
+
+export default HomePage;

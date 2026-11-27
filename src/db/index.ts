@@ -4,9 +4,9 @@ import * as schema from "./schema";
 
 // Tenant queries need a transaction (RLS context, spec Q-FND-2), so this uses the
 // Neon serverless Pool (WebSocket), not the HTTP driver.
-export function createDb(connectionString: string) {
+export const createDb = (connectionString: string) => {
   const pool = new Pool({ connectionString });
   return drizzle(pool, { schema });
-}
+};
 
 export type Db = ReturnType<typeof createDb>;
